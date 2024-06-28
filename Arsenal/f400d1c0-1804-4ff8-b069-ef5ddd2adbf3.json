@@ -1,0 +1,23 @@
+{
+    "name": "Environment variables discovery on windows",
+    "description": "Identify all environment variables. Upon execution, environments variables and your path info will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "set\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "f400d1c0-1804-4ff8-b069-ef5ddd2adbf3",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

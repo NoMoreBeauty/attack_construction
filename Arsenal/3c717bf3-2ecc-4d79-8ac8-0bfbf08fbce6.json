@@ -1,0 +1,31 @@
+{
+    "name": "Change User Password via passwd",
+    "description": "This test changes the user password to hinder access to the account using passwd utility. ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "executor": {
+        "command": "passwd #{user_account} #enter admin password > enter new password > confirm new password\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1531",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Account Access Removal",
+    "source": "ART",
+    "uuid": "3c717bf3-2ecc-4d79-8ac8-0bfbf08fbce6",
+    "arguments": {
+        "user_account": {
+            "description": "User account whose password will be changed.",
+            "type": "string",
+            "default": "ARTUser"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

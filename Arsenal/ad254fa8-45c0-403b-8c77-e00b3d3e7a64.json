@@ -1,0 +1,30 @@
+{
+    "name": "Shutdown System - Windows",
+    "description": "This test shuts down a Windows system. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "shutdown /s /t #{timeout}\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1529",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "System Shutdown/Reboot",
+    "source": "ART",
+    "uuid": "ad254fa8-45c0-403b-8c77-e00b3d3e7a64",
+    "arguments": {
+        "timeout": {
+            "description": "Timeout period before shutdown (seconds)",
+            "type": "integer",
+            "default": 1
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

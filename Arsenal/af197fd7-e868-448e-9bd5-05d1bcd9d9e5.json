@@ -1,0 +1,23 @@
+{
+    "name": "Enumeration for PuTTY Credentials in Registry",
+    "description": "Queries to enumerate for PuTTY credentials in the Registry. PuTTY must be installed for this test to work. If any registry entries are found, they will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg query HKCU\\Software\\SimonTatham\\PuTTY\\Sessions /t REG_SZ /s\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1552.002",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials in Registry",
+    "source": "ART",
+    "uuid": "af197fd7-e868-448e-9bd5-05d1bcd9d9e5",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

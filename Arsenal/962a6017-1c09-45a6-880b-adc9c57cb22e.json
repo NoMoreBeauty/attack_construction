@@ -1,0 +1,31 @@
+{
+    "name": "Enumerate domain computers within Active Directory using DirectorySearcher",
+    "description": "This test is a Powershell script that enumerates Active Directory to determine computers that are joined to the domain.  This test is designed to mimic how SessionGopher can determine the additional systems within a domain, which has been used before by threat actors to aid in lateral movement.  Reference: [Head Fake: Tackling Disruptive Ransomware Attacks](https://www.mandiant.com/resources/head-fake-tackling-disruptive-ransomware-attacks).  Upon successful execution, this test will output the names of the computers that reside on the domain to the console window.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "$DirectorySearcher = New-Object System.DirectoryServices.DirectorySearcher(\"(ObjectCategory=Computer)\")\n$DirectorySearcher.PropertiesToLoad.Add(\"Name\")\n$Computers = $DirectorySearcher.findall()\nforeach ($Computer in $Computers) {\n  $Computer = $Computer.Properties.name\n  if (!$Computer) { Continue }\n  Write-Host $Computer}\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1018",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Remote System Discovery",
+    "source": "ART",
+    "uuid": "962a6017-1c09-45a6-880b-adc9c57cb22e",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "This PC must be joined to a domain.",
+            "prereq_command": "if ((Get-WmiObject -Class Win32_ComputerSystem).partofdomain -eq $true) {exit 0} else {exit 1}",
+            "get_prereq_command": "write-host \"This PC must be manually added to a domain.\" "
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

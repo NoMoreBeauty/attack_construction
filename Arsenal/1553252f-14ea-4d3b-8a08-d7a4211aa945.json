@@ -1,0 +1,24 @@
+{
+    "name": "Security Software Discovery - AV Discovery via WMI",
+    "description": "Discovery of installed antivirus products via a WMI query.  when sucessfully executed, the test is going to display installed AV software. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "wmic.exe /Namespace:\\\\root\\SecurityCenter2 Path AntiVirusProduct Get displayName /Format:List",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1518.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Security Software Discovery",
+    "source": "ART",
+    "uuid": "1553252f-14ea-4d3b-8a08-d7a4211aa945",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

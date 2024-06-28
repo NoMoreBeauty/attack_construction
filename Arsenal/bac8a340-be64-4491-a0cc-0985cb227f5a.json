@@ -1,0 +1,53 @@
+{
+    "name": "ESXi - Disable Firewall via Esxcli",
+    "description": "Adversaries may disable the ESXI firewall via ESXCLI ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "#{plink_file} -ssh #{vm_host} -l #{username} -pw #{password} -m PathToAtomicsFolder\\..\\atomics\\T1562.004\\src\\esxi_disable_firewall.txt\n",
+        "cleanup_command": "#{plink_file} -ssh #{vm_host} -l #{username} -pw #{password} -m PathToAtomicsFolder\\..\\atomics\\T1562.004\\src\\esxi_enable_firewall.txt\n",
+        "name": "command_prompt",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "bac8a340-be64-4491-a0cc-0985cb227f5a",
+    "arguments": {
+        "vm_host": {
+            "description": "Specify the host name of the ESXi Server",
+            "type": "string",
+            "default": "atomic.local"
+        },
+        "plink_file": {
+            "description": "Path to Putty",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\plink.exe"
+        },
+        "username": {
+            "description": "username used to log into ESXi",
+            "type": "string",
+            "default": "root"
+        },
+        "password": {
+            "description": "password used to log into ESXI",
+            "type": "string",
+            "default": "n/a"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The plink executable must be found in the ExternalPayloads folder.\n",
+            "prereq_command": "if (Test-Path \"#{plink_file}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe\" -OutFile \"#{plink_file}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

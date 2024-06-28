@@ -1,0 +1,25 @@
+{
+    "name": "Setting the HISTSIZE environment variable",
+    "description": "An Adversary may set the sh history files size environment variable (HISTSIZE) to zero to prevent the logging of commands to the history file after they log out of the system.  Note: we don't wish to log out, so we are just confirming the value of HISTSIZE. In this test we 1. echo HISTSIZE 2. set it to zero 3. confirm that HISTSIZE is set to zero. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "echo $HISTSIZE\nexport HISTSIZE=0\nif [ $(echo $HISTSIZE) -eq 0 ]; then echo \"\\$HISTSIZE is zero\"; fi\n# -> $HISTSIZE is zero\n",
+        "cleanup_command": "export HISTSIZE=100\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Impair Command History Logging",
+    "source": "ART",
+    "uuid": "386d3850-2ce7-4508-b56b-c0558922c814",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

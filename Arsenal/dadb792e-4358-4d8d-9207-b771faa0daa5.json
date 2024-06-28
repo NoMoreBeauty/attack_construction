@@ -1,0 +1,38 @@
+{
+    "name": "Create Windows Hidden File with Attrib",
+    "description": "Creates a file and marks it as hidden using the attrib.exe utility.Upon execution, open File Epxplorer and enable View > Hidden Items. Then, open Properties > Details on the file and observe that the Attributes are SH for System and Hidden. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "command_prompt",
+    "executor": {
+        "command": "attrib.exe +h #{file_to_modify}\n",
+        "cleanup_command": "del /A:H #{file_to_modify} >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1564.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Hidden Files and Directories",
+    "source": "ART",
+    "uuid": "dadb792e-4358-4d8d-9207-b771faa0daa5",
+    "arguments": {
+        "file_to_modify": {
+            "description": "File to modify using Attrib command",
+            "type": "string",
+            "default": "%temp%\\T1564.001.txt"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The file must exist on disk at specified location (#{file_to_modify})\n",
+            "prereq_command": "IF EXIST #{file_to_modify} ( EXIT 0 ) ELSE ( EXIT 1 )\n",
+            "get_prereq_command": "echo system_Attrib_T1564.001 >> #{file_to_modify}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

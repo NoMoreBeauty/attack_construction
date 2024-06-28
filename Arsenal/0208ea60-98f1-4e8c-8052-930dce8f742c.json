@@ -1,0 +1,30 @@
+{
+    "name": "Overwrite macOS system log via echo utility",
+    "description": "This test overwrites the contents of system log file with an empty string using echo utility ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "sudo echo '' > #{system_log_path}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "0208ea60-98f1-4e8c-8052-930dce8f742c",
+    "arguments": {
+        "system_log_path": {
+            "description": "path to system.log",
+            "type": "string",
+            "default": "/var/log/system.log"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

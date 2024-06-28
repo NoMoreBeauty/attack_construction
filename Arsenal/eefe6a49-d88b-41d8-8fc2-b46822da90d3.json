@@ -1,0 +1,23 @@
+{
+    "name": "FreeBSD VM Check via Kernel Modules",
+    "description": "Identify virtual machine host kernel modules. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "kldstat | grep -i \"vmm\"\nkldstat | grep -i \"vbox\"\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "eefe6a49-d88b-41d8-8fc2-b46822da90d3",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

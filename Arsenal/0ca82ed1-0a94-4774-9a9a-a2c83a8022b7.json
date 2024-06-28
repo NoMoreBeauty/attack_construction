@@ -1,0 +1,32 @@
+{
+    "name": "Stop/Start Packet Filter",
+    "description": "Stop the Packet Filter if installed. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "service pf stop\nservice pf disable\n",
+        "cleanup_command": "service pf enable\nservice pf start\nservice pf status\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "0ca82ed1-0a94-4774-9a9a-a2c83a8022b7",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if pfctl is installed on the machine.\n",
+            "prereq_command": "if [ ! -x \"$(command -v pfctl)\" ]; then echo -e \"\\n***** PF NOT installed *****\\n\"; exit 1; fi\nif [ \"$(kldstat -n pf)\" = \"\" ]; then echo -e \"\\n***** PF inactive *****\\n\"; exit 1; fi \n",
+            "get_prereq_command": "echo \"\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,23 @@
+{
+    "name": "Extracting passwords with findstr",
+    "description": "Extracting Credentials from Files. Upon execution, the contents of files that contain the word password will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "findstr /si pass *.xml *.doc *.txt *.xls\nls -R | select-string -ErrorAction SilentlyContinue -Pattern password\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1552.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials In Files",
+    "source": "ART",
+    "uuid": "0e56bf29-ff49-4ea5-9af4-3b81283fd513",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

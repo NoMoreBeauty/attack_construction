@@ -1,0 +1,51 @@
+{
+    "name": "InstallUtil HelpText method call",
+    "description": "Executes the Uninstall Method. Upon execution, help information will be displayed for InstallUtil. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "# Import the required test harness function, Invoke-BuildAndInvokeInstallUtilAssembly\n. \"#{test_harness}\"\n\n$InstallerAssemblyDir = \"#{assembly_dir}\"\n$InstallerAssemblyFileName = \"#{assembly_filename}\"\n$InstallerAssemblyFullPath = Join-Path -Path $InstallerAssemblyDir -ChildPath $InstallerAssemblyFileName\n\n$CommandLine = \"/? `\"$InstallerAssemblyFullPath`\"\"\n$ExpectedOutput = 'Constructor_HelpText_'\n\n$TestArgs = @{\n    OutputAssemblyDirectory = $InstallerAssemblyDir\n    OutputAssemblyFileName = $InstallerAssemblyFileName\n    InvocationMethod = '#{invocation_method}'\n    CommandLine = $CommandLine\n}\n\n$ActualOutput = Invoke-BuildAndInvokeInstallUtilAssembly @TestArgs\n\nif ($ActualOutput -ne $ExpectedOutput) {\n    throw @\"\nInstallUtil HelpText property execution test failure. Installer assembly execution output did not match the expected output.\nExpected: $ExpectedOutput\nActual: $ActualOutput\n\"@\n}\n",
+        "cleanup_command": "$InstallerAssemblyDir = \"#{assembly_dir}\"\n$InstallerAssemblyFileName = \"#{assembly_filename}\"\n$InstallerAssemblyFullPath = Join-Path -Path $InstallerAssemblyDir -ChildPath $InstallerAssemblyFileName\nRemove-Item -Path $InstallerAssemblyFullPath -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1218.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "InstallUtil",
+    "source": "ART",
+    "uuid": "5a683850-1145-4326-a0e5-e91ced3c6022",
+    "arguments": {
+        "test_harness": {
+            "description": "location of the test harness script - Invoke-BuildAndInvokeInstallUtilAssembly",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218.004\\src\\InstallUtilTestHarness.ps1"
+        },
+        "assembly_dir": {
+            "description": "directory to drop the compiled installer assembly",
+            "type": "path",
+            "default": "$Env:TEMP\\"
+        },
+        "invocation_method": {
+            "description": "the type of InstallUtil invocation variant - Executable, InstallHelper, or CheckIfInstallable",
+            "type": "string",
+            "default": "Executable"
+        },
+        "assembly_filename": {
+            "description": "filename of the compiled installer assembly",
+            "type": "string",
+            "default": "T1218.004.dll"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "InstallUtil test harness script must be installed at specified location (#{test_harness})\n",
+            "prereq_command": "if (Test-Path \"#{test_harness}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{test_harness}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest 'https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.004/src/InstallUtilTestHarness.ps1' -OutFile \"#{test_harness}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

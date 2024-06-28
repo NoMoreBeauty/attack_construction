@@ -1,0 +1,53 @@
+{
+    "name": "Encrypt files using gpg (FreeBSD/Linux)",
+    "description": "Uses gpg to encrypt a file ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "echo \"#{pwd_for_encrypted_file}\" | $which_gpg --batch --yes --passphrase-fd 0 --cipher-algo #{encryption_alg} -o #{encrypted_file_path} -c #{input_file_path}\n",
+        "cleanup_command": "rm #{encrypted_file_path}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1486",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Data Encrypted for Impact",
+    "source": "ART",
+    "uuid": "7b8ce084-3922-4618-8d22-95f996173765",
+    "arguments": {
+        "pwd_for_encrypted_file": {
+            "description": "the password that you want for the encrypted file",
+            "type": "string",
+            "default": "passwd"
+        },
+        "encrypted_file_path": {
+            "description": "path to the encrypted file",
+            "type": "path",
+            "default": "/tmp/passwd.gpg"
+        },
+        "input_file_path": {
+            "description": "path to the file that you want to encrypt",
+            "type": "path",
+            "default": "/etc/passwd"
+        },
+        "encryption_alg": {
+            "description": "encryption algorithm of the file",
+            "type": "string",
+            "default": "AES-256"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Finds where gpg is located\n",
+            "prereq_command": "which_gpg=`which gpg`\n",
+            "get_prereq_command": "(which pkg && pkg install -y gnupg)||(which yum && yum -y install epel-release gpg)||(which apt-get && DEBIAN_FRONTEND=noninteractive apt-get install -y gpg)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

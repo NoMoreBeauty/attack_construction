@@ -1,0 +1,36 @@
+{
+    "name": "Compiled HTML Help Local Payload",
+    "description": "Uses hh.exe to execute a local compiled HTML Help payload. Upon execution calc.exe will open ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "hh.exe \"#{local_chm_file}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Compiled HTML File",
+    "source": "ART",
+    "uuid": "5cb87818-0d7c-4469-b7ef-9224107aebe8",
+    "arguments": {
+        "local_chm_file": {
+            "description": "Local .chm payload",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218.001\\src\\T1218.001.chm"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The payload must exist on disk at specified location (#{local_chm_file})\n",
+            "prereq_command": "if (Test-Path \"#{local_chm_file}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{local_chm_file}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.001/src/T1218.001.chm\" -OutFile \"#{local_chm_file}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

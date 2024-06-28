@@ -1,0 +1,27 @@
+{
+    "name": "Modify SSH Authorized Keys",
+    "description": "Modify contents of <user-home>/.ssh/authorized_keys to maintain persistence on victim host.  If the user is able to save the same contents in the authorized_keys file, it shows user can modify the file. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "if [ -f ~/.ssh/authorized_keys ]; then ssh_authorized_keys=$(cat ~/.ssh/authorized_keys); echo \"$ssh_authorized_keys\" > ~/.ssh/authorized_keys; fi;\n",
+        "cleanup_command": "unset ssh_authorized_keys\n",
+        "type": "Command Executor"
+    },
+    "id": "T1098.004",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "SSH Authorized Keys",
+    "source": "ART",
+    "uuid": "342cc723-127c-4d3a-8292-9c0c6b4ecadc",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

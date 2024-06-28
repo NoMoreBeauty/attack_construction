@@ -1,0 +1,23 @@
+{
+    "name": "Enumerate all accounts via PowerShell (Local)",
+    "description": "Enumerate all accounts via PowerShell. Upon execution, lots of user account and group information will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net user\nget-localuser\nget-localgroupmember -group Users\ncmdkey.exe /list\nls C:/Users\nget-childitem C:\\Users\\\ndir C:\\Users\\\nget-localgroup\nnet localgroup\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1087.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "ae4b6361-b5f8-46cb-a3f9-9cf108ccfe7b",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

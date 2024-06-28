@@ -1,0 +1,42 @@
+{
+    "name": "Compress Data and lock with password for Exfiltration with 7zip",
+    "description": "Note: This test requires 7zip installation ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "command_prompt",
+        "elevation_required": false,
+        "command": "mkdir $PathToAtomicsFolder\\T1560.001\\victim-files\ncd $PathToAtomicsFolder\\T1560.001\\victim-files\necho \"This file will be encrypted\" > .\\encrypted_file.txt\n\"#{7zip_exe}\" u archive.7z *txt -pblue\ndir\n",
+        "cleanup_command": "rmdir /s /Q $PathToAtomicsFolder\\T1560.001\\victim-files >nul 2>&1\n",
+        "type": "Command Executor"
+    },
+    "id": "T1560.001",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Archive via Utility",
+    "source": "ART",
+    "uuid": "d1334303-59cb-4a03-8313-b3e24d02c198",
+    "arguments": {
+        "7zip_installer": {
+            "description": "7zip installer",
+            "type": "path",
+            "default": "%TEMP%\\7zip.exe"
+        },
+        "7zip_exe": {
+            "description": "Path to installed 7zip executable",
+            "type": "path",
+            "default": "%ProgramFiles%\\7-zip\\7z.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "7zip tool must be installed at specified location (#{7zip_exe})\n",
+            "prereq_command": "if not exist \"#{7zip_exe}\" (exit /b 1)\n",
+            "get_prereq_command": "echo Downloading 7-zip installer\nbitsadmin /transfer myDownloadJob /download /priority normal \"https://www.7-zip.org/a/7z2301-x64.exe\" #{7zip_installer}\n#{7zip_installer} /S\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

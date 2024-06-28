@@ -1,0 +1,52 @@
+{
+    "name": "Register Portable Virtualbox",
+    "description": "ransomware payloads via virtual machines (VM).  [Maze ransomware](https://threatpost.com/maze-ransomware-ragnar-locker-virtual-machine/159350/) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "\"C:\\Program Files\\Oracle\\VirtualBox\\VBoxSVC.exe\" /reregserver\nregsvr32 /S \"C:\\Program Files\\Oracle\\VirtualBox\\VboxC.dll\"\nrundll32 \"C:\\Program Files\\Oracle\\VirtualBox\\VBoxRT.dll,RTR3Init\"\nsc create VBoxDRV binpath= \"C:\\Program Files\\Oracle\\VirtualBox\\drivers\\VboxDrv.sys\" type= kernel start= auto error= normal displayname= PortableVBoxDRV\nsc start VBoxDRV\n",
+        "cleanup_command": "sc stop VBoxDRV\nsc delete VBoxDRV\nregsvr32 /u /S \"C:\\Program Files\\Oracle\\VirtualBox\\VboxC.dll\"\nmsiexec /x \"#{msi_file_path}\" /qn\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1564.006",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Run Virtual Instance",
+    "source": "ART",
+    "uuid": "c59f246a-34f8-4e4d-9276-c295ef9ba0dd",
+    "arguments": {
+        "msi_file_path": {
+            "description": "Path to the MSI file",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1564.006\\bin\\Virtualbox_52.msi"
+        },
+        "cab_file_path": {
+            "description": "Path to the CAB file",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1564.006\\bin\\common.cab"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "MSI file must exist on disk at specified location (#{msi_file_path})\n",
+            "prereq_command": "if (Test-Path \"#{msi_file_path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{msi_file_path}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1564.006/bin/Virtualbox_52.msi\" -OutFile \"#{msi_file_path}\"\n"
+        },
+        {
+            "description": "CAB file must exist on disk at specified location (#{cab_file_path})\n",
+            "prereq_command": "if (Test-Path \"#{cab_file_path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{cab_file_path}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1564.006/bin/common.cab\" -OutFile \"#{cab_file_path}\" \n"
+        },
+        {
+            "description": "Old version of Virtualbox must be installed\n",
+            "prereq_command": "if (Test-Path \"C:\\Program Files\\Oracle\\VirtualBox\\VboxC.dll\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "msiexec /i \"#{msi_file_path}\" /qn\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

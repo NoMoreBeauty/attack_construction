@@ -1,0 +1,63 @@
+{
+    "name": "Create and start VirtualBox virtual machine",
+    "description": "Create a simple VirtualBox VM and start up the machine Cleanup command stops and deletes the newly created VM and associated files https://www.virtualbox.org/manual/ch08.html#vboxmanage-startvm https://news.sophos.com/en-us/2020/05/21/ragnar-locker-ransomware-deploys-virtual-machine-to-dodge-security/ https://attack.mitre.org/techniques/T1564/006/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "command_prompt",
+        "elevation_required": false,
+        "command": "\"#{vboxmanage_exe}\" createvm --name \"#{vm_name}\" --register\n\"#{vboxmanage_exe}\" modifyvm \"#{vm_name}\" --firmware efi\n\"#{vboxmanage_exe}\" startvm \"#{vm_name}\"\n",
+        "cleanup_command": "\"#{vboxmanage_exe}\" controlvm \"#{vm_name}\" poweroff\n\"#{vboxmanage_exe}\" unregistervm \"#{vm_name}\" --delete",
+        "type": "Command Executor"
+    },
+    "id": "T1564.006",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Run Virtual Instance",
+    "source": "ART",
+    "uuid": "88b81702-a1c0-49a9-95b2-2dd53d755767",
+    "arguments": {
+        "vm_name": {
+            "description": "Name of the new virtual machine",
+            "type": "string",
+            "default": "Atomic VM"
+        },
+        "virtualbox_exe": {
+            "description": "Path to the VirtualBox executable",
+            "type": "path",
+            "default": "C:\\Program Files\\Oracle\\VirtualBox\\VirtualBox.exe"
+        },
+        "vboxmanage_exe": {
+            "description": "Path to the executable for VBoxManage, the command-line interface to VirtualBox",
+            "type": "path",
+            "default": "C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe"
+        },
+        "virtualbox_download": {
+            "description": "URL for the current installer for the Windows version of VirtualBox, as of March 2022",
+            "type": "url",
+            "default": "https://download.virtualbox.org/virtualbox/6.1.32/VirtualBox-6.1.32-149290-Win.exe"
+        },
+        "virtualbox_installer": {
+            "description": "Executable for the Virtualbox installer",
+            "type": "string",
+            "default": "VirtualBox-6.1.32-149290-Win.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "VirtualBox must exist on disk at specified locations (#{virtualbox_exe})\n",
+            "prereq_command": "if (Test-Path \"#{virtualbox_exe}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\n$wc = New-Object System.Net.WebClient\n$wc.DownloadFile(\"#{virtualbox_download}\",\"PathToAtomicsFolder\\..\\ExternalPayloads\\#{virtualbox_installer}\")\nstart-process -FilePath \"PathToAtomicsFolder\\..\\ExternalPayloads\\#{virtualbox_installer}\" -ArgumentList \"--silent\" -Wait\n"
+        },
+        {
+            "description": "VBoxManage must exist on disk at specified locations (#{vboxmanage_exe})\n",
+            "prereq_command": "if (Test-Path \"#{vboxmanage_exe}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "$wc = New-Object System.Net.WebClient\n$wc.DownloadFile(\"#{virtualbox_download}\",\"PathToAtomicsFolder\\..\\ExternalPayloads\\#{virtualbox_installer}\")\nstart-process -FilePath \"PathToAtomicsFolder\\..\\ExternalPayloads\\#{virtualbox_installer}\" -ArgumentList \"--silent\" -Wait\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

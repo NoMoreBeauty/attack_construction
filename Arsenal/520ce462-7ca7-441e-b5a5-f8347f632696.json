@@ -1,0 +1,24 @@
+{
+    "name": "Private Keys",
+    "description": "Find private keys on the Windows file system. File extensions include: .key, .pgp, .gpg, .ppk., .p12, .pem, pfx, .cer, .p7b, .asc ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "dir c:\\ /b /s .key | findstr /e .key\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1552.004",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Private Keys",
+    "source": "ART",
+    "uuid": "520ce462-7ca7-441e-b5a5-f8347f632696",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

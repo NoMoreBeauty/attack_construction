@@ -1,0 +1,31 @@
+{
+    "name": "Copy in loginwindow.plist for Re-Opened Applications",
+    "description": "Copy in new loginwindow.plist to launch Calculator. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "cp #{calc_plist_path} ~/Library/Preferences/ByHost/com.apple.loginwindow.plist\n",
+        "cleanup_command": "rm -f ~/Library/Preferences/ByHost/com.apple.loginwindow.plist\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1547.007",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Re-opened Applications",
+    "source": "ART",
+    "uuid": "5fefd767-ef54-4ac6-84d3-751ab85e8aba",
+    "arguments": {
+        "calc_plist_path": {
+            "description": "path to binary plist with entry to open calculator",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1547.007/src/reopen_loginwindow_calc.plist"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

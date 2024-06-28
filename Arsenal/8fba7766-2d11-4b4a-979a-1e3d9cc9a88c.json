@@ -1,0 +1,25 @@
+{
+    "name": "Disable Carbon Black Response",
+    "description": "Disables Carbon Black Response ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "sudo launchctl unload /Library/LaunchDaemons/com.carbonblack.daemon.plist\nsudo launchctl unload /Library/LaunchDaemons/com.carbonblack.defense.daemon.plist\n",
+        "cleanup_command": "sudo launchctl load -w /Library/LaunchDaemons/com.carbonblack.daemon.plist\nsudo launchctl load -w /Library/LaunchDaemons/com.carbonblack.defense.daemon.plist\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "8fba7766-2d11-4b4a-979a-1e3d9cc9a88c",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

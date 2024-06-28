@@ -1,0 +1,23 @@
+{
+    "name": "List Google Chrome / Opera Bookmarks on Windows with powershell",
+    "description": "Searches for Google Chrome's and Opera's Bookmarks file (on Windows distributions) that contains bookmarks. Upon execution, paths that contain bookmark files will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Get-ChildItem -Path C:\\Users\\ -Filter Bookmarks -Recurse -ErrorAction SilentlyContinue -Force\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1217",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Browser Information Discovery",
+    "source": "ART",
+    "uuid": "faab755e-4299-48ec-8202-fc7885eb6545",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

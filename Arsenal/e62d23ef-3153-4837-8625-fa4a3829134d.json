@@ -1,0 +1,52 @@
+{
+    "name": "Azure AD - Create a new user",
+    "description": "Creates a new user in Azure AD. Upon successful creation, a new user will be created. Adversaries create new users so that their malicious activity does not interrupt the normal functions of the compromised users and can remain undetected for a long time.",
+    "supported_platforms": [
+        "azure-ad"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Connect-AzureAD\n$userprincipalname = \"#{userprincipalname}\"\n$username = \"#{username}\"      \n$password = \"#{password}\"\n$PasswordProfile = New-Object -TypeName Microsoft.Open.AzureAD.Model.PasswordProfile\n$PasswordProfile.Password = $password\nNew-AzureADUser -DisplayName $username -PasswordProfile $PasswordProfile -UserPrincipalName $userprincipalname -AccountEnabled $true -MailNickName $username      ",
+        "cleanup_command": "Remove-AzureADUser -ObjectId \"#{userprincipalname}\"",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1136.003",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Cloud Account",
+    "source": "ART",
+    "uuid": "e62d23ef-3153-4837-8625-fa4a3829134d",
+    "arguments": {
+        "username": {
+            "description": "Display name of the new user to be created in Azure AD",
+            "type": "string",
+            "default": "atomicredteam"
+        },
+        "userprincipalname": {
+            "description": "User principal name (UPN) for the new Azure user being created format email address",
+            "type": "string",
+            "default": "atomicredteam@yourdomain.com"
+        },
+        "password": {
+            "description": "Password for the new Azure AD user being created",
+            "type": "string",
+            "default": "reallylongcredential12345ART-ydsfghsdgfhsdgfhgsdhfg"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if AzureAD PowerShell module is installed",
+            "prereq_command": "Get-InstalledModule -Name AzureAD",
+            "get_prereq_command": "echo \"use the following to install AzureAD PowerShell module - Install-Module -Name AzureAD -Scope CurrentUser -Repository PSGallery -Force\""
+        },
+        {
+            "description": "Check if AzureAD PowerShell module is installed",
+            "prereq_command": "Update the input arguments so the userprincipalname value is accurate for your environment",
+            "get_prereq_command": "echo \"Update the input arguments in the .yaml file so that the userprincipalname value is accurate for your environment\""
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

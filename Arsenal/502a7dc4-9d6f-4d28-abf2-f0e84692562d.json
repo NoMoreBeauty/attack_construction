@@ -1,0 +1,26 @@
+{
+    "name": "Detect Virtualization Environment (Windows)",
+    "description": "Windows Management Instrumentation(WMI) objects contains system information which helps to detect virtualization. This command will specifically attempt to get the CurrentTemperature value from this object and will check to see if the attempt results in an error that contains the word supported. This is meant to find the result of Not supported, which is the result if run in a virtual machine ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "$error.clear()\nGet-WmiObject -Query \"SELECT * FROM MSAcpi_ThermalZoneTemperature\" -ErrorAction SilentlyContinue\nif($error) {echo \"Virtualization Environment detected\"}\n",
+        "cleanup_command": "$error.clear()\n",
+        "type": "Command Executor"
+    },
+    "id": "T1497.001",
+    "tactics": [
+        "Defense Evasion",
+        "Discovery"
+    ],
+    "technique": "System Checks",
+    "source": "ART",
+    "uuid": "502a7dc4-9d6f-4d28-abf2-f0e84692562d",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

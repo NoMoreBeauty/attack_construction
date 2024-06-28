@@ -1,0 +1,35 @@
+{
+    "name": "Create ADS command prompt",
+    "description": "Create an Alternate Data Stream with the command prompt. Write access is required. Upon execution, run dir /a-d /s /r | find :$DATA in the %temp% folder to view that the alternate data stream exists. To view the data in the alternate data stream, run notepad T1564.004_has_ads.txt:adstest.txt ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "echo cmd /c echo \"Shell code execution.\"> #{file_name}:#{ads_filename}\nfor /f \"usebackq delims=?\" %i in (#{file_name}:#{ads_filename}) do %i\n",
+        "cleanup_command": "del #{file_name} >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1564.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "NTFS File Attributes",
+    "source": "ART",
+    "uuid": "17e7637a-ddaf-4a82-8622-377e20de8fdb",
+    "arguments": {
+        "file_name": {
+            "description": "File name of file to create ADS on.",
+            "type": "string",
+            "default": "%temp%\\T1564.004_has_ads_cmd.txt"
+        },
+        "ads_filename": {
+            "description": "Name of ADS.",
+            "type": "string",
+            "default": "adstest.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

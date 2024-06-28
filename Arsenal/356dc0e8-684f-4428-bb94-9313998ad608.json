@@ -1,0 +1,42 @@
+{
+    "name": "Base64 decoding with Python",
+    "description": "Use Python to decode a base64-encoded text string and echo it to the console ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "ENCODED=$(python3 -c 'import base64;enc=base64.b64encode(\"#{message}\".encode());print(enc.decode())')\npython3 -c \"import base64;dec=base64.b64decode(\\\"$ENCODED\\\");print(dec.decode())\"\npython3 -c \"import base64 as d;dec=d.b64decode(\\\"$ENCODED\\\");print(dec.decode())\"\npython3 -c \"from base64 import b64decode;dec=b64decode(\\\"$ENCODED\\\");print(dec.decode())\"\npython3 -c \"from base64 import b64decode as d;dec=d(\\\"$ENCODED\\\");print(dec.decode())\"\necho $ENCODED | python3 -c \"import base64,sys;dec=base64.b64decode(sys.stdin.read());print(dec.decode())\"\necho $ENCODED > #{encoded_file} && python3 -c \"import base64;dec=base64.b64decode(open('#{encoded_file}').read());print(dec.decode())\"\n",
+        "type": "Command Executor"
+    },
+    "id": "T1140",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Deobfuscate/Decode Files or Information",
+    "source": "ART",
+    "uuid": "356dc0e8-684f-4428-bb94-9313998ad608",
+    "arguments": {
+        "message": {
+            "description": "Message to print to the screen",
+            "type": "string",
+            "default": "Hello from Atomic Red Team test T1140!"
+        },
+        "encoded_file": {
+            "description": "File to temporarily save encoded text",
+            "type": "path",
+            "default": "/tmp/T1140.encoded"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Python must be present\n",
+            "prereq_command": "which python3\n",
+            "get_prereq_command": "echo \"Please install Python 3\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

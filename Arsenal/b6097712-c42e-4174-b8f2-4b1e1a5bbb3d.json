@@ -1,0 +1,35 @@
+{
+    "name": "Base64 decoding with shell utilities (freebsd)",
+    "description": "Use common shell utilities to decode a base64-encoded text string and echo it to the console ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "ENCODED=$(echo '#{message}' | b64encode -r -)\nprintf $ENCODED | b64decode -r\necho $ENCODED | b64decode -r\necho $(echo $ENCODED) | b64decode -r\necho $ENCODED > #{encoded_file} && b64encode -r #{encoded_file}\necho $ENCODED > #{encoded_file} && b64decode -r < #{encoded_file}\necho $ENCODED > #{encoded_file} && cat #{encoded_file} | b64decode -r\necho $ENCODED > #{encoded_file} && cat < #{encoded_file} | b64decode -r\n",
+        "type": "Command Executor"
+    },
+    "id": "T1140",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Deobfuscate/Decode Files or Information",
+    "source": "ART",
+    "uuid": "b6097712-c42e-4174-b8f2-4b1e1a5bbb3d",
+    "arguments": {
+        "message": {
+            "description": "Message to print to the screen",
+            "type": "string",
+            "default": "Hello from Atomic Red Team test T1140!"
+        },
+        "encoded_file": {
+            "description": "File to temporarily save encoded text",
+            "type": "path",
+            "default": "/tmp/T1140.encoded"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

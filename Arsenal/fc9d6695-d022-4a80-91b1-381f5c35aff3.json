@@ -1,0 +1,35 @@
+{
+    "name": "chmod - Change file or folder mode (symbolic mode)",
+    "description": "Changes a file or folder's permissions using chmod and a specified symbolic mode. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "chmod #{symbolic_mode} #{file_or_folder}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1222.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Linux and Mac File and Directory Permissions Modification",
+    "source": "ART",
+    "uuid": "fc9d6695-d022-4a80-91b1-381f5c35aff3",
+    "arguments": {
+        "symbolic_mode": {
+            "description": "Specified symbolic mode value",
+            "type": "string",
+            "default": "a+w"
+        },
+        "file_or_folder": {
+            "description": "Path of the file or folder",
+            "type": "path",
+            "default": "/tmp/AtomicRedTeam/atomics/T1222.002"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

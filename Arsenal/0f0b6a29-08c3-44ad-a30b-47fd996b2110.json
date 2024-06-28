@@ -1,0 +1,37 @@
+{
+    "name": "Show if a user account has ever logged in remotely",
+    "description": "Show if a user account has ever logged in remotely ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "[ \"$(uname)\" = 'FreeBSD' ] && cmd=\"lastlogin\" || cmd=\"lastlog\" \n$cmd > #{output_file}\ncat #{output_file}\n",
+        "cleanup_command": "rm -f #{output_file}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1087.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "0f0b6a29-08c3-44ad-a30b-47fd996b2110",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed",
+            "type": "path",
+            "default": "/tmp/T1087.001.txt"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if lastlog command exists on the machine\n",
+            "prereq_command": "if [ -x \"$(command -v lastlog)\" ]; then exit 0; else exit 1; fi\n",
+            "get_prereq_command": "sudo apt-get install login; exit 1;\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

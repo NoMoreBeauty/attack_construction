@@ -1,0 +1,46 @@
+{
+    "name": "Set a firewall rule using New-NetFirewallRule",
+    "description": "This test will attempt to create a new inbound/outbound firewall rule using the New-NetFirewallRule commandlet.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "New-NetFirewallRule -DisplayName \"New rule\" -Direction \"#{direction}\" -LocalPort \"#{local_port}\" -Protocol \"#{protocol}\" -Action \"#{action}\"",
+        "cleanup_command": "Remove-NetFirewallRule -DisplayName \"New rule\"",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "94be7646-25f6-467e-af23-585fb13000c8",
+    "arguments": {
+        "direction": {
+            "description": "Direction can be Inbound or Outbound",
+            "type": "string",
+            "default": "Inbound"
+        },
+        "local_port": {
+            "description": "This is the local port you wish to test opening",
+            "type": "integer",
+            "default": 21
+        },
+        "protocol": {
+            "description": "This is the protocol",
+            "type": "string",
+            "default": "TCP"
+        },
+        "action": {
+            "description": "This is the action",
+            "type": "string",
+            "default": "allow"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

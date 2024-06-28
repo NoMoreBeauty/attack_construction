@@ -1,0 +1,41 @@
+{
+    "name": "cacls - Grant permission to specified user or group recursively",
+    "description": "Modifies the filesystem permissions of the specified folder and contents to allow the specified user or group Full Control. If Access is denied is displayed it may be because the file or folder doesn't exit. Run the prereq command to create it. Upon successfull execution, Successfully processed 3 files will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "command_prompt",
+    "executor": {
+        "command": "icacls.exe #{file_or_folder} /grant #{user_or_group}:F\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1222.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Windows File and Directory Permissions Modification",
+    "source": "ART",
+    "uuid": "a8206bcc-f282-40a9-a389-05d9c0263485",
+    "arguments": {
+        "file_or_folder": {
+            "description": "Path of the file or folder to change permissions.",
+            "type": "path",
+            "default": "%temp%\\T1222.001_cacls"
+        },
+        "user_or_group": {
+            "description": "User or group to allow full control",
+            "type": "string",
+            "default": "Everyone"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Test requrires a file to modify to be located at (#{file_or_folder})\n",
+            "prereq_command": "IF EXIST #{file_or_folder} ( EXIT 0 ) ELSE ( EXIT 1 )\n",
+            "get_prereq_command": "mkdir #{file_or_folder}\necho T1222.001_cacls1 >> #{file_or_folder}\\T1222.001_cacls1.txt\necho T1222.001_cacls2 >> #{file_or_folder}\\T1222.001_cacls2.txt\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

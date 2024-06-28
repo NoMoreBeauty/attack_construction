@@ -1,0 +1,45 @@
+{
+    "name": "Invoke HTML Application - JScript Engine with Rundll32 and Inline Protocol Handler",
+    "description": "Executes an HTA Application with JScript Engine, Rundll32 and Inline Protocol Handler.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Invoke-ATHHTMLApplication -ScriptEngine #{script_engine} -InlineProtocolHandler #{protocol_handler} -UseRundll32 -Rundll32FilePath #{rundll32_file_path}",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1218.005",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Mshta",
+    "source": "ART",
+    "uuid": "e7e3a525-7612-4d68-a5d3-c4649181b8af",
+    "arguments": {
+        "rundll32_file_path": {
+            "description": "Location of rundll32.exe",
+            "type": "path",
+            "default": "$env:windir\\system32\\rundll32.exe"
+        },
+        "script_engine": {
+            "description": "Script Engine to use",
+            "type": "string",
+            "default": "JScript"
+        },
+        "protocol_handler": {
+            "description": "Protocol Handler to use",
+            "type": "string",
+            "default": "About"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The AtomicTestHarnesses module must be installed and Invoke-ATHHTMLApplication must be exported in the module.",
+            "prereq_command": "$RequiredModule = Get-Module -Name AtomicTestHarnesses -ListAvailable\nif (-not $RequiredModule) {exit 1}\nif (-not $RequiredModule.ExportedCommands['Invoke-ATHHTMLApplication']) {exit 1} else {exit 0}",
+            "get_prereq_command": "Install-Module -Name AtomicTestHarnesses -Scope CurrentUser -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

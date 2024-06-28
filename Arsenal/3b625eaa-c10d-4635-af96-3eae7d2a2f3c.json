@@ -1,0 +1,25 @@
+{
+    "name": "Tamper Win Defender Protection",
+    "description": "Tamper Win Defender Protection. RedLine Stealer is executing another component file to modify this win defender feature in registry.  Take note that this modification might not be enough to disable this feature but can be a good indicator of malicious process that  tries to tamper this Win Defender feature settings. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Features\" /v \"TamperProtection\" /t REG_DWORD /d 0 /f\n",
+        "cleanup_command": "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Features\" /v \"TamperProtection\" /t REG_DWORD /d 5 /f\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "3b625eaa-c10d-4635-af96-3eae7d2a2f3c",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

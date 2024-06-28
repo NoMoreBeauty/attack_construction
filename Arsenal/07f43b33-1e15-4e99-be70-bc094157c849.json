@@ -1,0 +1,25 @@
+{
+    "name": "Disable OpenDNS Umbrella",
+    "description": "Disables OpenDNS Umbrella ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "sudo launchctl unload /Library/LaunchDaemons/com.opendns.osx.RoamingClientConfigUpdater.plist\n",
+        "cleanup_command": "sudo launchctl load -w /Library/LaunchDaemons/com.opendns.osx.RoamingClientConfigUpdater.plist\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "07f43b33-1e15-4e99-be70-bc094157c849",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

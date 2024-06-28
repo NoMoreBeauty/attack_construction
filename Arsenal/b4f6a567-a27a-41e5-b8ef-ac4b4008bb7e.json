@@ -1,0 +1,36 @@
+{
+    "name": "Base64 decoding with shell utilities",
+    "description": "Use common shell utilities to decode a base64-encoded text string and echo it to the console ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "ENCODED=$(echo '#{message}' | base64)\nprintf $ENCODED | base64 -d\necho $ENCODED | base64 -d\necho $(echo $ENCODED) | base64 -d\necho $ENCODED > #{encoded_file} && base64 -d #{encoded_file}\necho $ENCODED > #{encoded_file} && base64 -d < #{encoded_file}\necho $ENCODED > #{encoded_file} && cat #{encoded_file} | base64 -d\necho $ENCODED > #{encoded_file} && cat < #{encoded_file} | base64 -d\nbash -c \"{echo,\\\"$(echo $ENCODED)\\\"}|{base64,-d}\"\n",
+        "type": "Command Executor"
+    },
+    "id": "T1140",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Deobfuscate/Decode Files or Information",
+    "source": "ART",
+    "uuid": "b4f6a567-a27a-41e5-b8ef-ac4b4008bb7e",
+    "arguments": {
+        "message": {
+            "description": "Message to print to the screen",
+            "type": "string",
+            "default": "Hello from Atomic Red Team test T1140!"
+        },
+        "encoded_file": {
+            "description": "File to temporarily save encoded text",
+            "type": "path",
+            "default": "/tmp/T1140.encoded"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

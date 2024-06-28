@@ -1,0 +1,33 @@
+{
+    "name": "Make and modify binary from C source",
+    "description": "Make, change owner, and change file attributes on a C source code file ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "executor": {
+        "command": "cp #{payload} /tmp/hello.c\nsudo chown root /tmp/hello.c\nsudo make /tmp/hello\nsudo chown root /tmp/hello\nsudo chmod u+s /tmp/hello\n/tmp/hello\n",
+        "cleanup_command": "sudo rm /tmp/hello\nsudo rm /tmp/hello.c\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1548.001",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Setuid and Setgid",
+    "source": "ART",
+    "uuid": "896dfe97-ae43-4101-8e96-9a7996555d80",
+    "arguments": {
+        "payload": {
+            "description": "hello.c payload",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1548.001/src/hello.c"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

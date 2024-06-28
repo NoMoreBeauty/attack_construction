@@ -1,0 +1,42 @@
+{
+    "name": "Install IIS Module using AppCmd.exe",
+    "description": "The following Atomic will utilize AppCmd.exe to install a new IIS Module. IIS must be installed. This atomic utilizes a DLL on disk, but to test further suspiciousness, compile and load [IIS-Raid](https://www.mdsec.co.uk/2020/02/iis-raid-backdooring-iis-using-native-modules/). A successful execution will install a module into IIS using AppCmd.exe. [Managing and installing Modules Reference](https://learn.microsoft.com/en-us/iis/get-started/introduction-to-iis/iis-modules-overview#to-install-a-module-using-appcmdexe) [IIS Modules](https://www.microsoft.com/en-us/security/blog/2022/12/12/iis-modules-the-evolution-of-web-shells-and-how-to-detect-them/) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "%windir%\\system32\\inetsrv\\appcmd.exe install module /name:#{module_name} /image:#{dll_path}\n",
+        "cleanup_command": "%windir%\\system32\\inetsrv\\appcmd.exe uninstall module #{module_name}\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1505.004",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "IIS Components",
+    "source": "ART",
+    "uuid": "53adbdfa-8200-490c-871c-d3b1ab3324b2",
+    "arguments": {
+        "module_name": {
+            "description": "The name of the IIS module",
+            "type": "string",
+            "default": "DefaultDocumentModule_Atomic"
+        },
+        "dll_path": {
+            "description": "The path to the DLL to be loaded",
+            "type": "path",
+            "default": "%windir%\\system32\\inetsrv\\defdoc.dll"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "IIS must be installed in order to add a module to IIS.\n",
+            "prereq_command": "$service = get-service w3svc -ErrorAction SilentlyContinue\nif($service){ Write-Host \"IIS installed on $env:computername\" } else { Write-Host \"IIS is not installed on $env:computername\" } \n",
+            "get_prereq_command": "Install IIS to continue.\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

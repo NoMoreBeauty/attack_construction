@@ -1,0 +1,42 @@
+{
+    "name": "Port Scan NMap for Windows",
+    "description": "Scan ports to check for listening ports for the local host 127.0.0.1",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "nmap #{host_to_scan}",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1046",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Network Service Discovery",
+    "source": "ART",
+    "uuid": "d696a3cb-d7a8-4976-8eb5-5af4abf2e3df",
+    "arguments": {
+        "nmap_url": {
+            "description": "NMap installer download URL",
+            "type": "url",
+            "default": "https://nmap.org/dist/nmap-7.80-setup.exe"
+        },
+        "host_to_scan": {
+            "description": "The host to scan with NMap",
+            "type": "string",
+            "default": "127.0.0.1"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "NMap must be installed\n",
+            "prereq_command": "if (cmd /c \"nmap 2>nul\") {exit 0} else {exit 1}",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\nmap-7.80-setup.exe\" #{nmap_url}\nStart-Process \"PathToAtomicsFolder\\..\\ExternalPayloads\\nmap-7.80-setup.exe\" /S\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

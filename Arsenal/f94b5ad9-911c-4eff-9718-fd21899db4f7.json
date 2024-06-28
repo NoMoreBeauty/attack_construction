@@ -1,0 +1,29 @@
+{
+    "name": "Network Share Discovery",
+    "description": "Network Share Discovery ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "df -aH\nsmbutil view -g //#{computer_name}\nshowmount #{computer_name}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1135",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Network Share Discovery",
+    "source": "ART",
+    "uuid": "f94b5ad9-911c-4eff-9718-fd21899db4f7",
+    "arguments": {
+        "computer_name": {
+            "description": "Computer name to find a mount on.",
+            "type": "string",
+            "default": "computer1"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

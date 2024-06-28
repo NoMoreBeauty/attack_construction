@@ -1,0 +1,36 @@
+{
+    "name": "Discover Private SSH Keys",
+    "description": "Discover private SSH keys on a FreeBSD, macOS or Linux system. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "find #{search_path} -name id_rsa 2>/dev/null >> #{output_file}\nexit 0\n",
+        "cleanup_command": "rm #{output_file}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1552.004",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Private Keys",
+    "source": "ART",
+    "uuid": "46959285-906d-40fa-9437-5a439accd878",
+    "arguments": {
+        "search_path": {
+            "description": "Path where to start searching from.",
+            "type": "path",
+            "default": "/"
+        },
+        "output_file": {
+            "description": "Output file containing locations of SSH key files",
+            "type": "path",
+            "default": "/tmp/keyfile_locations.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

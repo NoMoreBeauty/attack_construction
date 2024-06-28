@@ -1,0 +1,35 @@
+{
+    "name": "chown - Change file or folder mode ownership only",
+    "description": "Changes a file or folder's ownership only using chown. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "chown #{owner} #{file_or_folder}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1222.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Linux and Mac File and Directory Permissions Modification",
+    "source": "ART",
+    "uuid": "967ba79d-f184-4e0e-8d09-6362b3162e99",
+    "arguments": {
+        "owner": {
+            "description": "Username of desired owner",
+            "type": "string",
+            "default": "root"
+        },
+        "file_or_folder": {
+            "description": "Path of the file or folder",
+            "type": "path",
+            "default": "/tmp/AtomicRedTeam/atomics/T1222.002/T1222.002.yaml"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,42 @@
+{
+    "name": "Network Share Discovery - FreeBSD",
+    "description": "Network Share Discovery using smbstatus ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "smbstatus --shares\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1135",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Network Share Discovery",
+    "source": "ART",
+    "uuid": "77e468a6-3e5c-45a1-9948-c4b5603747cb",
+    "arguments": {
+        "package_checker": {
+            "description": "Package checking command. pkg info -x samba",
+            "type": "string",
+            "default": "(pkg info -x samba &>/dev/null)"
+        },
+        "package_installer": {
+            "description": "Package installer command. pkg install -y samba413",
+            "type": "string",
+            "default": "(which pkg && pkg install -y samba413)"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Package with smbstatus (samba) must exist on device\n",
+            "prereq_command": "if #{package_checker} > /dev/null; then exit 0; else exit 1; fi\n",
+            "get_prereq_command": "#{package_installer} \n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

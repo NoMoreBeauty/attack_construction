@@ -1,0 +1,37 @@
+{
+    "name": "Mount ISO image",
+    "description": "Mounts ISO image downloaded from internet to evade Mark-of-the-Web. Upon successful execution, powershell will download the .iso from the Atomic Red Team repo, and mount the image. The provided sample ISO simply has a Reports shortcut file in it. Reference: https://www.microsoft.com/security/blog/2021/05/27/new-sophisticated-email-based-attack-from-nobelium/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Mount-DiskImage -ImagePath \"#{path_of_iso}\"\n",
+        "cleanup_command": "Dismount-DiskImage -ImagePath \"#{path_of_iso}\" | Out-Null\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1553.005",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Mark-of-the-Web Bypass",
+    "source": "ART",
+    "uuid": "002cca30-4778-4891-878a-aaffcfa502fa",
+    "arguments": {
+        "path_of_iso": {
+            "description": "Path to ISO file",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1553.005\\bin\\T1553.005.iso"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "T1553.005.iso must exist on disk at specified location (#{path_of_iso})\n",
+            "prereq_command": "if (Test-Path \"#{path_of_iso}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{path_of_iso}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1553.005/bin/T1553.005.iso -OutFile \"#{path_of_iso}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,37 @@
+{
+    "name": "Launch NSudo Executable",
+    "description": "Launches the NSudo executable for a short period of time and then exits. NSudo download observed after maldoc execution. NSudo is a system management tool for advanced users to launch programs with full privileges.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Start-Process \"#{nsudo_path}\" -Argument \"-U:T -P:E cmd\"\nStart-Sleep -Second 5\nStop-Process -Name \"cmd\" -force -erroraction silentlycontinue\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1134.001",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Token Impersonation/Theft",
+    "source": "ART",
+    "uuid": "7be1bc0f-d8e5-4345-9333-f5f67d742cb9",
+    "arguments": {
+        "nsudo_path": {
+            "description": "Path to the NSudoLG.exe file",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1134.001\\bin\\NSudoLG.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "NSudoLG.exe must exist in the specified path #{nsudo_path}\n",
+            "prereq_command": "if (Test-Path \"#{nsudo_path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\NSudo_8.2_All_Components.zip\" \"https://github.com/M2Team/NSudo/releases/download/8.2/NSudo_8.2_All_Components.zip\"\nExpand-Archive -Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\NSudo_8.2_All_Components.zip\" -DestinationPath \"PathToAtomicsFolder\\..\\ExternalPayloads\\NSudo_8.2_All_Components\" -Force\nCopy-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\NSudo_8.2_All_Components\\NSudo Launcher\\x64\\NSudoLG.exe\" \"#{nsudo_path}\"\nRemove-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\NSudo_8.2_All_Components.zip\" -Recurse -ErrorAction Ignore\nRemove-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\NSudo_8.2_All_Components\" -Recurse -ErrorAction Ignore\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,25 @@
+{
+    "name": "Space After Filename",
+    "description": "Space after filename. ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "executor": {
+        "name": "sh",
+        "command": "mkdir -p /tmp/atomic-test-T1036.006\ncd /tmp/atomic-test-T1036.006\nmkdir -p 'testdirwithspaceend '\n[ \"$(uname)\" = 'FreeBSD' ] && /bin/echo \"#\\!/bin/sh\" > \"testdirwithspaceend /init \" && echo 'echo \"print(\\\"running T1035.006 with space after filename to masquerade init\\\")\" | python3.9' >> \"testdirwithspaceend /init \" && echo \"exit\" >> \"testdirwithspaceend /init \" || /usr/bin/echo -e \"%d\\na\\n#!/usr/bin/perl\\nprint \\\"running T1035.006 with space after filename to masquerade init\\\\n\\\";\\nqx/cp \\/usr\\/bin\\/perl 'init  '/;\\nqx/'.\\/init  ' -e 'sleep 5'/;\\n.\\nwq\\n\" | ed 'testdirwithspaceend /init ' >/dev/null\nchmod +x 'testdirwithspaceend /init '\n'./testdirwithspaceend /init '\n",
+        "cleanup_command": "rm -rf /tmp/atomic-test-T1036.006",
+        "type": "Command Executor"
+    },
+    "id": "T1036.006",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Space after Filename",
+    "source": "ART",
+    "uuid": "b95ce2eb-a093-4cd8-938d-5258cef656ea",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

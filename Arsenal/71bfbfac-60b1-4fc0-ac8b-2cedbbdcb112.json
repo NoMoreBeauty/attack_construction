@@ -1,0 +1,42 @@
+{
+    "name": "Regasm Uninstall Method Call Test",
+    "description": "Executes the Uninstall Method, No Admin Rights Required. Upon execution, I shouldn't really execute either. will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\csc.exe /r:System.EnterpriseServices.dll /out:\"#{output_file}\" /target:library \"#{source_file}\"\nC:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\regasm.exe /U #{output_file}\n",
+        "cleanup_command": "del #{output_file} >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218.009",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Regsvcs/Regasm",
+    "source": "ART",
+    "uuid": "71bfbfac-60b1-4fc0-ac8b-2cedbbdcb112",
+    "arguments": {
+        "output_file": {
+            "description": "Location of the payload",
+            "type": "path",
+            "default": "%tmp%\\T1218.009.dll"
+        },
+        "source_file": {
+            "description": "Location of the CSharp source_file",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218.009\\src\\T1218.009.cs"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The CSharp source file must exist on disk at specified location (#{source_file})\n",
+            "prereq_command": "if (Test-Path \"#{source_file}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{source_file}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.009/src/T1218.009.cs\" -OutFile \"#{source_file}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

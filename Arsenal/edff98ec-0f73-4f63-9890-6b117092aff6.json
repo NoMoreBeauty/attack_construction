@@ -1,0 +1,23 @@
+{
+    "name": "System Information Discovery",
+    "description": "Identify System Info ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "system_profiler\nls -al /Applications\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "edff98ec-0f73-4f63-9890-6b117092aff6",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

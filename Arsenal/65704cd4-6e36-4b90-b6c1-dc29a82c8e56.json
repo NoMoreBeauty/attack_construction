@@ -1,0 +1,24 @@
+{
+    "name": "NetWire RAT Registry Key Creation",
+    "description": "NetWire continues to create its home key (HKCU\\SOFTWARE\\NetWire) as well as adding it into the auto-run group in the victim\u2019s registry. See how NetWire malware - https://app.any.run/tasks/41ecdbde-4997-4301-a350-0270448b4c8f/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v NetWire /t REG_SZ  /d \"C:\\Users\\admin\\AppData\\Roaming\\Install\\Host.exe\" /f\nreg add HKCU\\SOFTWARE\\NetWire /v HostId /t REG_SZ /d HostId-kai6Ci /f\nreg add HKCU\\SOFTWARE\\NetWire /v \"Install Date\" /t REG_SZ /d \"2021-08-30 07:17:27\" /f\n",
+        "cleanup_command": "reg delete HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v NetWire /f >nul 2>&1\nreg delete HKCU\\SOFTWARE\\NetWire /va /f >nul 2>&1\nreg delete HKCU\\SOFTWARE\\NetWire /f >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "65704cd4-6e36-4b90-b6c1-dc29a82c8e56",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

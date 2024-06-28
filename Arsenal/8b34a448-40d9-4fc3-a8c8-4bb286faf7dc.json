@@ -1,0 +1,29 @@
+{
+    "name": "Indirect Command Execution - forfiles.exe",
+    "description": "forfiles.exe may invoke the execution of programs and commands from a Command-Line Interface. [Reference](https://github.com/LOLBAS-Project/LOLBAS/blob/master/yml/OSBinaries/Forfiles.yml) This is basically saying for each occurrence of notepad.exe in c:\\windows\\system32 run calc.exe Upon execution calc.exe will be opened. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "forfiles /p c:\\windows\\system32 /m notepad.exe /c #{process}\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1202",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Indirect Command Execution",
+    "source": "ART",
+    "uuid": "8b34a448-40d9-4fc3-a8c8-4bb286faf7dc",
+    "arguments": {
+        "process": {
+            "description": "Process to execute",
+            "type": "string",
+            "default": "calc.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

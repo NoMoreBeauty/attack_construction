@@ -1,0 +1,37 @@
+{
+    "name": "CC compile",
+    "description": "Compile a c file with either gcc or clang on FreeBSD, Linux or Macos. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "g++ #{input_file} && ./a.out\nclang++ #{input_file} && ./a.out\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1027.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Compile After Delivery",
+    "source": "ART",
+    "uuid": "da97bb11-d6d0-4fc1-b445-e443d1346efe",
+    "arguments": {
+        "input_file": {
+            "description": "source file",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1027.004/src/T1027-004-test.cc"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "the source file must exist on disk at specified location (#{input_file})\n",
+            "prereq_command": "if [ -e  #{input_file} ]; then exit 0; else exit 1; fi\n",
+            "get_prereq_command": "wget https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1027.004/src/T1027-004-test.cc -O #{input_file}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

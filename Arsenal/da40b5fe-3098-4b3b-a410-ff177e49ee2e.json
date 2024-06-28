@@ -1,0 +1,41 @@
+{
+    "name": "Chmod through c script (freebsd)",
+    "description": "chmods a file using a c script ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "#{compiled_file} /tmp/ T1222002\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1222.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Linux and Mac File and Directory Permissions Modification",
+    "source": "ART",
+    "uuid": "da40b5fe-3098-4b3b-a410-ff177e49ee2e",
+    "arguments": {
+        "source_file": {
+            "description": "Path of c source file",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1222.002/src/T1222.002.c"
+        },
+        "compiled_file": {
+            "description": "Path of compiled file",
+            "type": "path",
+            "default": "/tmp/T1222002"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Compile the script from (#{source_file}). Destination is #{compiled_file}\n",
+            "prereq_command": "cc #{source_file} -o #{compiled_file}\n",
+            "get_prereq_command": "cc #{source_file} -o #{compiled_file}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

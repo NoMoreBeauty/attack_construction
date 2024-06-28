@@ -1,0 +1,25 @@
+{
+    "name": "Suspend History",
+    "description": "suspend Shell History seen in Awfulshred wiper- https://unix.stackexchange.com/questions/10922/temporarily-suspend-bash-history-on-a-given-shell ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "set +o history\n",
+        "cleanup_command": "set -o history\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "94f6a1c9-aae7-46a4-9083-2bb1f5768ec4",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

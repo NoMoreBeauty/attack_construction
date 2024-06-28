@@ -1,0 +1,36 @@
+{
+    "name": "Create a new account similar to ANONYMOUS LOGON",
+    "description": "Create a new account similar to ANONYMOUS LOGON in a command prompt. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net user \"#{username}\" \"#{password}\" /add /domain\n",
+        "cleanup_command": "net user \"#{username}\" >nul 2>&1 /del /domain\n",
+        "name": "command_prompt",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1136.002",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "dc7726d2-8ccb-4cc6-af22-0d5afb53a548",
+    "arguments": {
+        "username": {
+            "description": "Username of the user to create",
+            "type": "string",
+            "default": "ANONYMOUS  LOGON"
+        },
+        "password": {
+            "description": "Password of the user to create",
+            "type": "string",
+            "default": "T1136_pass123!"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

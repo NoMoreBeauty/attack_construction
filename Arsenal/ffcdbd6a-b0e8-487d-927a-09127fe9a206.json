@@ -1,0 +1,42 @@
+{
+    "name": "Compile After Delivery using csc.exe",
+    "description": "Compile C# code using csc.exe binary used by .NET Upon execution an exe named T1027.004.exe will be placed in the temp folder ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe /out:#{output_file} \"#{input_file}\"\n",
+        "cleanup_command": "del #{output_file} >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1027.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Compile After Delivery",
+    "source": "ART",
+    "uuid": "ffcdbd6a-b0e8-487d-927a-09127fe9a206",
+    "arguments": {
+        "output_file": {
+            "description": "Output compiled binary",
+            "type": "path",
+            "default": "C:\\Windows\\Temp\\T1027.004.exe"
+        },
+        "input_file": {
+            "description": "C# code that launches calc.exe from a hidden cmd.exe Window",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1027.004\\src\\calc.cs"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "C# file must exist on disk at specified location (#{input_file})\n",
+            "prereq_command": "if (Test-Path \"#{input_file}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{input_file}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1027.004/src/calc.cs\" -OutFile \"#{input_file}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

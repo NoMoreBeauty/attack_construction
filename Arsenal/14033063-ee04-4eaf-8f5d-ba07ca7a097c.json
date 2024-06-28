@@ -1,0 +1,24 @@
+{
+    "name": "Truncate system log files via truncate utility (freebsd)",
+    "description": "This test truncates the system log files using the truncate utility with (-s 0 or --size=0) parameter which sets file size to zero, thus emptying the file content ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "truncate -s 0 /var/log/messages #size parameter shorthand\ntruncate --size=0 /var/log/security #size parameter \n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "14033063-ee04-4eaf-8f5d-ba07ca7a097c",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,30 @@
+{
+    "name": "List Google Chrome Bookmark JSON Files on macOS",
+    "description": "Searches for Google Chrome's Bookmark file (on macOS) that contains bookmarks in JSON format and lists any found instances to a text file. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "find / -path \"*/Google/Chrome/*/Bookmarks\" -exec echo {} >> #{output_file} \\;\ncat #{output_file} 2>/dev/null\n",
+        "cleanup_command": "rm -f #{output_file} 2>/dev/null\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1217",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Browser Information Discovery",
+    "source": "ART",
+    "uuid": "b789d341-154b-4a42-a071-9111588be9bc",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed.",
+            "type": "path",
+            "default": "/tmp/T1217-Chrome.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

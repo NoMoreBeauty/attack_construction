@@ -1,0 +1,43 @@
+{
+    "name": "Delete a single file - FreeBSD/Linux/macOS",
+    "description": "Delete a single file from the temporary directory ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "rm -f #{file_to_delete}\n",
+        "cleanup_command": "rm -rf #{parent_folder}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1070.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "File Deletion",
+    "source": "ART",
+    "uuid": "562d737f-2fc6-4b09-8c2a-7f8ff0828480",
+    "arguments": {
+        "parent_folder": {
+            "description": "Path of parent folder",
+            "type": "path",
+            "default": "/tmp/victim-files/"
+        },
+        "file_to_delete": {
+            "description": "Path of file to delete",
+            "type": "path",
+            "default": "/tmp/victim-files/T1070.004-test.txt"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The file must exist in order to be deleted\n",
+            "prereq_command": "test -e #{file_to_delete} && exit 0 || exit 1\n",
+            "get_prereq_command": "mkdir -p #{parent_folder} && touch #{file_to_delete}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

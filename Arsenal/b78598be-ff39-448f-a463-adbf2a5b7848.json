@@ -1,0 +1,40 @@
+{
+    "name": "chown - Change file or folder ownership and group recursively",
+    "description": "Changes a file or folder's ownership and group information recursively using chown. ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "executor": {
+        "command": "chown -R #{owner}:#{group} #{file_or_folder}\n",
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1222.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Linux and Mac File and Directory Permissions Modification",
+    "source": "ART",
+    "uuid": "b78598be-ff39-448f-a463-adbf2a5b7848",
+    "arguments": {
+        "owner": {
+            "description": "Username of desired owner",
+            "type": "string",
+            "default": "root"
+        },
+        "file_or_folder": {
+            "description": "Path of the file or folder",
+            "type": "path",
+            "default": "/tmp/AtomicRedTeam/atomics/T1222.002"
+        },
+        "group": {
+            "description": "Group name of desired group",
+            "type": "string",
+            "default": "root"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

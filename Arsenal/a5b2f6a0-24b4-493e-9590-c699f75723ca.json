@@ -1,0 +1,63 @@
+{
+    "name": "Packet Capture Windows Command Prompt",
+    "description": "Perform a packet capture using the windows command prompt. This will require a host that has Wireshark/Tshark installed.  Upon successful execution, tshark will execute and capture 5 packets on interface Ethernet. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "\"c:\\Program Files\\Wireshark\\tshark.exe\" -i #{interface} -c 5\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1040",
+    "tactics": [
+        "Credential Access",
+        "Discovery"
+    ],
+    "technique": "Network Sniffing",
+    "source": "ART",
+    "uuid": "a5b2f6a0-24b4-493e-9590-c699f75723ca",
+    "arguments": {
+        "interface": {
+            "description": "Specify interface to perform PCAP on.",
+            "type": "string",
+            "default": "Ethernet"
+        },
+        "wireshark_url": {
+            "description": "wireshark installer download URL",
+            "type": "url",
+            "default": "https://1.eu.dl.wireshark.org/win64/Wireshark-latest-x64.exe"
+        },
+        "tshark_path": {
+            "description": "path to tshark.exe",
+            "type": "path",
+            "default": "c:\\program files\\wireshark\\tshark.exe"
+        },
+        "npcap_url": {
+            "description": "npcap installed download URL",
+            "type": "url",
+            "default": "https://nmap.org/npcap/dist/npcap-1.31.exe"
+        },
+        "npcap_path": {
+            "description": "path to npcap.sys",
+            "type": "path",
+            "default": "C:\\Program Files\\Npcap\\npcap.sys"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "tshark must be installed and in the default path of \"c:\\Program Files\\Wireshark\\Tshark.exe\".\n",
+            "prereq_command": "if (test-path \"#{tshark_path}\") {exit 0} else {exit 1}",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\wireshark_installer.exe\" #{wireshark_url}\nStart-Process \"PathToAtomicsFolder\\..\\ExternalPayloads\\wireshark_installer.exe\" /S\n"
+        },
+        {
+            "description": "npcap must be installed.\n",
+            "prereq_command": "if (test-path \"#{npcap_path}\") {exit 0} else {exit 1}",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\npcap_installer.exe\" #{npcap_url}\nStart-Process \"PathToAtomicsFolder\\..\\ExternalPayloads\\npcap_installer.exe\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

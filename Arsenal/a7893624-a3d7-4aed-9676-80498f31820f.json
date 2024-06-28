@@ -1,0 +1,23 @@
+{
+    "name": "Examine password complexity policy - FreeBSD",
+    "description": "Lists the password complexity policy to console on FreeBSD. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "cat /etc/pam.d/passwd\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1201",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Password Policy Discovery",
+    "source": "ART",
+    "uuid": "a7893624-a3d7-4aed-9676-80498f31820f",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

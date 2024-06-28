@@ -1,0 +1,43 @@
+{
+    "name": "office-365-Disable-AntiPhishRule",
+    "description": "Using the Disable-AntiPhishRule cmdlet to disable antiphish rules in your office-365 organization. ",
+    "supported_platforms": [
+        "office-365"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "$secure_pwd = \"#{password}\" | ConvertTo-SecureString -AsPlainText -Force\n$creds = New-Object System.Management.Automation.PSCredential -ArgumentList \"#{username}\", $secure_pwd\nConnect-ExchangeOnline -Credential $creds\n$test = Get-AntiPhishRule\nDisable-AntiPhishRule -Identity $test.Name -Confirm:$false\nGet-AntiPhishRule\n",
+        "cleanup_command": "if(\"#{password}\" -ne \"\") {\n$secure_pwd = (\"#{password}\" + \"\") | ConvertTo-SecureString -AsPlainText -Force\n$creds = New-Object System.Management.Automation.PSCredential -ArgumentList \"#{username}\", $secure_pwd\nConnect-ExchangeOnline -Credential $creds\n$test = Get-AntiPhishRule\nEnable-AntiPhishRule -Identity $test.Name -Confirm:$false\nGet-AntiPhishRule\n} \n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "b9bbae2c-2ba6-4cf3-b452-8e8f908696f3",
+    "arguments": {
+        "username": {
+            "description": "office-365 username",
+            "type": "string",
+            "default": null
+        },
+        "password": {
+            "description": "office-365 password",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [
+        {
+            "description": "ExchangeOnlineManagement PowerShell module must be installed\n",
+            "prereq_command": "$RequiredModule = Get-Module -Name ExchangeOnlineManagement -ListAvailable\nif (-not $RequiredModule) {exit 1}\nif (-not $RequiredModule.ExportedCommands['Connect-ExchangeOnline']) {exit 1} else {exit 0}\n",
+            "get_prereq_command": "Install-Module -Name ExchangeOnlineManagement\nImport-Module ExchangeOnlineManagement\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

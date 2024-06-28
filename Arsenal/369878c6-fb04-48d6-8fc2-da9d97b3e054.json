@@ -1,0 +1,24 @@
+{
+    "name": "Delete log files via cat utility by appending /dev/null or /dev/zero (freebsd)",
+    "description": "The first sub-test truncates the log file to zero bytes via /dev/null and the second sub-test fills the log file with null bytes(zeroes) via /dev/zero, using cat utility ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "cat /dev/null > /var/log/messages #truncating the file to zero bytes\ncat /dev/zero > /var/lol/messages #log file filled with null bytes(zeros)\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "369878c6-fb04-48d6-8fc2-da9d97b3e054",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

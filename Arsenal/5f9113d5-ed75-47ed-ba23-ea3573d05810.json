@@ -1,0 +1,37 @@
+{
+    "name": "Set a file's access timestamp",
+    "description": "Stomps on the access timestamp of a file ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "touch -a -t 197001010000.00 #{target_filename}\n",
+        "cleanup_command": "rm -f #{target_filename}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1070.006",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Timestomp",
+    "source": "ART",
+    "uuid": "5f9113d5-ed75-47ed-ba23-ea3573d05810",
+    "arguments": {
+        "target_filename": {
+            "description": "Path of file that we are going to stomp on last access time",
+            "type": "path",
+            "default": "/tmp/T1070.006-access.txt"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The file must exist in order to be timestomped\n",
+            "prereq_command": "test -e #{target_filename} && exit 0 || exit 1\n",
+            "get_prereq_command": "echo 'T1070.006 file access timestomp test' > #{target_filename}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

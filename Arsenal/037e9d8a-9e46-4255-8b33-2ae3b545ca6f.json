@@ -1,0 +1,36 @@
+{
+    "name": "Control Panel Items",
+    "description": "This test simulates an adversary leveraging control.exe Upon execution calc.exe will be launched ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "control.exe \"#{cpl_file_path}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Control Panel",
+    "source": "ART",
+    "uuid": "037e9d8a-9e46-4255-8b33-2ae3b545ca6f",
+    "arguments": {
+        "cpl_file_path": {
+            "description": "path to cpl file",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218.002\\bin\\calc.cpl"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Cpl file must exist on disk at specified location (#{cpl_file_path})\n",
+            "prereq_command": "if (Test-Path \"#{cpl_file_path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{cpl_file_path}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.002/bin/calc.cpl\" -OutFile \"#{cpl_file_path}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

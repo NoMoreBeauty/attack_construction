@@ -1,0 +1,23 @@
+{
+    "name": "System Service Discovery - systemctl/service",
+    "description": "Enumerates system service using systemctl/service ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "if [ \"$(uname)\" = 'FreeBSD' ]; then service -e; else systemctl --type=service; fi;\n",
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1007",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Service Discovery",
+    "source": "ART",
+    "uuid": "f4b26bce-4c2c-46c0-bcc5-fce062d38bef",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,45 @@
+{
+    "name": "Invoke HTML Application - JScript Engine with Inline Protocol Handler",
+    "description": "Executes an HTA Application with JScript Engine and Inline Protocol Handler.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Invoke-ATHHTMLApplication -ScriptEngine #{script_engine} -InlineProtocolHandler #{protocol_handler} -MSHTAFilePath #{mshta_file_path}",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1218.005",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Mshta",
+    "source": "ART",
+    "uuid": "d3eaaf6a-cdb1-44a9-9ede-b6c337d0d840",
+    "arguments": {
+        "mshta_file_path": {
+            "description": "Location of mshta.exe",
+            "type": "path",
+            "default": "$env:windir\\system32\\mshta.exe"
+        },
+        "script_engine": {
+            "description": "Script Engine to use",
+            "type": "string",
+            "default": "JScript"
+        },
+        "protocol_handler": {
+            "description": "Protocol Handler to use",
+            "type": "string",
+            "default": "About"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The AtomicTestHarnesses module must be installed and Invoke-ATHHTMLApplication must be exported in the module.",
+            "prereq_command": "$RequiredModule = Get-Module -Name AtomicTestHarnesses -ListAvailable\nif (-not $RequiredModule) {exit 1}\nif (-not $RequiredModule.ExportedCommands['Invoke-ATHHTMLApplication']) {exit 1} else {exit 0}",
+            "get_prereq_command": "Install-Module -Name AtomicTestHarnesses -Scope CurrentUser -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

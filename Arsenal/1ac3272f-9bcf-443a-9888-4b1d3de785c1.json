@@ -1,0 +1,32 @@
+{
+    "name": "Provide the SetUID capability to a file",
+    "description": "This test gives a file the capability to set UID without using flags. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "touch #{file_to_setcap}\nsudo setcap cap_setuid=ep #{file_to_setcap}\n",
+        "cleanup_command": "rm #{file_to_setcap}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1548.001",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Setuid and Setgid",
+    "source": "ART",
+    "uuid": "1ac3272f-9bcf-443a-9888-4b1d3de785c1",
+    "arguments": {
+        "file_to_setcap": {
+            "description": "Path of file to provide the SetUID capability",
+            "type": "path",
+            "default": "/tmp/evilBinary"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

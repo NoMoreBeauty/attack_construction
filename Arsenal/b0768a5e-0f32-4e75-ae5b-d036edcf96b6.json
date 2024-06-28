@@ -1,0 +1,42 @@
+{
+    "name": "Delete system log files using srm utility",
+    "description": "This test securely deletes the system log files individually and recursively using the srm utility. Install srm using Homebrew with the command: brew install khell/homebrew-srm/srm Refer: https://github.com/khell/homebrew-srm/issues/1 for installation ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "sudo srm #{system_log_path} #system log file deletion\nsudo srm -r #{system_log_folder} #recursive deletion of log files\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "b0768a5e-0f32-4e75-ae5b-d036edcf96b6",
+    "arguments": {
+        "system_log_path": {
+            "description": "path to system.log",
+            "type": "string",
+            "default": "/var/log/system.log"
+        },
+        "system_log_folder": {
+            "description": "path to log parent folder",
+            "type": "string",
+            "default": "/var/log/"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "target files must exist\n",
+            "prereq_command": "stat #{system_log_path} #{system_log_folder}\n",
+            "get_prereq_command": "mkdir -p #{system_log_folder} && touch #{system_log_path} #{system_log_folder}/system.log\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

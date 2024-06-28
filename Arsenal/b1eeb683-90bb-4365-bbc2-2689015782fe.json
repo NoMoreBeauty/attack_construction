@@ -1,0 +1,31 @@
+{
+    "name": "LOLBAS CustomShellHost to Spawn Process",
+    "description": "This test simulates an adversary copying `customshellhost.exe` and `calc.exe` from `C:\\windows\\system32\\` to `C:\\temp\\`, renaming `calc.exe` to `explorer.exe`. Upon execution, customshellhost.exe will spawn calc.exe. Note this will only work on Windows 10 or 11. [LOLBAS](https://lolbas-project.github.io/lolbas/Binaries/CustomShellHost/) [BishopFox](https://bishopfox.com/blog/edr-bypass-with-lolbins) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "if (-not (Test-Path #{dest_path})) {\nNew-Item -Path #{dest_path} -ItemType Directory\n} else {\nWrite-Host \"Directory #{dest_path} already exists.\" }\nCopy-Item -Path \"C:\\windows\\system32\\customshellhost.exe\" -Destination \"#{dest_path}\\customshellhost.exe\" -Force\nCopy-Item -Path \"C:\\windows\\system32\\calc.exe\" -Destination \"#{dest_path}\\explorer.exe\" -Force\n#{dest_path}\\customshellhost.exe\n",
+        "cleanup_command": "Remove-Item -Path #{dest_path} -Recurse -Force\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1218",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "System Binary Proxy Execution",
+    "source": "ART",
+    "uuid": "b1eeb683-90bb-4365-bbc2-2689015782fe",
+    "arguments": {
+        "dest_path": {
+            "description": "Directory to copy files into",
+            "type": "path",
+            "default": "C:\\test"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

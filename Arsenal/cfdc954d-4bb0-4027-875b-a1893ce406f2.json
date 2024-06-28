@@ -1,0 +1,26 @@
+{
+    "name": "Create shortcut to cmd in startup folders",
+    "description": "LNK file to launch CMD placed in startup folder. Upon execution, open File Explorer and browse to %APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\ to view the new shortcut. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$Shell = New-Object -ComObject (\"WScript.Shell\")\n$ShortCut = $Shell.CreateShortcut(\"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\T1547.009.lnk\")\n$ShortCut.TargetPath=\"cmd.exe\"\n$ShortCut.WorkingDirectory = \"C:\\Windows\\System32\";\n$ShortCut.WindowStyle = 1;\n$ShortCut.Description = \"T1547.009.\";\n$ShortCut.Save()\n\n$Shell = New-Object -ComObject (\"WScript.Shell\")\n$ShortCut = $Shell.CreateShortcut(\"$env:ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\T1547.009.lnk\")\n$ShortCut.TargetPath=\"cmd.exe\"\n$ShortCut.WorkingDirectory = \"C:\\Windows\\System32\";\n$ShortCut.WindowStyle = 1;\n$ShortCut.Description = \"T1547.009.\";\n$ShortCut.Save()\n",
+        "cleanup_command": "Remove-Item \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\T1547.009.lnk\" -ErrorAction Ignore\nRemove-Item \"$env:ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\T1547.009.lnk\" -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1547.009",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Shortcut Modification",
+    "source": "ART",
+    "uuid": "cfdc954d-4bb0-4027-875b-a1893ce406f2",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

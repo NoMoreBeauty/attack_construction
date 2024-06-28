@@ -1,0 +1,25 @@
+{
+    "name": "Tamper with Windows Defender Command Prompt",
+    "description": "Attempting to disable scheduled scanning and other parts of windows defender atp. These commands must be run as System, so they still fail as administrator. However, adversaries do attempt to perform this action so monitoring for these command lines can help alert to other bad things going on. Upon execution, Access Denied will be displayed twice and the WinDefend service status will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "sc stop WinDefend\nsc config WinDefend start=disabled\nsc query WinDefend\n",
+        "cleanup_command": "sc start WinDefend >nul 2>&1\nsc config WinDefend start=enabled >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "aa875ed4-8935-47e2-b2c5-6ec00ab220d2",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

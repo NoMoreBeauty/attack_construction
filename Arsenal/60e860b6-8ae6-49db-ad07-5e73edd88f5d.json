@@ -1,0 +1,30 @@
+{
+    "name": "Access /etc/passwd (Local)",
+    "description": "/etc/passwd file is accessed in FreeBSD and Linux environments ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "cat /etc/passwd > #{output_file}\ncat #{output_file}\n",
+        "cleanup_command": "rm -f #{output_file}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1003.008",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "/etc/passwd and /etc/shadow",
+    "source": "ART",
+    "uuid": "60e860b6-8ae6-49db-ad07-5e73edd88f5d",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed",
+            "type": "path",
+            "default": "/tmp/T1003.008.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

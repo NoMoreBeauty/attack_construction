@@ -1,0 +1,30 @@
+{
+    "name": "Add a driver",
+    "description": "Install a driver via pnputil.exe lolbin ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "pnputil.exe /add-driver \"#{driver_inf}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1547",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Boot or Logon Autostart Execution",
+    "source": "ART",
+    "uuid": "cb01b3da-b0e7-4e24-bf6d-de5223526785",
+    "arguments": {
+        "driver_inf": {
+            "description": "A built-in, already installed windows driver inf",
+            "type": "path",
+            "default": "C:\\Windows\\INF\\usbstor.inf"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

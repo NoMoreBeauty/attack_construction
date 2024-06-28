@@ -1,0 +1,29 @@
+{
+    "name": "Network Share Discovery command prompt",
+    "description": "Network Share Discovery utilizing the command prompt. The computer name variable may need to be modified to point to a different host Upon execution avalaible network shares will be displayed in the powershell session ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net view \\\\#{computer_name}\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1135",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Network Share Discovery",
+    "source": "ART",
+    "uuid": "20f1097d-81c1-405c-8380-32174d493bbb",
+    "arguments": {
+        "computer_name": {
+            "description": "Computer name to find a mount on.",
+            "type": "string",
+            "default": "localhost"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,23 @@
+{
+    "name": "Examine domain password policy - Windows",
+    "description": "Lists the domain password policy to console on Windows. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net accounts /domain\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1201",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Password Policy Discovery",
+    "source": "ART",
+    "uuid": "46c2c362-2679-4ef5-aec9-0e958e135be4",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

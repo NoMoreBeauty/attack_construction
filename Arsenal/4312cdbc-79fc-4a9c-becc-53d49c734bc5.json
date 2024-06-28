@@ -1,0 +1,23 @@
+{
+    "name": "List Mozilla Firefox bookmarks on Windows with command prompt",
+    "description": "Searches for Mozilla Firefox bookmarks file (on Windows distributions) that contains bookmarks in a SQLITE database. Upon execution, paths that contain bookmark files will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "where /R C:\\Users\\ places.sqlite\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1217",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Browser Information Discovery",
+    "source": "ART",
+    "uuid": "4312cdbc-79fc-4a9c-becc-53d49c734bc5",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

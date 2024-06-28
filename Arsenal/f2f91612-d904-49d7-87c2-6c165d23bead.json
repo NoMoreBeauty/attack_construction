@@ -1,0 +1,23 @@
+{
+    "name": "BIOS Information Discovery through Registry",
+    "description": "Looks up for BIOS information in the registry. BIOS information is often read in order to detect sandboxing environments.  Upon execution, BIOS information will be displayed. - https://tria.ge/210111-eaz8mqhgh6/behavioral1 - https://evasions.checkpoint.com/techniques/registry.html ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg query HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System /v SystemBiosVersion\nreg query HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System /v VideoBiosVersion\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "f2f91612-d904-49d7-87c2-6c165d23bead",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

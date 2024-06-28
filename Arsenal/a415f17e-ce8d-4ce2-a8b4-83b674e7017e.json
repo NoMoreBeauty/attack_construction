@@ -1,0 +1,37 @@
+{
+    "name": "Delete an entire folder - FreeBSD/Linux/macOS",
+    "description": "Recursively delete the temporary directory and all files contained within it ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "rm -rf #{folder_to_delete}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1070.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "File Deletion",
+    "source": "ART",
+    "uuid": "a415f17e-ce8d-4ce2-a8b4-83b674e7017e",
+    "arguments": {
+        "folder_to_delete": {
+            "description": "Path of folder to delete",
+            "type": "path",
+            "default": "/tmp/victim-folder"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The folder must exist in order to be deleted\n",
+            "prereq_command": "test -e #{folder_to_delete} && exit 0 || exit 1\n",
+            "get_prereq_command": "mkdir -p #{folder_to_delete}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

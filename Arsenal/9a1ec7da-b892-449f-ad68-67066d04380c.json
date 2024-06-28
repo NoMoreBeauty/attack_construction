@@ -1,0 +1,24 @@
+{
+    "name": "Show all hidden files",
+    "description": "Show all hidden files on MacOS ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "defaults write com.apple.finder AppleShowAllFiles YES\n",
+        "cleanup_command": "defaults write com.apple.finder AppleShowAllFiles NO\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1564.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Hidden Files and Directories",
+    "source": "ART",
+    "uuid": "9a1ec7da-b892-449f-ad68-67066d04380c",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

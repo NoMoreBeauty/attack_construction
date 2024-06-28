@@ -1,0 +1,25 @@
+{
+    "name": "Disable UAC notification via registry keys",
+    "description": "This atomic regarding UACDisableNotify pertains to the notification behavior of UAC. UAC is a critical security feature in Windows that prevents unauthorized changes to the operating system. It prompts the user for permission or an administrator password before allowing actions that could affect the system's operation or change settings that affect other users. The BlotchyQuasar RAT defense evasion activities that the adversary to disable UAC notifications makes it easier for malware and malicious software to execute with elevated privileges. [Article](https://securityintelligence.com/x-force/x-force-hive0129-targeting-financial-institutions-latam-banking-trojan/) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add \"HKLM\\SOFTWARE\\Microsoft\\Security Center\" /v UACDisableNotify /t REG_DWORD /d 1 /f\n",
+        "cleanup_command": "reg add \"HKLM\\SOFTWARE\\Microsoft\\Security Center\" /v UACDisableNotify /t REG_DWORD /d 0 /f\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1548.002",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Bypass User Account Control",
+    "source": "ART",
+    "uuid": "160a7c77-b00e-4111-9e45-7c2a44eda3fd",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

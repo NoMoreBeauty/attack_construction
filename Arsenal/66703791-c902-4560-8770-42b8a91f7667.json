@@ -1,0 +1,23 @@
+{
+    "name": "System Information Discovery",
+    "description": "Identify System Info. Upon execution, system info and time info will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "systeminfo\nreg query HKLM\\SYSTEM\\CurrentControlSet\\Services\\Disk\\Enum\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "66703791-c902-4560-8770-42b8a91f7667",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

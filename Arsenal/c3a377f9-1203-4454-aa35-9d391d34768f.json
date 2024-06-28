@@ -1,0 +1,25 @@
+{
+    "name": "Disable journal logging via systemctl utility",
+    "description": "The atomic test disables the journal logging using built-in systemctl utility ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "sudo systemctl stop systemd-journald #disables journal logging\n",
+        "cleanup_command": "sudo systemctl start systemd-journald #starts journal service\nsudo systemctl enable systemd-journald #starts journal service automatically at boot time\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Impair Defenses",
+    "source": "ART",
+    "uuid": "c3a377f9-1203-4454-aa35-9d391d34768f",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

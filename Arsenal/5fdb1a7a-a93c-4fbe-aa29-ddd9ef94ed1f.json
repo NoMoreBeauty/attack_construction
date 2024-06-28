@@ -1,0 +1,38 @@
+{
+    "name": "Install root CA on Windows with certutil",
+    "description": "Creates a root CA with certutil ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "certutil -addstore my #{pfx_path}\n",
+        "cleanup_command": "try {\n$cert = Import-Certificate -FilePath #{pfx_path} -CertStoreLocation Cert:\\LocalMachine\\My\nGet-ChildItem Cert:\\LocalMachine\\My\\$($cert.Thumbprint) -ErrorAction Ignore | Remove-Item -ErrorAction Ignore\nGet-ChildItem Cert:\\LocalMachine\\Root\\$($cert.Thumbprint) -ErrorAction Ignore | Remove-Item -ErrorAction Ignore\n} catch { }\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1553.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Install Root Certificate",
+    "source": "ART",
+    "uuid": "5fdb1a7a-a93c-4fbe-aa29-ddd9ef94ed1f",
+    "arguments": {
+        "pfx_path": {
+            "description": "Path of the certificate",
+            "type": "path",
+            "default": "$env:Temp\\rootCA2.cer"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Certificate must exist at specified location (#{pfx_path})\n",
+            "prereq_command": "if (Test-Path #{pfx_path}) { exit 0 } else { exit 1 }\n",
+            "get_prereq_command": "$cert = New-SelfSignedCertificate -DnsName atomicredteam.com -CertStoreLocation cert:\\LocalMachine\\My\nExport-Certificate -Type CERT -Cert  Cert:\\LocalMachine\\My\\$($cert.Thumbprint) -FilePath #{pfx_path}\nGet-ChildItem Cert:\\LocalMachine\\My\\$($cert.Thumbprint) | Remove-Item\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

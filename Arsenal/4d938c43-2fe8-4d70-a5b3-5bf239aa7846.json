@@ -1,0 +1,36 @@
+{
+    "name": "Delete User via dscl utility",
+    "description": "This test deletes the user account using the dscl utility. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "dscl . -delete /Users/#{user_account} #enter admin password\n",
+        "cleanup_command": "dscl . -create /Users/#{user_account} #enter admin password\ndscl . -create /Users/#{user_account} UserShell /bin/bash\ndscl . -create /Users/#{user_account} UniqueID 503\ndscl . -create /Users/#{user_account} NFSHomeDirectory /Users/#{user_account}\ndscl . -passwd /Users/#{user_account} #{user_password} #enter password for new user\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1531",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Account Access Removal",
+    "source": "ART",
+    "uuid": "4d938c43-2fe8-4d70-a5b3-5bf239aa7846",
+    "arguments": {
+        "user_account": {
+            "description": "User account which will be deleted.",
+            "type": "string",
+            "default": "ARTUser"
+        },
+        "user_password": {
+            "description": "User password.",
+            "type": "string",
+            "default": "ARTPassword"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

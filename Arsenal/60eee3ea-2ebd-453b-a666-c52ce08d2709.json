@@ -1,0 +1,29 @@
+{
+    "name": "chflags - Remove immutable file attribute",
+    "description": "Remove's a file's `immutable` attribute using `chflags`. This technique was used by the threat actor Rocke during the compromise of Linux web servers. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "touch #{file_to_modify}\nchflags simmutable #{file_to_modify}\nchflags nosimmutable #{file_to_modify}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1222.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Linux and Mac File and Directory Permissions Modification",
+    "source": "ART",
+    "uuid": "60eee3ea-2ebd-453b-a666-c52ce08d2709",
+    "arguments": {
+        "file_to_modify": {
+            "description": "Path of the file",
+            "type": "path",
+            "default": "/tmp/T1222.002.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

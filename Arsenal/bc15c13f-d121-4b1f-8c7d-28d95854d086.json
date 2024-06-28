@@ -1,0 +1,42 @@
+{
+    "name": "Masquerading - non-windows exe running as windows exe",
+    "description": "Copies an exe, renames it as a windows exe, and launches it to masquerade as a real windows exe  Upon successful execution, powershell will execute T1036.003.exe as svchost.exe from on a non-standard path. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "copy \"#{inputfile}\" #{outputfile}\ntry { $myT1036_003 = (Start-Process -PassThru -FilePath #{outputfile}).Id }\ncatch { $_; exit $_.Exception.HResult}\nStop-Process -ID $myT1036_003\n",
+        "cleanup_command": "Remove-Item #{outputfile} -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1036.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rename System Utilities",
+    "source": "ART",
+    "uuid": "bc15c13f-d121-4b1f-8c7d-28d95854d086",
+    "arguments": {
+        "outputfile": {
+            "description": "path of file to execute",
+            "type": "path",
+            "default": "($env:TEMP + \"\\svchost.exe\")"
+        },
+        "inputfile": {
+            "description": "path of file to copy",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1036.003\\bin\\T1036.003.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Exe file to copy must exist on disk at specified location (#{inputfile})\n",
+            "prereq_command": "if (Test-Path \"#{inputfile}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{inputfile}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1036.003/bin/T1036.003.exe\" -OutFile \"#{inputfile}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

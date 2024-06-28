@@ -1,0 +1,23 @@
+{
+    "name": "Security Software Discovery - powershell",
+    "description": "Methods to identify Security Software on an endpoint  when sucessfully executed, powershell is going to processes related AV products if they are running. Note that, depending on the privilege of current user, get-process | ?{$_.Description -like *} may not return the processes related to AV products of the check. For instance, only with Administrator right, you can see the process description of McAffee processes. Hence, it is better to use get-process | ?{$_.ProcessName -like *}, if you know the name of those processes. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "get-process | ?{$_.Description -like \"*virus*\"}\nget-process | ?{$_.Description -like \"*carbonblack*\"}\nget-process | ?{$_.Description -like \"*defender*\"}\nget-process | ?{$_.Description -like \"*cylance*\"}\nget-process | ?{$_.Description -like \"*mc*\"}\nget-process | ?{$_.ProcessName -like \"*mc*\"}\nget-process | Where-Object { $_.ProcessName -eq \"Sysmon\" }\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1518.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Security Software Discovery",
+    "source": "ART",
+    "uuid": "7f566051-f033-49fb-89de-b6bacab730f0",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

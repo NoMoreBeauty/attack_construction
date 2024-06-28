@@ -1,0 +1,30 @@
+{
+    "name": "Extract passwords with grep",
+    "description": "Extracting credentials from files ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "grep -ri password #{file_path}\nexit 0\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1552.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials In Files",
+    "source": "ART",
+    "uuid": "bd4cf0d1-7646-474e-8610-78ccf5a097c4",
+    "arguments": {
+        "file_path": {
+            "description": "Path to search",
+            "type": "string",
+            "default": "/"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

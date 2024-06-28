@@ -1,0 +1,26 @@
+{
+    "name": "Process Injection with Go using UuidFromStringA WinAPI",
+    "description": "Uses WinAPI UuidFromStringA to load shellcode to a memory address then executes the shellcode using EnumSystemLocalesA. With this technique, memory is allocated on the heap and does not use commonly suspicious APIs such as VirtualAlloc, WriteProcessMemory, or CreateThread  - PoC Credit: (https://github.com/Ne0nd0g/go-shellcode/tree/master#uuidfromstringa) - References:    - https://research.nccgroup.com/2021/01/23/rift-analysing-a-lazarus-shellcode-execution-method/   - https://twitter.com/_CPResearch_/status/1352310521752662018   - https://blog.securehat.co.uk/process-injection/shellcode-execution-via-enumsystemlocala ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "$PathToAtomicsFolder\\T1055\\bin\\x64\\UuidFromStringA.exe -debug\n",
+        "cleanup_command": "Stop-Process -Name CalculatorApp -ErrorAction SilentlyContinue\n",
+        "type": "Command Executor"
+    },
+    "id": "T1055",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Process Injection",
+    "source": "ART",
+    "uuid": "2315ce15-38b6-46ac-a3eb-5e21abef2545",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

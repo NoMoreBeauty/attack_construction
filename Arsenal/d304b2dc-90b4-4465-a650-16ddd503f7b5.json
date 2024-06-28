@@ -1,0 +1,31 @@
+{
+    "name": "Overwrite Linux Log",
+    "description": "This test overwrites the specified log. This technique was used by threat actor Rocke during the exploitation of Linux web servers. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "echo 0> #{log_path}\n",
+        "name": "bash",
+        "elevation_required": true,
+        "cleanup_command": "if [ \"/var/log/secure\" != \"#{log_path}\" ] ; then rm -f #{log_path} ; fi\n",
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "d304b2dc-90b4-4465-a650-16ddd503f7b5",
+    "arguments": {
+        "log_path": {
+            "description": "Path of specified log",
+            "type": "path",
+            "default": "/var/log/secure"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

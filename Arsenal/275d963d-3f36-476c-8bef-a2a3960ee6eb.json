@@ -1,0 +1,29 @@
+{
+    "name": "SyncAppvPublishingServer Signed Script PowerShell Command Execution",
+    "description": "Executes the signed SyncAppvPublishingServer script with options to execute an arbitrary PowerShell command. Upon execution, calc.exe will be launched. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "C:\\windows\\system32\\SyncAppvPublishingServer.vbs \"\\n;#{command_to_execute}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1216",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "System Script Proxy Execution",
+    "source": "ART",
+    "uuid": "275d963d-3f36-476c-8bef-a2a3960ee6eb",
+    "arguments": {
+        "command_to_execute": {
+            "description": "A PowerShell command to execute.",
+            "type": "string",
+            "default": "Start-Process calc"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

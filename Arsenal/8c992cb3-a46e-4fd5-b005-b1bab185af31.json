@@ -1,0 +1,58 @@
+{
+    "name": "Active Directory Create User Account (Non-elevated)",
+    "description": "Use Admin Credentials to Create A Normal Account (as means of entry) ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "elevation_required": false,
+        "command": "echo \"dn: cn=Atomic User, cn=Users,dc=#{domain},dc=#{top_level_domain}\\nobjectClass: person\\ncn: Atomic User\\nsn: User\" > tempadmin.ldif\necho ldapadd -H ldap://#{domain}.#{top_level_domain}:389 -x -D #{admin_user} -w #{admin_password} -f tempadmin.ldif\nldapadd -H ldap://#{domain}.#{top_level_domain}:389 -x -D #{admin_user} -w #{admin_password} -f tempadmin.ldif\n",
+        "cleanup_command": "echo removing Atomic User (temporary user)\necho \"dn: cn=Atomic User,cn=Users,dc=scwxscratch,dc=dev\\nchangetype: delete\" > deleteuser.ldif\nldapmodify -H ldap://#{domain_controller}:389 -x -D #{admin_user} -w #{admin_password} -f deleteuser.ldif\nrm deleteuser.ldif\nrm tempadmin.ldif\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1136.002",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "8c992cb3-a46e-4fd5-b005-b1bab185af31",
+    "arguments": {
+        "domain": {
+            "description": "The domain to be tested",
+            "type": "string",
+            "default": "example"
+        },
+        "top_level_domain": {
+            "description": "The top level domain (.com, .test, .remote, etc... following domain, minus the .)",
+            "type": "string",
+            "default": "test"
+        },
+        "admin_user": {
+            "description": "username@domain of a user with admin privileges",
+            "type": "string",
+            "default": "user@example.test"
+        },
+        "admin_password": {
+            "description": "password of the user",
+            "type": "string",
+            "default": "s3CurePssw0rD!"
+        },
+        "domain_controller": {
+            "description": "Name of the domain_controller machine, defined in etc/hosts",
+            "type": "string",
+            "default": "adVM"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Packages sssd-ad sssd-tools realmd adcli installed and realm available, ldapadd, ldapmodify\n",
+            "prereq_command": "which ldapadd\nwhich ldapmodify\n",
+            "get_prereq_command": "echo ldapadd or ldapmodify not found; exit 1\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

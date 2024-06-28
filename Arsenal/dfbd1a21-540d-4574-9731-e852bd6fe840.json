@@ -1,0 +1,25 @@
+{
+    "name": "Detect Virtualization Environment (Linux)",
+    "description": "systemd-detect-virt detects execution in a virtualized environment. At boot, dmesg stores a log if a hypervisor is detected. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "if (systemd-detect-virt) then echo \"Virtualization Environment detected\"; fi;\nif (sudo dmidecode | egrep -i 'manufacturer|product|vendor' | grep -iE 'Oracle|VirtualBox|VMWare|Parallels') then echo \"Virtualization Environment detected\"; fi;\n",
+        "type": "Command Executor"
+    },
+    "id": "T1497.001",
+    "tactics": [
+        "Defense Evasion",
+        "Discovery"
+    ],
+    "technique": "System Checks",
+    "source": "ART",
+    "uuid": "dfbd1a21-540d-4574-9731-e852bd6fe840",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

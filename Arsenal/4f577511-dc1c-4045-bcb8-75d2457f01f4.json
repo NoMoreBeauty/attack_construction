@@ -1,0 +1,42 @@
+{
+    "name": "Azure AD - Delete user via Azure AD PowerShell",
+    "description": "Deletes a user in Azure AD. Adversaries may interrupt availability of system and network resources by inhibiting access to accounts utilized by legitimate users. Accounts may be deleted, locked, or manipulated (excluding changed credentials) to remove access to accounts.",
+    "supported_platforms": [
+        "azure-ad"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Connect-AzureAD\n$userprincipalname = \"#{userprincipalname}\"\nRemove-AzureADUser -ObjectId $userprincipalname",
+        "cleanup_command": "N/A",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1531",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Account Access Removal",
+    "source": "ART",
+    "uuid": "4f577511-dc1c-4045-bcb8-75d2457f01f4",
+    "arguments": {
+        "userprincipalname": {
+            "description": "User principal name (UPN) for the Azure user being deleted",
+            "type": "string",
+            "default": "atomicredteam@yourdomain.com"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if AzureAD PowerShell module is installed",
+            "prereq_command": "Get-InstalledModule -Name AzureAD",
+            "get_prereq_command": "echo \"use the following to install AzureAD PowerShell module - Install-Module -Name AzureAD -Scope CurrentUser -Repository PSGallery -Force\""
+        },
+        {
+            "description": "Check if AzureAD PowerShell module is installed",
+            "prereq_command": "Update the input arguments so the userprincipalname value is accurate for your environment",
+            "get_prereq_command": "echo \"Update the input arguments in the .yaml file so that the userprincipalname value is accurate for your environment\""
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

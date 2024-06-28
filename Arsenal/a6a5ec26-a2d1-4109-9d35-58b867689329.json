@@ -1,0 +1,36 @@
+{
+    "name": "Simulating access to Windows Edge Login Data",
+    "description": "Simulates an adversary accessing encrypted credentials from Edge web browser's login database. more info in https://www.forensicfocus.com/articles/chromium-based-microsoft-edge-from-a-forensic-point-of-view/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "command": "Copy-Item \"$env:LOCALAPPDATA\\Microsoft\\Edge\\User Data\\Default\" -Destination \"PathToAtomicsFolder\\..\\ExternalPayloads\\Edge\" -Force -Recurse\n",
+        "cleanup_command": "Remove-Item -Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\Edge\" -Force -ErrorAction Ignore -Recurse\n",
+        "type": "Command Executor"
+    },
+    "id": "T1555.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Web Browsers",
+    "source": "ART",
+    "uuid": "a6a5ec26-a2d1-4109-9d35-58b867689329",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Edge must be installed\n",
+            "prereq_command": "if (Test-Path \"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe\") {exit 0} else {exit 1}",
+            "get_prereq_command": "\"Installation is not implemented as Edge is a part of windows\"\n"
+        },
+        {
+            "description": "Edge login data file must exist\n",
+            "prereq_command": "if (Test-Path \"$env:LOCALAPPDATA\\Microsoft\\Edge\\User Data\\Default\") {exit 0} else {exit 1}",
+            "get_prereq_command": "$edge=\"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe\"\nStart-Process $edge \nStart-Sleep -s 20\nStop-Process -Name msedge\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

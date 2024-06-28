@@ -1,0 +1,31 @@
+{
+    "name": "System Owner/User Discovery Using Command Prompt",
+    "description": "Identify the system owner or current user using native Windows command prompt utilities.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "command_prompt",
+        "elevation_required": false,
+        "command": "set file=#{output_file_path}\\user_info_%random%.tmp\necho Username: %USERNAME% > %file%\necho User Domain: %USERDOMAIN% >> %file%\nnet users >> %file%\nquery user >> %file%\n",
+        "cleanup_command": "del #{output_file_path}\\\\user_info_*.tmp\n",
+        "type": "Command Executor"
+    },
+    "id": "T1033",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Owner/User Discovery",
+    "source": "ART",
+    "uuid": "ba38e193-37a6-4c41-b214-61b33277fe36",
+    "arguments": {
+        "output_file_path": {
+            "description": "Location of output file.",
+            "type": "string",
+            "default": "$env:temp"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

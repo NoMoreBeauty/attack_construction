@@ -1,0 +1,24 @@
+{
+    "name": "System File Copied to Unusual Location",
+    "description": "It may be suspicious seeing a file copy of an EXE in System32 or SysWOW64 to a non-system directory or executing from a non-system directory.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "copy-item \"$env:windir\\System32\\cmd.exe\" -destination \"$env:allusersprofile\\cmd.exe\"\nstart-process \"$env:allusersprofile\\cmd.exe\"\nsleep -s 5 \nstop-process -name \"cmd\" | out-null",
+        "cleanup_command": "remove-item \"$env:allusersprofile\\cmd.exe\" -force -erroraction silentlycontinue",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1036",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Masquerading",
+    "source": "ART",
+    "uuid": "51005ac7-52e2-45e0-bdab-d17c6d4916cd",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

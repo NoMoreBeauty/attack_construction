@@ -1,0 +1,23 @@
+{
+    "name": "Discover System Language with locale",
+    "description": "Identify System language with the `locale` command.  Upon successful execution, the output will contain the environment variables that indicate the 5 character locale that can be looked up to correlate the language and territory. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "locale\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1614.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Language Discovery",
+    "source": "ART",
+    "uuid": "837d609b-845e-4519-90ce-edc3b4b0e138",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

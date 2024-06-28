@@ -1,0 +1,23 @@
+{
+    "name": "Process Discovery - tasklist",
+    "description": "Utilize tasklist to identify processes.  Upon successful execution, cmd.exe will execute tasklist.exe to list processes. Output will be via stdout.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "tasklist\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1057",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Process Discovery",
+    "source": "ART",
+    "uuid": "c5806a4f-62b8-4900-980b-c7ec004e9908",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

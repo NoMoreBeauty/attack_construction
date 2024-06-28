@@ -1,0 +1,25 @@
+{
+    "name": "Setting the HISTIGNORE environment variable",
+    "description": "An Adversary may take advantage of the HISTIGNORE environment variable either to ignore particular commands or all commands.   In this test we 1. set HISTIGNORE to ignore ls, rm and ssh commands 2. clear this history cache 3..4 execute ls commands 5. confirm that the ls commands are not in the history cache 6. unset HISTIGNORE variable 7.. same again, but ignoring ALL commands. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "name": "bash",
+        "elevation_required": false,
+        "command": "if ((${#HISTIGNORE[@]})); then echo \"\\$HISTIGNORE = $HISTIGNORE\"; else export HISTIGNORE='ls*:rm*:ssh*'; echo \"\\$HISTIGNORE = $HISTIGNORE\"; fi\n# -> $HISTIGNORE = ls*:rm*:ssh*\nhistory -c \nls -la $HISTFILE\nls -la ~/.bash_logout\nif [ $(history |wc -l) -eq 1 ]; then echo \"ls commands are not in history\"; fi\n# -> ls commands are not in history\nunset HISTIGNORE\n\nif ((${#HISTIGNORE[@]})); then echo \"\\$HISTIGNORE = $HISTIGNORE\"; else export HISTIGNORE='*'; echo \"\\$HISTIGNORE = $HISTIGNORE\"; fi\n# -> $HISTIGNORE = *\nhistory -c \nwhoami\ngroups\nif [ $(history |wc -l) -eq 0 ]; then echo \"History cache is empty\"; fi\n# -> History cache is empty\n",
+        "cleanup_command": "unset HISTIGNORE\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Impair Command History Logging",
+    "source": "ART",
+    "uuid": "f12acddb-7502-4ce6-a146-5b62c59592f1",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

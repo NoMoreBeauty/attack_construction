@@ -1,0 +1,23 @@
+{
+    "name": "System Time Discovery - PowerShell",
+    "description": "Identify the system time via PowerShell. Upon execution, the system time will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Get-Date\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1124",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Time Discovery",
+    "source": "ART",
+    "uuid": "1d5711d6-655c-4a47-ae9c-6503c74fa877",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

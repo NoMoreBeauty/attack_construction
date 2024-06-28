@@ -1,0 +1,44 @@
+{
+    "name": "MacOS - Load Kernel Module via KextManagerLoadKextWithURL()",
+    "description": "This test uses the IOKit API to load a kernel module for macOS. Harcoded to use SoftRAID kext ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "command": "sudo #{exe_path}\nkextstat 2>/dev/null | grep SoftRAID\nsudo kextunload /Library/Extensions/SoftRAID.kext\n",
+        "name": "bash",
+        "elevation_required": true,
+        "cleanup_command": "rm -f #{exe_path}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1547.006",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Kernel Modules and Extensions",
+    "source": "ART",
+    "uuid": "f0007753-beb3-41ea-9948-760785e4c1e5",
+    "arguments": {
+        "src_path": {
+            "description": "Folder used to store the module.",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1547.006/src/macos_kextload.c"
+        },
+        "exe_path": {
+            "description": "Folder used to store the module.",
+            "type": "path",
+            "default": "/tmp/T1547006_iokit_loader"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The kernel module must exist on disk at specified location\n",
+            "prereq_command": "if [ -f \"#{exe_path}\" ]; then exit 0 ; else exit 1; fi\n",
+            "get_prereq_command": "cc -o #{exe_path} #{src_path} -framework IOKit -framework Foundation\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

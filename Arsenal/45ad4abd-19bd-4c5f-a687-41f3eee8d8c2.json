@@ -1,0 +1,24 @@
+{
+    "name": "Delete system log files via unlink utility (freebsd)",
+    "description": "This test deletes the messages log file using unlink utility ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "unlink /var/log/messages\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "45ad4abd-19bd-4c5f-a687-41f3eee8d8c2",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

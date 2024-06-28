@@ -1,0 +1,38 @@
+{
+    "name": "AWS - GuardDuty Suspension or Deletion",
+    "description": "Enables GuardDuty in AWS, upon successful creation this test will suspend and then delete the GuardDuty configuration. ",
+    "supported_platforms": [
+        "iaas:aws"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "command": "detectorId=$(aws guardduty create-detector --enable --region \"#{region}\" | grep -oP '(?<=\"DetectorId\": \")[^\"]*')\naws guardduty update-detector --no-enable --detector-id $detectorId\naws guardduty delete-detector --detector-id $detectorId\n",
+        "cleanup_command": "echo \"If test successfully ran, no cleanup required.\"\n",
+        "name": "bash",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "11e65d8d-e7e4-470e-a3ff-82bc56ad938e",
+    "arguments": {
+        "region": {
+            "description": "Name of the specified region",
+            "type": "string",
+            "default": "us-east-1"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if ~/.aws/credentials file has a default stanza is configured\n",
+            "prereq_command": "cat ~/.aws/credentials | grep \"default\"\n",
+            "get_prereq_command": "echo \"Please install the aws-cli and configure your AWS default profile using: aws configure\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

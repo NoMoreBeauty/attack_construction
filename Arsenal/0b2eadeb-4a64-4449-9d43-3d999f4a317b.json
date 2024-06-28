@@ -1,0 +1,25 @@
+{
+    "name": "Simulate Patching termsrv.dll",
+    "description": "Simulates patching of termsrv.dll by making a benign change to the file and replacing it with the original afterwards. Before we can make the modifications we need to take ownership of the file and grant ourselves the necessary permissions. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "elevation_required": true,
+        "command": "$termsrvDll = \"C:\\Windows\\System32\\termsrv.dll\"\n\n$ACL = Get-Acl $termsrvDll\n$permission = \"Administrators\",\"FullControl\",\"Allow\"\n$accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule $permission\n$ACL.SetAccessRule($accessRule)\nSet-Acl -Path $termsrvDll -AclObject $ACL\n\nCopy-Item -Path \"C:\\Windows\\System32\\termsrv.dll\" -Destination \"C:\\Windows\\System32\\termsrv_backup.dll\" -ErrorAction Ignore\nAdd-Content -Path \"C:\\Windows\\System32\\termsrv.dll\" -Value \"`n\" -NoNewline -ErrorAction Ignore\nMove-Item -Path \"C:\\Windows\\System32\\termsrv_backup.dll\" -Destination \"C:\\Windows\\System32\\termsrv.dll\" -Force -ErrorAction Ignore\n",
+        "cleanup_command": "Move-Item -Path \"C:\\Windows\\System32\\termsrv_backup.dll\" -Destination \"C:\\Windows\\System32\\termsrv.dll\" -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1505.005",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Terminal Services DLL",
+    "source": "ART",
+    "uuid": "0b2eadeb-4a64-4449-9d43-3d999f4a317b",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

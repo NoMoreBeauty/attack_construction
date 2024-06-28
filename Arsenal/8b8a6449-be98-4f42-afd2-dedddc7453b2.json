@@ -1,0 +1,23 @@
+{
+    "name": "Enumerate all accounts via PowerShell (Domain)",
+    "description": "Enumerate all accounts via PowerShell. Upon execution, lots of user account and group information will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net user /domain\nget-localgroupmember -group Users\nget-aduser -filter *\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1087.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "8b8a6449-be98-4f42-afd2-dedddc7453b2",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,42 @@
+{
+    "name": "Chown through c script (freebsd)",
+    "description": "chowns a file to root using a c script ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "#{compiled_file} #{source_file}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1222.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Linux and Mac File and Directory Permissions Modification",
+    "source": "ART",
+    "uuid": "eb577a19-b730-4918-9b03-c5edcf51dc4e",
+    "arguments": {
+        "source_file": {
+            "description": "Path of c source file",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1222.002/src/chown.c"
+        },
+        "compiled_file": {
+            "description": "Path of compiled file",
+            "type": "path",
+            "default": "/tmp/T1222002own"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Compile the script from (#{source_file}). Destination is #{compiled_file}\n",
+            "prereq_command": "cc #{source_file} -o #{compiled_file}\n",
+            "get_prereq_command": "cc #{source_file} -o #{compiled_file}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

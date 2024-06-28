@@ -1,0 +1,23 @@
+{
+    "name": "Examine password expiration policy - All Linux",
+    "description": "Lists the password expiration policy to console on CentOS/RHEL/Ubuntu. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "cat /etc/login.defs\n",
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1201",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Password Policy Discovery",
+    "source": "ART",
+    "uuid": "7c86c55c-70fa-4a05-83c9-3aa19b145d1a",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

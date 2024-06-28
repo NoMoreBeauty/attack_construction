@@ -1,0 +1,31 @@
+{
+    "name": "Export Certificate Item(s)",
+    "description": "This command finds all certificate items and sends the output to local file in pem format. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "security find-certificate -a -p > #{cert_export}\n",
+        "cleanup_command": "rm #{cert_export}",
+        "name": "sh",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1555.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Keychain",
+    "source": "ART",
+    "uuid": "1864fdec-ff86-4452-8c30-f12507582a93",
+    "arguments": {
+        "cert_export": {
+            "description": "Specify the path of the certificates to export.",
+            "type": "path",
+            "default": "/tmp/certs.pem"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

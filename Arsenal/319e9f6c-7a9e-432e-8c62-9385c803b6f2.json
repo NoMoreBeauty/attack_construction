@@ -1,0 +1,23 @@
+{
+    "name": "Enumerate users and groups",
+    "description": "Utilize local utilities to enumerate users and groups ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "dscl . list /Groups\ndscl . list /Users\ndscl . list /Users | grep -v '_'\ndscacheutil -q group\ndscacheutil -q user\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1087.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "319e9f6c-7a9e-432e-8c62-9385c803b6f2",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

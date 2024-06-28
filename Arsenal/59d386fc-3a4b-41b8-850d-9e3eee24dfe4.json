@@ -1,0 +1,25 @@
+{
+    "name": "WMIC Tamper with Windows Defender Evade Scanning Folder",
+    "description": "The following Atomic will attempt to exclude a folder within Defender leveraging WMI Reference: https://www.bleepingcomputer.com/news/security/gootkit-malware-bypasses-windows-defender-by-setting-path-exclusions/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "wmic.exe /Namespace:\\\\root\\Microsoft\\Windows\\Defender class MSFT_MpPreference call Add ExclusionPath=\\\"ATOMICREDTEAM\\\"\n",
+        "cleanup_command": "wmic.exe /Namespace:\\\\root\\Microsoft\\Windows\\Defender class MSFT_MpPreference call Remove ExclusionPath=\\\"ATOMICREDTEAM\\\"\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "59d386fc-3a4b-41b8-850d-9e3eee24dfe4",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

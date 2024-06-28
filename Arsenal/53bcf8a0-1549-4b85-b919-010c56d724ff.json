@@ -1,0 +1,42 @@
+{
+    "name": "Install root CA on Debian/Ubuntu",
+    "description": "Creates a root CA with openssl ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "mv #{cert_filename} /usr/local/share/ca-certificates\necho sudo update-ca-certificates\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1553.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Install Root Certificate",
+    "source": "ART",
+    "uuid": "53bcf8a0-1549-4b85-b919-010c56d724ff",
+    "arguments": {
+        "cert_filename": {
+            "description": "CA file name",
+            "type": "path",
+            "default": "rootCA.crt"
+        },
+        "key_filename": {
+            "description": "Key we create that is used to create the CA certificate",
+            "type": "path",
+            "default": "rootCA.key"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Verify the certificate exists. It generates if not on disk.\n",
+            "prereq_command": "if [ -f #{cert_filename} ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "if [ ! -f #{key_filename} ]; then openssl genrsa -out #{key_filename} 4096; fi;\nopenssl req -x509 -new -nodes -key #{key_filename} -sha256 -days 365 -subj \"/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com\" -out #{cert_filename}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

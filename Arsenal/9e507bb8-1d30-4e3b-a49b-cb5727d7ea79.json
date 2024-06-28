@@ -1,0 +1,24 @@
+{
+    "name": "Extract Browser and System credentials with LaZagne",
+    "description": "[LaZagne Source](https://github.com/AlessandroZ/LaZagne) ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "python2 laZagne.py all\n",
+        "elevation_required": true,
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1552.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials In Files",
+    "source": "ART",
+    "uuid": "9e507bb8-1d30-4e3b-a49b-cb5727d7ea79",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

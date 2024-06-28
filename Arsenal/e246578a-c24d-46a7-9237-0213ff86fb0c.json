@@ -1,0 +1,25 @@
+{
+    "name": "Disable Windows LogOff Button",
+    "description": "Modify the registry of the currently logged in user using reg.exe via cmd console to disable the windows logoff button. See how ransomware abuses this technique- https://www.trendmicro.com/vinfo/be/threat-encyclopedia/search/js_noclose.e/2 ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add \"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\" /v NoLogOff /t REG_DWORD /d 1 /f\nreg add \"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\" /v StartMenuLogOff /t REG_DWORD /d 1 /f\n",
+        "cleanup_command": "reg delete \"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\" /v NoLogOff /f >nul 2>&1\nreg delete \"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\" /v StartMenuLogOff /f >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "e246578a-c24d-46a7-9237-0213ff86fb0c",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

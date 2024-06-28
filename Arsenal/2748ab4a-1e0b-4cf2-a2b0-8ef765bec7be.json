@@ -1,0 +1,48 @@
+{
+    "name": "Command Execution with NirCmd",
+    "description": "NirCmd is used by threat actors to execute commands, which can include recon and privilege escalation via running commands via the SYSTEM account See https://www.kroll.com/en/insights/publications/cyber/black-basta-technical-analysis ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "cmd /c \"#{nircmd_location}\" #{command_to_execute}\n",
+        "cleanup_command": "cmd /c \"#{nircmd_location}\" #{cleanup_command_to_execute} -erroraction silentlycontinue | out-null\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1564",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Hide Artifacts",
+    "source": "ART",
+    "uuid": "2748ab4a-1e0b-4cf2-a2b0-8ef765bec7be",
+    "arguments": {
+        "nircmd_location": {
+            "description": "Location of nircmd executable",
+            "type": "Path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\nircmd.exe"
+        },
+        "command_to_execute": {
+            "description": "Command for nircmd to execute",
+            "type": "Path",
+            "default": "win child class \"Shell_TrayWnd\" hide class \"TrayClockWClass\""
+        },
+        "cleanup_command_to_execute": {
+            "description": "Cleanup command to undo the arbitrary command ran by nircmd",
+            "type": "Path",
+            "default": "win child class \"Shell_TrayWnd\" show class \"TrayClockWClass\""
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The Nircmd executable must exist at (#{nircmd_location})\n",
+            "prereq_command": "if (Test-Path \"#{nircmd_location}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\ninvoke-webrequest \"https://www.nirsoft.net/utils/nircmd-x64.zip\" -outfile \"PathToAtomicsFolder\\..\\ExternalPayloads\\nircmd.zip\" \nexpand-archive -path \"PathToAtomicsFolder\\..\\ExternalPayloads\\nircmd.zip\" -destinationpath \"PathToAtomicsFolder\\..\\ExternalPayloads\\\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

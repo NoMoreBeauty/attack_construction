@@ -1,0 +1,26 @@
+{
+    "name": "Windows Internal pktmon set filter",
+    "description": "Select Desired ports for packet capture  https://lolbas-project.github.io/lolbas/Binaries/Pktmon/",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "pktmon.exe filter add -p 445\n",
+        "cleanup_command": "pktmon filter remove",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1040",
+    "tactics": [
+        "Credential Access",
+        "Discovery"
+    ],
+    "technique": "Network Sniffing",
+    "source": "ART",
+    "uuid": "855fb8b4-b8ab-4785-ae77-09f5df7bff55",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

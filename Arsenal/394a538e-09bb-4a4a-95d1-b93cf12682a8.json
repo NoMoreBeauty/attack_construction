@@ -1,0 +1,22 @@
+{
+    "name": "Plist Modification",
+    "description": "Modify MacOS plist file in one of two directories ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "steps": "1. Modify a .plist in\n\n    /Library/Preferences\n\n    OR\n\n    ~/Library/Preferences\n\n2. Subsequently, follow the steps for adding and running via [Launch Agent](Persistence/Launch_Agent.md)\n",
+        "name": "manual"
+    },
+    "id": "T1647",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Plist File Modification",
+    "source": "ART",
+    "uuid": "394a538e-09bb-4a4a-95d1-b93cf12682a8",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

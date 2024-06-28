@@ -1,0 +1,45 @@
+{
+    "name": "Invoke HTML Application - Jscript Engine over Local UNC Simulating Lateral Movement",
+    "description": "Executes an HTA Application using JScript script engine using local UNC path simulating lateral movement.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Invoke-ATHHTMLApplication -HTAFilePath #{hta_file_path} -ScriptEngine #{script_engine} -AsLocalUNCPath -SimulateLateralMovement -MSHTAFilePath #{mshta_file_path}",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1218.005",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Mshta",
+    "source": "ART",
+    "uuid": "007e5672-2088-4853-a562-7490ddc19447",
+    "arguments": {
+        "script_engine": {
+            "description": "Script Engine to use",
+            "type": "string",
+            "default": "JScript"
+        },
+        "hta_file_path": {
+            "description": "HTA file name and or path to be used",
+            "type": "string",
+            "default": "Test.hta"
+        },
+        "mshta_file_path": {
+            "description": "Location of mshta.exe",
+            "type": "string",
+            "default": "$env:windir\\system32\\mshta.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The AtomicTestHarnesses module must be installed and Invoke-ATHHTMLApplication must be exported in the module.",
+            "prereq_command": "$RequiredModule = Get-Module -Name AtomicTestHarnesses -ListAvailable\nif (-not $RequiredModule) {exit 1}\nif (-not $RequiredModule.ExportedCommands['Invoke-ATHHTMLApplication']) {exit 1} else {exit 0}",
+            "get_prereq_command": "Install-Module -Name AtomicTestHarnesses -Scope CurrentUser -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

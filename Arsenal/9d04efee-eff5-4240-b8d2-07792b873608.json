@@ -1,0 +1,38 @@
+{
+    "name": "Packet Capture macOS using tcpdump or tshark",
+    "description": "Perform a PCAP on macOS. This will require Wireshark/tshark to be installed. TCPdump may already be installed.  Upon successful execution, tshark or tcpdump will execute and capture 5 packets on interface en0A. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "command": "sudo tcpdump -c 5 -nnni #{interface}    \nif [ -x \"$(command -v tshark)\" ]; then sudo tshark -c 5 -i #{interface}; fi;\n",
+        "name": "bash",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1040",
+    "tactics": [
+        "Credential Access",
+        "Discovery"
+    ],
+    "technique": "Network Sniffing",
+    "source": "ART",
+    "uuid": "9d04efee-eff5-4240-b8d2-07792b873608",
+    "arguments": {
+        "interface": {
+            "description": "Specify interface to perform PCAP on.",
+            "type": "string",
+            "default": "en0A"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if at least one of tcpdump or tshark is installed.\n",
+            "prereq_command": "if [ ! -x \"$(command -v tcpdump)\" ] && [ ! -x \"$(command -v tshark)\" ]; then exit 1; else exit 0; fi;\n",
+            "get_prereq_command": "(which yum && yum -y install epel-release tcpdump tshark)||(which apt-get && DEBIAN_FRONTEND=noninteractive apt-get install -y tcpdump tshark)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

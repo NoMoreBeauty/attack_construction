@@ -1,0 +1,42 @@
+{
+    "name": "Data Encrypted with GPG4Win",
+    "description": "Gpg4win is a Windows tool (also called Kleopatra which is the preferred certificate manager) that uses email and file encryption packages for symmetric encryption. It is used by attackers to encrypt disks. User will need to add pass phrase to encrypt file as automation is not allowed under newer versions.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "cmd /c '#{GPG_Exe_Location}' -c '#{File_to_Encrypt_Location}'\n",
+        "cleanup_command": "remove-item '#{File_to_Encrypt_Location}.gpg' -force -erroraction silentlycontinue | out-null\n",
+        "type": "Command Executor"
+    },
+    "id": "T1486",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Data Encrypted for Impact",
+    "source": "ART",
+    "uuid": "4541e2c2-33c8-44b1-be79-9161440f1718",
+    "arguments": {
+        "GPG_Exe_Location": {
+            "description": "Path of the GPG program",
+            "type": "path",
+            "default": "C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe"
+        },
+        "File_to_Encrypt_Location": {
+            "description": "Path of File",
+            "type": "path",
+            "default": "$env:temp\\test.txt"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "GPG must exist at (#{GPG_Exe_Location})\n",
+            "prereq_command": "if (test-path '#{GPG_Exe_Location}'){exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\ninvoke-webrequest \"https://files.gpg4win.org/gpg4win-4.1.0.exe\" -outfile \"PathToAtomicsFolder\\..\\ExternalPayloads\\gpginstall.exe\"\ncmd /c \"PathToAtomicsFolder\\..\\ExternalPayloads\\gpginstall.exe\" /S\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

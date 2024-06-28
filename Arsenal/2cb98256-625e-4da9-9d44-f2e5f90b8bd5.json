@@ -1,0 +1,26 @@
+{
+    "name": "Suspicious vbs file run from startup Folder",
+    "description": "vbs files can be placed in and ran from the startup folder to maintain persistance. Upon execution, T1547.001 Hello, World VBS! will be displayed twice.  Additionally, the new files can be viewed in the $env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup folder and will also run when the computer is restarted and the user logs in. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Copy-Item \"$PathToAtomicsFolder\\T1547.001\\src\\vbsstartup.vbs\" \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\vbsstartup.vbs\"\nCopy-Item \"$PathToAtomicsFolder\\T1547.001\\src\\vbsstartup.vbs\" \"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\vbsstartup.vbs\"\ncscript.exe \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\vbsstartup.vbs\"\ncscript.exe \"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\vbsstartup.vbs\"\n",
+        "cleanup_command": "Remove-Item \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\vbsstartup.vbs\" -ErrorAction Ignore\nRemove-Item \"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\vbsstartup.vbs\" -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1547.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Registry Run Keys / Startup Folder",
+    "source": "ART",
+    "uuid": "2cb98256-625e-4da9-9d44-f2e5f90b8bd5",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

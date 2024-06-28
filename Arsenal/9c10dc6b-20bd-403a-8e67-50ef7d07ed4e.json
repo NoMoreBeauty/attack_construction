@@ -1,0 +1,57 @@
+{
+    "name": "AWS - CloudTrail Changes",
+    "description": "Creates a new cloudTrail in AWS, Upon successful creation it will Update,Stop and Delete the cloudTrail ",
+    "supported_platforms": [
+        "iaas:aws"
+    ],
+    "executor": {
+        "command": "aws cloudtrail update-trail --name #{cloudtrail_name} --s3-bucket-name #{s3_bucket_name}  --is-multi-region-trail --region #{region}\naws cloudtrail stop-logging --name #{cloudtrail_name} --region #{region}\naws cloudtrail delete-trail --name #{cloudtrail_name} --region #{region}\n",
+        "cleanup_command": "cd \"$PathToAtomicsFolder/T1562.008/src/T1562.008-1/\"\nterraform destroy -auto-approve\n",
+        "name": "sh",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1562.008",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Cloud Logs",
+    "source": "ART",
+    "uuid": "9c10dc6b-20bd-403a-8e67-50ef7d07ed4e",
+    "arguments": {
+        "cloudtrail_name": {
+            "description": "Name of the cloudTrail",
+            "type": "string",
+            "default": "redatomictesttrail"
+        },
+        "s3_bucket_name": {
+            "description": "Name of the bucket",
+            "type": "string",
+            "default": "redatomic-test"
+        },
+        "region": {
+            "description": "Name of the region",
+            "type": "string",
+            "default": "us-east-1"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if ~/.aws/credentials file has a default stanza is configured\n",
+            "prereq_command": "cat ~/.aws/credentials | grep \"default\"\n",
+            "get_prereq_command": "echo Please install the aws-cli and configure your AWS default profile using: aws configure\n"
+        },
+        {
+            "description": "Check if terraform is installed.\n",
+            "prereq_command": "terraform version\n",
+            "get_prereq_command": "echo Please install the terraform and configure your aws default profile \n"
+        },
+        {
+            "description": "Check if the dependency resources are already present.\n",
+            "prereq_command": "if [ -f \"$PathToAtomicsFolder/T1562.008/src/T1562.008-1/terraform.tfstate\" ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "cd \"$PathToAtomicsFolder/T1562.008/src/T1562.008-1/\"\nterraform init\nterraform apply -auto-approve\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

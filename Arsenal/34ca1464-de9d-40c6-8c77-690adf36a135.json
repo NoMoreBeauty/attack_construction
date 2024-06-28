@@ -1,0 +1,35 @@
+{
+    "name": "chmod - Change file or folder mode (numeric mode)",
+    "description": "Changes a file or folder's permissions using chmod and a specified numeric mode. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "chmod #{numeric_mode} #{file_or_folder}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1222.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Linux and Mac File and Directory Permissions Modification",
+    "source": "ART",
+    "uuid": "34ca1464-de9d-40c6-8c77-690adf36a135",
+    "arguments": {
+        "numeric_mode": {
+            "description": "Specified numeric mode value",
+            "type": "integer",
+            "default": 755
+        },
+        "file_or_folder": {
+            "description": "Path of the file or folder",
+            "type": "path",
+            "default": "/tmp/AtomicRedTeam/atomics/T1222.002"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

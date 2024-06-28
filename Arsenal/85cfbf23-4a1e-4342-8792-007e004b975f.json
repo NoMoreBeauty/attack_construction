@@ -1,0 +1,23 @@
+{
+    "name": "Hostname Discovery (Windows)",
+    "description": "Identify system hostname for Windows. Upon execution, the hostname of the device will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "hostname\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "85cfbf23-4a1e-4342-8792-007e004b975f",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

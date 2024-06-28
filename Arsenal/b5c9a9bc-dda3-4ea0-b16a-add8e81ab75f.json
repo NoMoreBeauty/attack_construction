@@ -1,0 +1,37 @@
+{
+    "name": "HKLM - Policy Settings Explorer Run Key",
+    "description": "This test will create a HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run key value to launch calc.exe on boot.  *Requires reboot ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "if (!(Test-Path -Path \"HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run\")){\n  New-Item -ItemType Key -Path  \"HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run\"\n}\nSet-ItemProperty -Path  \"HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run\" -Name \"#{target_key_value_name}\" -Value \"#{payload}\"\n",
+        "cleanup_command": "Remove-ItemProperty -Path  \"HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run\" -Name \"#{target_key_value_name}\"",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1547.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Registry Run Keys / Startup Folder",
+    "source": "ART",
+    "uuid": "b5c9a9bc-dda3-4ea0-b16a-add8e81ab75f",
+    "arguments": {
+        "target_key_value_name": {
+            "description": "registry value to crate on target key",
+            "type": "string",
+            "default": "atomictest"
+        },
+        "payload": {
+            "description": "payload to execute",
+            "type": "string",
+            "default": "C:\\Windows\\System32\\calc.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

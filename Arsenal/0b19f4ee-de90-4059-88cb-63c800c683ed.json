@@ -1,0 +1,31 @@
+{
+    "name": "Tamper with Windows Defender Evade Scanning -Folder",
+    "description": "Malware can exclude a specific path from being scanned and evading detection.  Upon successul execution, the file provided should be on the list of excluded path.  To check the exclusion list using poweshell (Get-MpPreference).ExclusionPath  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$excludedpath= \"#{excluded_folder}\"\nAdd-MpPreference -ExclusionPath $excludedpath",
+        "cleanup_command": "$excludedpath= \"#{excluded_folder}\"\nRemove-MpPreference -ExclusionPath $excludedpath\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "0b19f4ee-de90-4059-88cb-63c800c683ed",
+    "arguments": {
+        "excluded_folder": {
+            "description": "This folder will be excluded from scanning",
+            "type": "path",
+            "default": "C:\\Temp"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

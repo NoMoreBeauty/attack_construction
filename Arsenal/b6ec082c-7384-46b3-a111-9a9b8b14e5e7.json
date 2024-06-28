@@ -1,0 +1,23 @@
+{
+    "name": "Enumeration for Credentials in Registry",
+    "description": "Queries to enumerate for credentials in the Registry. Upon execution, any registry key containing the word password will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg query HKLM /f password /t REG_SZ /s\nreg query HKCU /f password /t REG_SZ /s\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1552.002",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials in Registry",
+    "source": "ART",
+    "uuid": "b6ec082c-7384-46b3-a111-9a9b8b14e5e7",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

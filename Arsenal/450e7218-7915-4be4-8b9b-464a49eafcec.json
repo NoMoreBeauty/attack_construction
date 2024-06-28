@@ -1,0 +1,40 @@
+{
+    "name": "Execute base64-encoded PowerShell from Windows Registry",
+    "description": "Stores base64-encoded PowerShell code in the Windows Registry and deobfuscates it for execution. This is used by numerous adversaries and malicious tools.  Upon successful execution, powershell will execute encoded command and read/write from the registry. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$OriginalCommand = '#{powershell_command}'\n$Bytes = [System.Text.Encoding]::Unicode.GetBytes($OriginalCommand)\n$EncodedCommand =[Convert]::ToBase64String($Bytes)\n$EncodedCommand\n\nSet-ItemProperty -Force -Path #{registry_key_storage} -Name #{registry_entry_storage} -Value $EncodedCommand\npowershell.exe -Command \"IEX ([Text.Encoding]::UNICODE.GetString([Convert]::FromBase64String((gp #{registry_key_storage} #{registry_entry_storage}).#{registry_entry_storage})))\"\n",
+        "cleanup_command": "Remove-ItemProperty -Force -ErrorAction Ignore -Path #{registry_key_storage} -Name #{registry_entry_storage}\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1027",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Obfuscated Files or Information",
+    "source": "ART",
+    "uuid": "450e7218-7915-4be4-8b9b-464a49eafcec",
+    "arguments": {
+        "registry_key_storage": {
+            "description": "Windows Registry Key to store code",
+            "type": "string",
+            "default": "HKCU:Software\\Microsoft\\Windows\\CurrentVersion"
+        },
+        "powershell_command": {
+            "description": "PowerShell command to encode",
+            "type": "string",
+            "default": "Write-Host \"Hey, Atomic!\""
+        },
+        "registry_entry_storage": {
+            "description": "Windows Registry entry to store code under key",
+            "type": "string",
+            "default": "Debug"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

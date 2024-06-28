@@ -1,0 +1,42 @@
+{
+    "name": "Hex decoding with shell utilities",
+    "description": "Use common shell utilities to decode a hex-encoded text string and echo it to the console ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "ENCODED=$(echo '#{message}' | xxd -ps -c 256)\nprintf $ENCODED | xxd -r -p\necho $ENCODED | xxd -r -p\necho $(echo $ENCODED) | xxd -r -p\necho $ENCODED > #{encoded_file} && xxd -r -p #{encoded_file}\necho $ENCODED > #{encoded_file} && xxd -r -p < #{encoded_file}\necho $ENCODED > #{encoded_file} && cat #{encoded_file} | xxd -r -p\necho $ENCODED > #{encoded_file} && cat < #{encoded_file} | xxd -r -p\n",
+        "type": "Command Executor"
+    },
+    "id": "T1140",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Deobfuscate/Decode Files or Information",
+    "source": "ART",
+    "uuid": "005943f9-8dd5-4349-8b46-0313c0a9f973",
+    "arguments": {
+        "message": {
+            "description": "Message to print to the screen",
+            "type": "string",
+            "default": "Hello from Atomic Red Team test T1140!"
+        },
+        "encoded_file": {
+            "description": "File to temporarily save encoded text",
+            "type": "path",
+            "default": "/tmp/T1140.encoded"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "xxd must be present\n",
+            "prereq_command": "which xxd\n",
+            "get_prereq_command": "echo \"Please install xxd\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

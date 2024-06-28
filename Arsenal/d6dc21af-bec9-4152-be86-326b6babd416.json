@@ -1,0 +1,23 @@
+{
+    "name": "Execute Commands from Clipboard using PowerShell",
+    "description": "Utilize PowerShell to echo a command to clipboard and execute it ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "echo Get-Process | clip\nGet-Clipboard | iex\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1115",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Clipboard Data",
+    "source": "ART",
+    "uuid": "d6dc21af-bec9-4152-be86-326b6babd416",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,42 @@
+{
+    "name": "Change Default File Association",
+    "description": "Change Default File Association From cmd.exe of hta to notepad.  Upon successful execution, cmd.exe will change the file association of .hta to notepad.exe.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "assoc #{extension_to_change}=#{target_extension_handler}\n",
+        "cleanup_command": "assoc  #{extension_to_change}=#{original_extension_handler}\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1546.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Change Default File Association",
+    "source": "ART",
+    "uuid": "10a08978-2045-4d62-8c42-1957bbbea102",
+    "arguments": {
+        "target_extension_handler": {
+            "description": "txtfile maps to notepad.exe",
+            "type": "path",
+            "default": "txtfile"
+        },
+        "extension_to_change": {
+            "description": "File Extension To Hijack",
+            "type": "string",
+            "default": ".hta"
+        },
+        "original_extension_handler": {
+            "description": "File Extension To Revert",
+            "type": "string",
+            "default": "htafile"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

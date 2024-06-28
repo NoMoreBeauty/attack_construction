@@ -1,0 +1,25 @@
+{
+    "name": "Restart System via `reboot` - FreeBSD/macOS/Linux",
+    "description": "This test restarts a FreeBSD/macOS/Linux system via `reboot`. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "reboot\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1529",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "System Shutdown/Reboot",
+    "source": "ART",
+    "uuid": "47d0b042-a918-40ab-8cf9-150ffe919027",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

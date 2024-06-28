@@ -1,0 +1,32 @@
+{
+    "name": "Add and delete Packet Filter rules",
+    "description": "Add and delete a rule on the Packet Filter (PF) if installed and enabled.  ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "echo \"block in proto tcp from 1.2.3.4 to any\" | pfctl -a pf-rules -f -\npfctl -a pf-rules -s rules\n",
+        "cleanup_command": "pfctl -a pf-rules -F rules\nsed -i \"\" '/anchor pf-rules/d'\npfctl -f /etc/pf.conf\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "8b23cae1-66c1-41c5-b79d-e095b6098b5b",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if pf is installed on the machine and enabled.\n",
+            "prereq_command": "if [ ! -x \"$(command -v pfctl)\" ]; then echo -e \"\\n***** PF NOT installed *****\\n\"; exit 1; fi\nif [ \"$(kldstat -n pf)\" = \"\" ]; then echo -e \"\\n***** PF inactive *****\\n\"; exit 1; fi \n",
+            "get_prereq_command": "echo \"anchor pf-rules >> /etc/pf.conf\"\npfctl -f /etc/pf.conf\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

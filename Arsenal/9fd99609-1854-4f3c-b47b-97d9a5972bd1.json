@@ -1,0 +1,32 @@
+{
+    "name": "Stop/Start UFW firewall systemctl",
+    "description": "Stop the Uncomplicated Firewall (UFW) if installed, using systemctl.  ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "systemctl stop ufw\n",
+        "cleanup_command": "systemctl start ufw\nsystemctl status ufw\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "9fd99609-1854-4f3c-b47b-97d9a5972bd1",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if systemctl and ufw is installed on the machine.\n",
+            "prereq_command": "if [ ! -x \"$(command -v systemctl)\" ]; then echo -e \"\\n***** systemctl NOT installed *****\\n\"; exit 1; fi\nif [ ! -x \"$(command -v ufw)\" ]; then echo -e \"\\n***** ufw NOT installed *****\\n\"; exit 1; fi\nif echo \"$(ufw status)\" |grep -q \"inactive\"; then echo -e \"\\n***** ufw inactive *****\\n\"; exit 1; fi \n",
+            "get_prereq_command": "echo \"\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

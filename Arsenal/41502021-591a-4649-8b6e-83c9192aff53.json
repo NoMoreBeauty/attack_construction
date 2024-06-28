@@ -1,0 +1,31 @@
+{
+    "name": "Add command to .shrc",
+    "description": "Adds a command to the .shrc file of the current user ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "echo '#{command_to_add}' >> ~/.shrc\n",
+        "cleanup_command": "head -n '-2' ~/.shrc > /tmp/T1546.004\nmv /tmp/T1546.004 ~/.shrc\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1546.004",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Unix Shell Configuration Modification",
+    "source": "ART",
+    "uuid": "41502021-591a-4649-8b6e-83c9192aff53",
+    "arguments": {
+        "command_to_add": {
+            "description": "Command to add to the .shrc file",
+            "type": "string",
+            "default": "echo \"Hello from Atomic Red Team T1546.004\" > /tmp/T1546.004"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

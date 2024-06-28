@@ -1,0 +1,40 @@
+{
+    "name": "Invoke HTML Application - Jscript Engine Simulating Double Click",
+    "description": "Executes an HTA Application using JScript script engine simulating double click.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Invoke-ATHHTMLApplication -HTAFilePath #{hta_file_path} -ScriptEngine #{script_engine} -SimulateUserDoubleClick",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1218.005",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Mshta",
+    "source": "ART",
+    "uuid": "58a193ec-131b-404e-b1ca-b35cf0b18c33",
+    "arguments": {
+        "script_engine": {
+            "description": "Script Engine to use",
+            "type": "string",
+            "default": "JScript"
+        },
+        "hta_file_path": {
+            "description": "HTA file name and or path to be used",
+            "type": "string",
+            "default": "Test.hta"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The AtomicTestHarnesses module must be installed and Invoke-ATHHTMLApplication must be exported in the module.",
+            "prereq_command": "$RequiredModule = Get-Module -Name AtomicTestHarnesses -ListAvailable\nif (-not $RequiredModule) {exit 1}\nif (-not $RequiredModule.ExportedCommands['Invoke-ATHHTMLApplication']) {exit 1} else {exit 0}",
+            "get_prereq_command": "Install-Module -Name AtomicTestHarnesses -Scope CurrentUser -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

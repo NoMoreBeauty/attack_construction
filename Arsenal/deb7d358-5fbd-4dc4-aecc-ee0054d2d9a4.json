@@ -1,0 +1,30 @@
+{
+    "name": "Screencapture (silent)",
+    "description": "Use screencapture command to collect a full desktop screenshot ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "screencapture -x #{output_file}\n",
+        "cleanup_command": "rm #{output_file}\n",
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1113",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Screen Capture",
+    "source": "ART",
+    "uuid": "deb7d358-5fbd-4dc4-aecc-ee0054d2d9a4",
+    "arguments": {
+        "output_file": {
+            "description": "Output file path",
+            "type": "path",
+            "default": "/tmp/T1113_desktop.png"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

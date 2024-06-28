@@ -1,0 +1,29 @@
+{
+    "name": "Disable history collection (freebsd)",
+    "description": "Disables history collection in shells ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "export HISTSIZE=0\n#{evil_command}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1562.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Impair Command History Logging",
+    "source": "ART",
+    "uuid": "cada55b4-8251-4c60-819e-8ec1b33c9306",
+    "arguments": {
+        "evil_command": {
+            "description": "Command to run after shell history collection is disabled",
+            "type": "string",
+            "default": "whoami"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

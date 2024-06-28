@@ -1,0 +1,24 @@
+{
+    "name": "Chrome/Chromium (Chrome Web Store)",
+    "description": "Install the Minimum Viable Malicious Extension Chrome extension",
+    "supported_platforms": [
+        "linux",
+        "windows",
+        "macos"
+    ],
+    "executor": {
+        "steps": "1. Navigate to https://chrome.google.com/webstore/detail/minimum-viable-malicious/odlpfdolehmhciiebahbpnaopneicend\nin Chrome\n\n2. Click 'Add to Chrome'\n",
+        "name": "manual"
+    },
+    "id": "T1176",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Browser Extensions",
+    "source": "ART",
+    "uuid": "4c83940d-8ca5-4bb2-8100-f46dc914bc3f",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

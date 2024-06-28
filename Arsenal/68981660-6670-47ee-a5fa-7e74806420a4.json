@@ -1,0 +1,23 @@
+{
+    "name": "Find and Display Internet Explorer Browser Version",
+    "description": "Query the registry to determine the version of internet explorer installed on the system. Upon execution, version information about internet explorer will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg query \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Internet Explorer\" /v svcVersion\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1518",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Software Discovery",
+    "source": "ART",
+    "uuid": "68981660-6670-47ee-a5fa-7e74806420a4",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,31 @@
+{
+    "name": "Winlogon HKLM Shell Key Persistence - PowerShell",
+    "description": "PowerShell code to set Winlogon shell key to execute a binary at logon along with explorer.exe.  Upon successful execution, PowerShell will modify a registry value to execute cmd.exe upon logon/logoff. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Set-ItemProperty \"HKLM:\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\\" \"Shell\" \"explorer.exe, #{binary_to_execute}\" -Force\n",
+        "cleanup_command": "Remove-ItemProperty -Path \"HKLM:\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\\" -Name \"Shell\" -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1547.004",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Winlogon Helper DLL",
+    "source": "ART",
+    "uuid": "95a3c42f-8c88-4952-ad60-13b81d929a9d",
+    "arguments": {
+        "binary_to_execute": {
+            "description": "Path of binary to execute",
+            "type": "path",
+            "default": "C:\\Windows\\System32\\cmd.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,37 @@
+{
+    "name": "Remote Process Injection with Go using RtlCreateUserThread WinAPI",
+    "description": "Executes shellcode in a remote process.  Steps taken with this technique 1. Get a handle to the target process 2. Allocate memory for the shellcode with VirtualAllocEx setting the page permissions to Read/Write 3. Use the WriteProcessMemory to copy the shellcode to the allocated memory space in the remote process 4. Change the memory page permissions to Execute/Read with VirtualProtectEx 5. Execute the entrypoint of the shellcode in the remote process with RtlCreateUserThread 6. Close the handle to the remote process  - PoC Credit: (https://github.com/Ne0nd0g/go-shellcode/tree/master#rtlcreateuserthread) - References:    - https://www.cobaltstrike.com/blog/cobalt-strikes-process-injection-the-details-cobalt-strike ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "$process = Start-Process #{spawn_process_path} -passthru\n$PathToAtomicsFolder\\T1055\\bin\\x64\\RtlCreateUserThread.exe -pid $process.Id -debug\n",
+        "cleanup_command": "Stop-Process -Name CalculatorApp -ErrorAction SilentlyContinue\nStop-Process -Name #{spawn_process_name} -ErrorAction SilentlyContinue\n",
+        "type": "Command Executor"
+    },
+    "id": "T1055",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Process Injection",
+    "source": "ART",
+    "uuid": "a0c1725f-abcd-40d6-baac-020f3cf94ecd",
+    "arguments": {
+        "spawn_process_path": {
+            "description": "Path of the binary to spawn",
+            "type": "string",
+            "default": "C:\\Windows\\System32\\werfault.exe"
+        },
+        "spawn_process_name": {
+            "description": "Name of the process spawned",
+            "type": "string",
+            "default": "werfault"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

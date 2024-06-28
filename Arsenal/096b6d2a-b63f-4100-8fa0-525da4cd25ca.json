@@ -1,0 +1,52 @@
+{
+    "name": "Active Directory Domain Search",
+    "description": "Output information from LDAPSearch. LDAP Password is the admin-user password on Active Directory ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "elevation_required": false,
+        "command": "ldapsearch -H ldap://#{domain}.#{top_level_domain}:389 -x -D #{user} -w #{password} -b \"CN=Users,DC=#{domain},DC=#{top_level_domain}\" -s sub -a always -z 1000 dn\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1087.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "096b6d2a-b63f-4100-8fa0-525da4cd25ca",
+    "arguments": {
+        "domain": {
+            "description": "The domain to be tested",
+            "type": "string",
+            "default": "example"
+        },
+        "top_level_domain": {
+            "description": "The top level domain (.com, .test, .remote, etc... following domain, minus the .)",
+            "type": "string",
+            "default": "test"
+        },
+        "user": {
+            "description": "username@domain of a user within the ad database",
+            "type": "string",
+            "default": "user@example.test"
+        },
+        "password": {
+            "description": "password of the user with admin privileges referenced in admin_user",
+            "type": "string",
+            "default": "s3CurePssw0rD!"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Packages sssd-ad sssd-tools realmd adcli installed and realm available, ldapsearch\n",
+            "prereq_command": "which ldapsearch\n",
+            "get_prereq_command": "echo ldapsearch not found\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

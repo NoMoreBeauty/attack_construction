@@ -1,0 +1,24 @@
+{
+    "name": "rm -rf",
+    "description": "Delete messages and security logs ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "rm -rf /var/log/messages\nrm -rf /var/log/security\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "bd8ccc45-d632-481e-b7cf-c467627d68f9",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

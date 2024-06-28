@@ -1,0 +1,24 @@
+{
+    "name": "Shutdown System via `poweroff` - FreeBSD/Linux",
+    "description": "This test shuts down a FreeBSD/Linux system using `poweroff`. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "poweroff\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1529",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "System Shutdown/Reboot",
+    "source": "ART",
+    "uuid": "73a90cd2-48a2-4ac5-8594-2af35fa909fa",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

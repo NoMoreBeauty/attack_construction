@@ -1,0 +1,24 @@
+{
+    "name": "Windows - vssadmin Resize Shadowstorage Volume",
+    "description": "Adversaries generally try to Resize Shadowstorage Volume using vssadmin.exe to avoid the shadow volumes being made again. This technique is typically found used by adversaries during a ransomware event and a precursor to deleting the shadowstorage.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "vssadmin resize shadowstorage /For=C: /On=C: /MaxSize=20%",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1490",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Inhibit System Recovery",
+    "source": "ART",
+    "uuid": "da558b07-69ae-41b9-b9d4-4d98154a7049",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

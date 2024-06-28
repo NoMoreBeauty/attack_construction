@@ -1,0 +1,25 @@
+{
+    "name": "Creating W32Time similar named service using schtasks",
+    "description": "Creating W32Time similar named service (win32times) using schtasks just like threat actor dubbed Operation Wocao",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "schtasks /create /ru system /sc daily /tr \"cmd /c powershell.exe -ep bypass -file c:\\T1036.004_NonExistingScript.ps1\" /tn win32times /f\nschtasks /query /tn win32times\n",
+        "cleanup_command": "schtasks /tn win32times /delete /f\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1036.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Masquerade Task or Service",
+    "source": "ART",
+    "uuid": "f9f2fe59-96f7-4a7d-ba9f-a9783200d4c9",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

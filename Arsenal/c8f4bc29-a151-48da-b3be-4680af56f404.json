@@ -1,0 +1,58 @@
+{
+    "name": "Azure - adding service principal to Azure role in subscription",
+    "description": "The adversaries want to add service principal to some Azure role, also called Azure resource role. Threat actor  may be interested primarily in highly privileged roles, e.g. Owner, Contributor. By default, the role Reader is assigned to service principal in this test.  New-AzRoleAssignment cmdlet could be also use to assign user/service principal to resource, resource group and management group.  The account you use to run the PowerShell command must have Microsoft.Authorization/roleAssignments/write  (e.g. such as User Access Administrator or Owner) and the Azure Active Directory Graph Directory.Read.All  and Microsoft Graph Directory.Read.All permissions.  Detection hint - check Operation Name Create role assignment in subscriptions Activity Logs. ",
+    "supported_platforms": [
+        "iaas:azure"
+    ],
+    "executor": {
+        "command": "Import-Module -Name Az.Resources\n$PWord = ConvertTo-SecureString -String \"#{password}\" -AsPlainText -Force\n$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList \"#{username}\", $Pword\nConnect-AzAccount -Credential $Credential\n\n$sp = Get-AzADServicePrincipal | where-object {$_.DisplayName -eq \"#{service_principal_name}\"}\nif ($sp -eq $null) { Write-Warning \"Service Principal not found\"; exit }\n$subscription = Get-AzSubscription | where-object {$_.Name -eq \"#{subscription}\"} \nif ($subscription -eq $null) { Write-Warning \"Subscription not found\"; exit }\n$role = Get-AzRoleDefinition | where-object {$_.Name -eq \"#{role_name}\"}\nif ($role -eq $null) { Write-Warning \"Role not found\"; exit }\n\nNew-AzRoleAssignment -ObjectId $sp.id -RoleDefinitionId $role.id -Scope /subscriptions/$subscription\nWrite-Host \"Service Principal $($sp.DisplayName) was added to $($role.Name) role in subscriptions $($subscriptions.Name)\"\n",
+        "cleanup_command": "Import-Module -Name AzureAD -ErrorAction Ignore\n$PWord = ConvertTo-SecureString -String \"#{password}\" -AsPlainText -Force\n$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList \"#{username}\", $Pword\nConnect-AzAccount -Credential $Credential -ErrorAction Ignore\n\n$sp = Get-AzADServicePrincipal | where-object {$_.DisplayName -eq \"#{service_principal_name}\"}\nif ($sp -eq $null) { Write-Warning \"Service Principal not found\"; exit }\n$subscription = Get-AzSubscription | where-object {$_.Name -eq \"#{subscription}\"} \nif ($subscription -eq $null) { Write-Warning \"Subscription not found\"; exit }\n$role = Get-AzRoleDefinition | where-object {$_.Name -eq \"#{role_name}\"}\nif ($role -eq $null) { Write-Warning \"Role not found\"; exit }\n\nRemove-AzRoleAssignment -ObjectId $sp.id -RoleDefinitionId $role.id -Scope /subscriptions/$subscription\nWrite-Host \"Service Principal $($sp.DisplayName) was removed from $($role.Name) role in subscriptions $($subscriptions.Name)\"\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1098",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Account Manipulation",
+    "source": "ART",
+    "uuid": "c8f4bc29-a151-48da-b3be-4680af56f404",
+    "arguments": {
+        "username": {
+            "description": "Azure AD username",
+            "type": "string",
+            "default": "jonh@contoso.com"
+        },
+        "password": {
+            "description": "Azure AD password",
+            "type": "string",
+            "default": "p4sswd"
+        },
+        "service_principal_name": {
+            "description": "Name of the service principal",
+            "type": "string",
+            "default": "SuperSP"
+        },
+        "role_name": {
+            "description": "Name of the targeted Azure role",
+            "type": "string",
+            "default": "Reader"
+        },
+        "subscription": {
+            "description": "Name of the targeted subscription",
+            "type": "string",
+            "default": "Azure subscription 1"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Az.Resources module must be installed.\n",
+            "prereq_command": "try {if (Get-InstalledModule -Name Az.Resources -ErrorAction SilentlyContinue) {exit 0} else {exit 1}} catch {exit 1}\n",
+            "get_prereq_command": "Install-Module -Name Az.Resources -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

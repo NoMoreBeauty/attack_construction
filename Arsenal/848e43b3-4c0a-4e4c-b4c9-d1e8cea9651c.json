@@ -1,0 +1,24 @@
+{
+    "name": "Real-time system log clearance/deletion",
+    "description": "This test reads real-time system log file and writes empty string to it, thus clearing the log file without tampering with the logging process ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "sudo log -f /var/log/system.log | : > /var/log/system.log\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "848e43b3-4c0a-4e4c-b4c9-d1e8cea9651c",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,38 @@
+{
+    "name": "Packet Capture FreeBSD using tshark or tcpdump",
+    "description": "Perform a PCAP. Wireshark will be required for tshark. TCPdump may already be installed.  Upon successful execution, tshark or tcpdump will execute and capture 5 packets on interface ens33. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "tcpdump -c 5 -nnni #{interface}\ntshark -c 5 -i #{interface}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1040",
+    "tactics": [
+        "Credential Access",
+        "Discovery"
+    ],
+    "technique": "Network Sniffing",
+    "source": "ART",
+    "uuid": "c93f2492-9ebe-44b5-8b45-36574cccfe67",
+    "arguments": {
+        "interface": {
+            "description": "Specify interface to perform PCAP on.",
+            "type": "string",
+            "default": "em0"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if at least one of tcpdump or tshark is installed.\n",
+            "prereq_command": "if [ ! -x \"$(command -v tcpdump)\" ] && [ ! -x \"$(command -v tshark)\" ]; then exit 1; else exit 0; fi;\n",
+            "get_prereq_command": "(which pkg && pkg install -y wireshark-nox11)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

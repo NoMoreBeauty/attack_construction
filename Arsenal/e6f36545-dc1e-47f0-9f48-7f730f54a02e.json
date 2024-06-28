@@ -1,0 +1,24 @@
+{
+    "name": "Enumerate users and groups",
+    "description": "Utilize groups and id to enumerate users and groups ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "groups\nid\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1087.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "e6f36545-dc1e-47f0-9f48-7f730f54a02e",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

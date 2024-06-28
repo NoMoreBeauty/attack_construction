@@ -1,0 +1,26 @@
+{
+    "name": "Suspicious bat file run from startup Folder",
+    "description": "bat files can be placed in and executed from the startup folder to maintain persistance  Upon execution, cmd will be run and immediately closed. Additionally, the new files can be viewed in the $env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup folder and will also run when the computer is restarted and the user logs in. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Copy-Item \"$PathToAtomicsFolder\\T1547.001\\src\\batstartup.bat\" \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\batstartup.bat\"\nCopy-Item \"$PathToAtomicsFolder\\T1547.001\\src\\batstartup.bat\" \"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\batstartup.bat\"\nStart-Process \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\batstartup.bat\"\nStart-Process \"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\batstartup.bat\"\n",
+        "cleanup_command": "Remove-Item \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\batstartup.bat\" -ErrorAction Ignore\nRemove-Item \"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\batstartup.bat\" -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1547.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Registry Run Keys / Startup Folder",
+    "source": "ART",
+    "uuid": "5b6768e4-44d2-44f0-89da-a01d1430fd5e",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

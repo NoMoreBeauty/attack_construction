@@ -1,0 +1,31 @@
+{
+    "name": "Export Root Certificate with Export-Certificate",
+    "description": "Creates a Root certificate and exports it with Export-Certificate PowerShell Cmdlet. Upon a successful attempt, this will write a pfx to disk and utilize the Cmdlet Export-Certificate. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$cert = New-SelfSignedCertificate -DnsName atomicredteam.com -CertStoreLocation cert:\\LocalMachine\\My\nSet-Location Cert:\\LocalMachine\\My\nExport-Certificate -Type CERT -Cert  Cert:\\LocalMachine\\My\\$($cert.Thumbprint) -FilePath #{pfx_path}\n",
+        "cleanup_command": "try {\n   $cert = Import-Certificate -FilePath #{pfx_path} -CertStoreLocation Cert:\\LocalMachine\\My -ErrorAction Ignore\n   Get-ChildItem Cert:\\LocalMachine\\My\\$($cert.Thumbprint) -ErrorAction Ignore | Remove-Item -ErrorAction Ignore\n   Get-ChildItem Cert:\\LocalMachine\\Root\\$($cert.Thumbprint) -ErrorAction Ignore | Remove-Item -ErrorAction Ignore\n}\ncatch { }\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1552.004",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Private Keys",
+    "source": "ART",
+    "uuid": "78b274f8-acb0-428b-b1f7-7b0d0e73330a",
+    "arguments": {
+        "pfx_path": {
+            "description": "Path of the certificate",
+            "type": "path",
+            "default": "$env:Temp\\AtomicRedTeam.cer"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

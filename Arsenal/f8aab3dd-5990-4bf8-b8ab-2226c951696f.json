@@ -1,0 +1,30 @@
+{
+    "name": "Enumerate all accounts (Local)",
+    "description": "Enumerate all accounts by copying /etc/passwd to another file ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "cat /etc/passwd > #{output_file}\ncat #{output_file}\n",
+        "cleanup_command": "rm -f #{output_file}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1087.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "f8aab3dd-5990-4bf8-b8ab-2226c951696f",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed",
+            "type": "path",
+            "default": "/tmp/T1087.001.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

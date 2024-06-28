@@ -1,0 +1,36 @@
+{
+    "name": "Copy Private SSH Keys with rsync",
+    "description": "Copy private SSH keys on a Linux or macOS system to a staging folder using the `rsync` command. ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "executor": {
+        "command": "mkdir #{output_folder}\nfind #{search_path} -name id_rsa 2>/dev/null -exec rsync -R {} #{output_folder} \\;\nexit 0\n",
+        "cleanup_command": "rm -rf #{output_folder}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1552.004",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Private Keys",
+    "source": "ART",
+    "uuid": "864bb0b2-6bb5-489a-b43b-a77b3a16d68a",
+    "arguments": {
+        "search_path": {
+            "description": "Path where to start searching from.",
+            "type": "path",
+            "default": "/"
+        },
+        "output_folder": {
+            "description": "Output folder containing copies of SSH private key files",
+            "type": "path",
+            "default": "/tmp/art-staging"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

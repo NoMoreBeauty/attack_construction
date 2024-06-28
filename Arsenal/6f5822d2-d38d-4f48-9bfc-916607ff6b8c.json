@@ -1,0 +1,31 @@
+{
+    "name": "Allow Executable Through Firewall Located in Non-Standard Location",
+    "description": "This test will attempt to allow an executable through the system firewall located in the Users directory",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Copy-Item \"#{exe_file_path}\" -Destination \"C:\\Users\\$env:UserName\" -Force\nnetsh advfirewall firewall add rule name=\"Atomic Test\" dir=in action=allow program=\"C:\\Users\\$env:UserName\\AtomicTest.exe\" enable=yes\n",
+        "cleanup_command": "netsh advfirewall firewall delete rule name=\"Atomic Test\" | Out-Null\nRemove-Item C:\\Users\\$env:UserName\\AtomicTest.exe -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "6f5822d2-d38d-4f48-9bfc-916607ff6b8c",
+    "arguments": {
+        "exe_file_path": {
+            "description": "path to exe file",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1562.004\\bin\\AtomicTest.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

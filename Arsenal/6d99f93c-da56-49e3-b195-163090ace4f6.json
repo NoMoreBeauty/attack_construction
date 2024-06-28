@@ -1,0 +1,25 @@
+{
+    "name": "Copy and Modify Mailbox Data on Linux",
+    "description": "Copies and modifies mail data on Linux ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "mkdir -p /var/spool/mail/copy\nfor file in /var/spool/mail/*; do\n  if [ \"$(basename \"$file\")\" != \"copy\" ]\n  then\n    cp -R \"$file\" /var/spool/mail/copy/\n    if [ -f \"/var/spool/mail/copy/$(basename \"$file\")\" ]; then\n      echo \"Modification for Atomic Red Test\" >> \"/var/spool/mail/copy/$(basename \"$file\")\"\n    fi\n  fi\ndone\n",
+        "cleanup_command": "rm -rf /var/spool/mail/copy\n",
+        "name": "bash",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.008",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Mailbox Data",
+    "source": "ART",
+    "uuid": "6d99f93c-da56-49e3-b195-163090ace4f6",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

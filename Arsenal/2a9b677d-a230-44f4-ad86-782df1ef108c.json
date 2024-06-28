@@ -1,0 +1,24 @@
+{
+    "name": "System Owner/User Discovery",
+    "description": "Identify System owner or users on an endpoint  Upon successful execution, sh will stdout list of usernames. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "users\nw\nwho\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1033",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Owner/User Discovery",
+    "source": "ART",
+    "uuid": "2a9b677d-a230-44f4-ad86-782df1ef108c",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

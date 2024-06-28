@@ -1,0 +1,50 @@
+{
+    "name": "Dylib Injection via DYLD_INSERT_LIBRARIES",
+    "description": "injects a dylib that opens calculator via env variable ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "command": "DYLD_INSERT_LIBRARIES=#{dylib_file} #{file_to_inject}\n",
+        "cleanup_command": "kill `pgrep Calculator`\nkill `pgrep firefox`\n",
+        "name": "bash",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1574.006",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Dynamic Linker Hijacking",
+    "source": "ART",
+    "uuid": "4d66029d-7355-43fd-93a4-b63ba92ea1be",
+    "arguments": {
+        "file_to_inject": {
+            "description": "Path of executable to be injected. Mostly works on non-apple default apps.",
+            "type": "path",
+            "default": "/Applications/Firefox.app/Contents/MacOS/firefox"
+        },
+        "source_file": {
+            "description": "Path of c source file",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1574.006/src/MacOS/T1574.006.c"
+        },
+        "dylib_file": {
+            "description": "Path of dylib file",
+            "type": "path",
+            "default": "/tmp/T1574006MOS.dylib"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Compile the dylib from (#{source_file}). Destination is #{dylib_file}\n",
+            "prereq_command": "gcc -dynamiclib #{source_file} -o #{dylib_file}\n",
+            "get_prereq_command": "gcc -dynamiclib #{source_file} -o #{dylib_file}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

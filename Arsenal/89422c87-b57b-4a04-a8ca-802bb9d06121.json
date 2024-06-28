@@ -1,0 +1,42 @@
+{
+    "name": "AWS - CloudWatch Log Group Deletes",
+    "description": "Creates a new cloudWatch log group in AWS, Upon successful creation it will Delete the group. Attackers can use this technique to evade defenses by  deleting the log stream. Once it is deleted, the logs created by the attackers will not be logged. https://www.elastic.co/guide/en/security/current/aws-cloudwatch-log-group-deletion.html#aws-cloudwatch-log-group-deletion ",
+    "supported_platforms": [
+        "iaas:aws"
+    ],
+    "executor": {
+        "command": "aws logs create-log-group --log-group-name #{cloudwatch_log_group_name} --region #{region} --output json\necho \"*** Log Group Created ***\"\naws logs delete-log-group --log-group-name #{cloudwatch_log_group_name} --region #{region} --output json\necho \"*** Log Group Deleted ***\"\n",
+        "cleanup_command": null,
+        "name": "sh",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1562.008",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Cloud Logs",
+    "source": "ART",
+    "uuid": "89422c87-b57b-4a04-a8ca-802bb9d06121",
+    "arguments": {
+        "cloudwatch_log_group_name": {
+            "description": "Name of the cloudWatch log group",
+            "type": "string",
+            "default": "log-test"
+        },
+        "region": {
+            "description": "Name of the region",
+            "type": "string",
+            "default": "us-east-1"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if ~/.aws/credentials file has a default stanza is configured\n",
+            "prereq_command": "cat ~/.aws/credentials | grep \"default\"\n",
+            "get_prereq_command": "echo Please install the aws-cli and configure your AWS defult profile using: aws configure\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

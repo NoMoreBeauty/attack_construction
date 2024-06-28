@@ -1,0 +1,39 @@
+{
+    "name": "Execute a powershell command on victim's machines using CALDERA",
+    "uuid": "9e0a37d7-f06a-4fa6-bd8a-7562306ef34b",
+    "description": "Execute a powershell command on victim's machines using CALDERA",
+    "supported_platforms": [
+        "windows"
+    ],
+    "arguments": {
+        "command": {
+            "description": "The executed powershell command.",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [
+        {
+            "description": "A live CALDERA agent should be running on the target machines.",
+            "type": "CALDERA Agent"
+        }
+    ],
+    "infrastructure_requirement":[
+        {
+            "description": "CALDERA should be installed on the C2 server."
+        }
+    ],
+    "executor": {
+        "type": "C2 console",
+        "name": "CALDERA"
+    },
+    "side": "Attacker",
+    "id": "T1059.001",
+    "tactics": [
+        "Execution"
+    ],
+    "technique": "Command and Scripting Interpreter: PowerShell",
+    "lateral_movement_feature": null,
+    "source": "CALDERA",
+    "effect": "Command Execution"
+}

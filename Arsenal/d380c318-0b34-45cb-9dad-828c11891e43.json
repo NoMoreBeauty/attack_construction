@@ -1,0 +1,38 @@
+{
+    "name": "Create Windows System File with powershell",
+    "description": "Creates a file and marks it as System through powershell. Upon execution, open File Epxplorer and enable View > Hidden Items. Then, open Properties > Details on the file and observe that the Attributes is S System. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "command_prompt",
+    "executor": {
+        "command": "$file = Get-Item $env:temp\\T1564.001-10.txt -Force\n$file.attributes='System'\n",
+        "cleanup_command": "cmd /c 'del /A:H #{file_to_modify} >nul 2>&1'\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1564.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Hidden Files and Directories",
+    "source": "ART",
+    "uuid": "d380c318-0b34-45cb-9dad-828c11891e43",
+    "arguments": {
+        "file_to_modify": {
+            "description": "File to modify",
+            "type": "string",
+            "default": "%temp%\\T1564.001-10.txt"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The file must exist on disk at specified location (#{file_to_modify})\n",
+            "prereq_command": "IF EXIST #{file_to_modify} ( EXIT 0 ) ELSE ( EXIT 1 )\n",
+            "get_prereq_command": "echo system_Attrib_T1564.001-10 >> #{file_to_modify}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

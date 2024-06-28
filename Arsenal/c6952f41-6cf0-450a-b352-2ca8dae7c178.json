@@ -1,0 +1,25 @@
+{
+    "name": "Section View Injection",
+    "description": "This test creates a section object in the local process followed by a local section view. The shellcode is copied into the local section view and a remote section view is created in the target process, pointing to the local section view.  A thread is then created in the target process, using the remote section view as start address. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$notepad = Start-Process notepad -passthru\nStart-Process \"$PathToAtomicsFolder\\T1055\\bin\\x64\\InjectView.exe\"\n",
+        "cleanup_command": "Stop-Process $notepad.pid",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1055",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Process Injection",
+    "source": "ART",
+    "uuid": "c6952f41-6cf0-450a-b352-2ca8dae7c178",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

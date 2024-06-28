@@ -1,0 +1,35 @@
+{
+    "name": "Invoke HTML Application - Simulate Lateral Movement over UNC Path",
+    "description": "Executes an HTA Application with Simulate lateral movement over UNC Path.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Invoke-ATHHTMLApplication -TemplatePE -AsLocalUNCPath -MSHTAFilePath #{mshta_file_path}",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1218.005",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Mshta",
+    "source": "ART",
+    "uuid": "b8a8bdb2-7eae-490d-8251-d5e0295b2362",
+    "arguments": {
+        "mshta_file_path": {
+            "description": "Location of mshta.exe",
+            "type": "string",
+            "default": "$env:windir\\system32\\mshta.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The AtomicTestHarnesses module must be installed and Invoke-ATHHTMLApplication must be exported in the module.",
+            "prereq_command": "$RequiredModule = Get-Module -Name AtomicTestHarnesses -ListAvailable\nif (-not $RequiredModule) {exit 1}\nif (-not $RequiredModule.ExportedCommands['Invoke-ATHHTMLApplication']) {exit 1} else {exit 0}",
+            "get_prereq_command": "Install-Module -Name AtomicTestHarnesses -Scope CurrentUser -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

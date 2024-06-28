@@ -1,0 +1,26 @@
+{
+    "name": "Trap EXIT",
+    "description": "Launch bash shell with command arg to create TRAP on EXIT. The trap executes script that writes to /tmp/art-fish.txt ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "executor": {
+        "command": "bash -c 'trap \"nohup sh $PathToAtomicsFolder/T1546.005/src/echo-art-fish.sh\" EXIT'\n",
+        "cleanup_command": "rm -f /tmp/art-fish.txt\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1546.005",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Trap",
+    "source": "ART",
+    "uuid": "a74b2e07-5952-4c03-8b56-56274b076b61",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

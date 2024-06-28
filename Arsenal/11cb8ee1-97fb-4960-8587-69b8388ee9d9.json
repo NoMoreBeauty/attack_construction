@@ -1,0 +1,24 @@
+{
+    "name": "Overwrite FreeBSD system log via echo utility",
+    "description": "This test overwrites the contents of system log file with an empty string using echo utility ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "echo '' > /var/log/messages\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "11cb8ee1-97fb-4960-8587-69b8388ee9d9",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

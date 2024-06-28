@@ -1,0 +1,32 @@
+{
+    "name": "Append commands user shell profile",
+    "description": "An adversary may wish to establish persistence by executing malicious commands from the users ~/.profile every time the user logs in. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "elevation_required": false,
+        "name": "sh",
+        "command": "echo '#{text_to_append}' >> ~/.profile\n",
+        "cleanup_command": "sed -i \"s/# Atomic Red Team was here... T1546.004//\" ~/.profile\n",
+        "type": "Command Executor"
+    },
+    "id": "T1546.004",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Unix Shell Configuration Modification",
+    "source": "ART",
+    "uuid": "bbdb06bc-bab6-4f5b-8232-ba3fbed51d77",
+    "arguments": {
+        "text_to_append": {
+            "description": "Text to append to the ~/.profile file",
+            "type": "string",
+            "default": "# Atomic Red Team was here... T1546.004"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

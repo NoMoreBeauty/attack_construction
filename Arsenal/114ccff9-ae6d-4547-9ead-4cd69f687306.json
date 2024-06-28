@@ -1,0 +1,27 @@
+{
+    "name": "Download Phishing Attachment",
+    "uuid": "114ccff9-ae6d-4547-9ead-4cd69f687306",
+    "description": "This atomic test downloads an attachment from the specified url, simulating an end user clicking a phishing link to download the file.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "arguments": null,
+    "preconditions": [],
+    "executor": {
+        "command": "$url = '#{url}'\n[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nInvoke-WebRequest -Uri $url -OutFile #{path}\n",
+        "type": "Command Executor",
+        "name": "powershell",
+        "cleanup_command": "Remove-Item #{path}\n",
+        "elevation_required": false
+    },
+    "side": "Victim",
+    "id": "T1566.001",
+    "tactics": [
+        "Initial Access"
+    ],
+    "technique": "Spearphishing Attachment",
+    "dependencies": null,
+    "lateral_movement_feature": null,
+    "source": "ART",
+    "effect": "Place Files"
+}

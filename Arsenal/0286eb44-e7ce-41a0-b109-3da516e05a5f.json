@@ -1,0 +1,49 @@
+{
+    "name": "Data Encrypted with zip and gpg symmetric",
+    "description": "Encrypt data for exiltration ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "mkdir -p #{test_folder}\ncd #{test_folder}; touch a b c d e f g\nzip --password \"#{encryption_password}\" #{test_folder}/#{test_file} ./*\necho \"#{encryption_password}\" | gpg --batch --yes --passphrase-fd 0 --output #{test_folder}/#{test_file}.zip.gpg -c #{test_folder}/#{test_file}.zip\nls -l #{test_folder}\n",
+        "cleanup_command": "rm -Rf #{test_folder}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1560.001",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Archive via Utility",
+    "source": "ART",
+    "uuid": "0286eb44-e7ce-41a0-b109-3da516e05a5f",
+    "arguments": {
+        "test_folder": {
+            "description": "Path used to store files.",
+            "type": "path",
+            "default": "/tmp/T1560"
+        },
+        "test_file": {
+            "description": "Temp file used to store encrypted data.",
+            "type": "path",
+            "default": "T1560"
+        },
+        "encryption_password": {
+            "description": "Password used to encrypt data.",
+            "type": "string",
+            "default": "InsertPasswordHere"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "gpg and zip are required to run the test.",
+            "prereq_command": "if [ ! -x \"$(command -v gpg)\" ] || [ ! -x \"$(command -v zip)\" ]; then exit 1; fi;\n",
+            "get_prereq_command": "(which pkg && pkg install -y gnupg zip)||(which yum && yum -y install epel-release zip gpg)||(which apt-get && apt-get install -y zip gpg)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

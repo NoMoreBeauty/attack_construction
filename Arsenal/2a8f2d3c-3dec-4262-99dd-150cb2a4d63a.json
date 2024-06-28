@@ -1,0 +1,30 @@
+{
+    "name": "manage-bde.wsf Signed Script Command Execution",
+    "description": "Executes the signed manage-bde.wsf script with options to execute an arbitrary command. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "set comspec=#{command_to_execute}\ncscript %windir%\\System32\\manage-bde.wsf\n",
+        "cleanup_command": "set comspec=%windir%\\System32\\cmd.exe\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1216",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "System Script Proxy Execution",
+    "source": "ART",
+    "uuid": "2a8f2d3c-3dec-4262-99dd-150cb2a4d63a",
+    "arguments": {
+        "command_to_execute": {
+            "description": "A command to execute.",
+            "type": "path",
+            "default": "%windir%\\System32\\calc.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

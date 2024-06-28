@@ -1,0 +1,35 @@
+{
+    "name": "Masquerading - windows exe running as different windows exe",
+    "description": "Copies a windows exe, renames it as another windows exe, and launches it to masquerade as second windows exe ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "copy \"#{inputfile}\" #{outputfile}\n$myT1036_003 = (Start-Process -PassThru -FilePath #{outputfile}).Id\nStop-Process -ID $myT1036_003\n",
+        "cleanup_command": "Remove-Item #{outputfile} -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1036.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rename System Utilities",
+    "source": "ART",
+    "uuid": "c3d24a39-2bfe-4c6a-b064-90cd73896cb0",
+    "arguments": {
+        "outputfile": {
+            "description": "path of file to execute",
+            "type": "path",
+            "default": "($env:TEMP + \"\\svchost.exe\")"
+        },
+        "inputfile": {
+            "description": "path of file to copy",
+            "type": "path",
+            "default": "$env:ComSpec"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

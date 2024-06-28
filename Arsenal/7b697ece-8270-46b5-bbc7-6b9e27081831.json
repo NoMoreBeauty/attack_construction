@@ -1,0 +1,32 @@
+{
+    "name": "Edit UFW firewall main configuration file",
+    "description": "Edit the Uncomplicated Firewall (UFW) main configuration file for setting  default policies /etc/default/ufw. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "echo \"# THIS IS A COMMENT\" >> /etc/default/ufw\ngrep \"# THIS IS A COMMENT\" /etc/default/ufw\n",
+        "cleanup_command": "sed -i 's/# THIS IS A COMMENT//g' /etc/default/ufw\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "7b697ece-8270-46b5-bbc7-6b9e27081831",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if /etc/default/ufw exists.\n",
+            "prereq_command": "if [ ! -f \"/etc/default/ufw\" ]; then echo -e \"\\n***** ufw NOT installed *****\\n\"; exit 1; fi\n",
+            "get_prereq_command": "echo \"\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

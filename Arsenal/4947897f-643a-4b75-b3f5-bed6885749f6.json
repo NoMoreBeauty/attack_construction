@@ -1,0 +1,23 @@
+{
+    "name": "FreeBSD List Kernel Modules",
+    "description": "Enumerate kernel modules loaded. Upon successful execution stdout will display kernel modules loaded, followed by list of modules matching 'vmm' if present. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "kldstat\nkldstat | grep vmm\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "4947897f-643a-4b75-b3f5-bed6885749f6",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

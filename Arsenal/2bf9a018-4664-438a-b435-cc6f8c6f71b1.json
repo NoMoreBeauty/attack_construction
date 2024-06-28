@@ -1,0 +1,32 @@
+{
+    "name": "Sudo usage (freebsd)",
+    "description": "Common Sudo enumeration methods. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "sudo -l      \nsudo cat /usr/local/etc/sudoers\nsudo ee /usr/local/etc/sudoers\n",
+        "type": "Command Executor"
+    },
+    "id": "T1548.003",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Sudo and Sudo Caching",
+    "source": "ART",
+    "uuid": "2bf9a018-4664-438a-b435-cc6f8c6f71b1",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if sudo is installed.\n",
+            "prereq_command": "if [ ! -x \"$(command -v sudo)\" ]; then exit 1; else exit 0; fi;\n",
+            "get_prereq_command": "(which pkg && pkg install -y sudo)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

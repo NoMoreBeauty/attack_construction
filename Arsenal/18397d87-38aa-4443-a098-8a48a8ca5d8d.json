@@ -1,0 +1,36 @@
+{
+    "name": "Capture Linux Desktop using Import Tool (freebsd)",
+    "description": "Use import command from ImageMagick to collect a full desktop screenshot ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "import -window root #{output_file}\n",
+        "cleanup_command": "rm #{output_file}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1113",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Screen Capture",
+    "source": "ART",
+    "uuid": "18397d87-38aa-4443-a098-8a48a8ca5d8d",
+    "arguments": {
+        "output_file": {
+            "description": "Output file path",
+            "type": "path",
+            "default": "/tmp/T1113_desktop.png"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "ImageMagick must be installed\n",
+            "prereq_command": "if import -help > /dev/null 2>&1; then exit 0; else exit 1; fi\n",
+            "get_prereq_command": "pkg install -y ImageMagick7\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

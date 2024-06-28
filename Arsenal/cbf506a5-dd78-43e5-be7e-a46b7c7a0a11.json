@@ -1,0 +1,29 @@
+{
+    "name": "Clear Bash history (echo)",
+    "description": "Clears bash history via echo ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "echo \"\" > #{history_path}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1070.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Command History",
+    "source": "ART",
+    "uuid": "cbf506a5-dd78-43e5-be7e-a46b7c7a0a11",
+    "arguments": {
+        "history_path": {
+            "description": "Bash history path",
+            "type": "path",
+            "default": "~/.bash_history"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

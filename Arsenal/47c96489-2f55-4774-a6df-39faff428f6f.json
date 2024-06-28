@@ -1,0 +1,36 @@
+{
+    "name": "PowerShell Version 2 Downgrade",
+    "description": "Executes outdated PowerShell Version 2 which does not support security features like AMSI. By default the atomic will attempt to execute the cmdlet Invoke-Mimikatz whether it exists or not, as this cmdlet will be blocked by AMSI when active.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "PowerShell -version 2 -command '#{v2_command}'",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1562.010",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Downgrade Attack",
+    "source": "ART",
+    "uuid": "47c96489-2f55-4774-a6df-39faff428f6f",
+    "arguments": {
+        "v2_command": {
+            "description": "Specify the command to execute with Version 2",
+            "type": "string",
+            "default": "Invoke-Mimikatz"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if Version 2 is installed.",
+            "prereq_command": "$v2_installed = PowerShell -version 2 -command '$PSVersionTable.PSVersion.Major'\nif (-not $v2_installed) {exit 1} else {exit 0}\n",
+            "get_prereq_command": "echo \"Manually install PowerShell Version 2\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

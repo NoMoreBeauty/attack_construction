@@ -1,0 +1,36 @@
+{
+    "name": "Adfind -Listing password policy",
+    "description": "Adfind tool can be used for reconnaissance in an Active directory environment. The example chosen illustrates adfind used to query the local password policy. reference- http://www.joeware.net/freetools/tools/adfind/, https://social.technet.microsoft.com/wiki/contents/articles/7535.adfind-command-examples.aspx ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "\"PathToAtomicsFolder\\..\\ExternalPayloads\\AdFind.exe\" #{optional_args} -default -s base lockoutduration lockoutthreshold lockoutobservationwindow maxpwdage minpwdage minpwdlength pwdhistorylength pwdproperties\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1087.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "736b4f53-f400-4c22-855d-1a6b5a551600",
+    "arguments": {
+        "optional_args": {
+            "description": "Allows defining arguments to add to the adfind command to tailor it to the specific needs of the environment. Use \"-arg\" notation to add arguments separated by spaces.",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [
+        {
+            "description": "AdFind.exe must exist on disk at specified location (PathToAtomicsFolder\\..\\ExternalPayloads\\AdFind.exe)\n",
+            "prereq_command": "if (Test-Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\AdFind.exe\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"PathToAtomicsFolder\\..\\ExternalPayloads\\AdFind.exe\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest -Uri \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1087.002/bin/AdFind.exe\" -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\AdFind.exe\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,36 @@
+{
+    "name": "SystemBC Malware-as-a-Service Registry",
+    "description": "This Atomic will create a registry key called socks5_powershell for persistance access https://medium.com/walmartglobaltech/systembc-powershell-version-68c9aad0f85c ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$RunKey = \"#{reg_key_path}\"\nSet-ItemProperty -Path $RunKey -Name \"socks5_powershell\" -Value \"#{reg_key_value}\"\n",
+        "cleanup_command": "Remove-ItemProperty -Path #{reg_key_path} -Name \"socks5_powershell\" -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1547.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Registry Run Keys / Startup Folder",
+    "source": "ART",
+    "uuid": "9dc7767b-30c1-4cc4-b999-50cab5e27891",
+    "arguments": {
+        "reg_key_value": {
+            "description": "Thing to Run",
+            "type": "path",
+            "default": "powershell.exe -windowstyle hidden -ExecutionPolicy Bypass -File"
+        },
+        "reg_key_path": {
+            "description": "Path to registry key to update",
+            "type": "path",
+            "default": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

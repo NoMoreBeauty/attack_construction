@@ -1,0 +1,25 @@
+{
+    "name": "Suspicious LAPS Attributes Query with Get-ADComputer all properties and SearchScope",
+    "description": "This test executes LDAP query using powershell command Get-ADComputer with SearchScope as subtree and lists all the properties including Microsoft LAPS attributes ms-mcs-AdmPwd and ms-mcs-AdmPwdExpirationTime",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Get-adcomputer -SearchScope subtree -filter \"name -like '*'\" -Properties *",
+        "cleanup_command": null,
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1087.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "ffbcfd62-15d6-4989-a21a-80bfc8e58bb5",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

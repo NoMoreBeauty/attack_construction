@@ -1,0 +1,24 @@
+{
+    "name": "Security Software Discovery - Sysmon Service",
+    "description": "Discovery of an installed Sysinternals Sysmon service using driver altitude (even if the name is changed).  when sucessfully executed, the test is going to display sysmon driver instance if it is installed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "fltmc.exe | findstr.exe 385201\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1518.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Security Software Discovery",
+    "source": "ART",
+    "uuid": "fe613cf3-8009-4446-9a0f-bc78a15b66c9",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

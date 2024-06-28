@@ -1,0 +1,31 @@
+{
+    "name": "Windows - Stop service using Service Controller",
+    "description": "Stops a specified service using the sc.exe command. Upon execution, if the spooler service was running infomration will be displayed saying it has changed to a state of STOP_PENDING. If the spooler service was not running The service has not been started. will be displayed and it can be started by running the cleanup command. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "sc.exe stop #{service_name}\n",
+        "cleanup_command": "sc.exe start #{service_name} >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1489",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Service Stop",
+    "source": "ART",
+    "uuid": "21dfb440-830d-4c86-a3e5-2a491d5a8d04",
+    "arguments": {
+        "service_name": {
+            "description": "Name of a service to stop",
+            "type": "string",
+            "default": "spooler"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

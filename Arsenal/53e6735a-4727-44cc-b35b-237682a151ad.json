@@ -1,0 +1,48 @@
+{
+    "name": "Encrypt files using 7z (FreeBSD/Linux)",
+    "description": "Uses 7z to encrypt a file ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "$which_7z a -p#{pwd_for_encrypted_file} #{encrypted_file_path} #{input_file_path}\n",
+        "cleanup_command": "$which_7z e #{encrypted_file_path}\nrm #{encrypted_file_path}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1486",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Data Encrypted for Impact",
+    "source": "ART",
+    "uuid": "53e6735a-4727-44cc-b35b-237682a151ad",
+    "arguments": {
+        "pwd_for_encrypted_file": {
+            "description": "the password that you want for the encrypted file",
+            "type": "string",
+            "default": "passwd"
+        },
+        "encrypted_file_path": {
+            "description": "path to the encrypted file",
+            "type": "path",
+            "default": "/tmp/passwd.zip"
+        },
+        "input_file_path": {
+            "description": "path to the file that you want to encrypt",
+            "type": "path",
+            "default": "/etc/passwd"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Finds where 7z is located\n",
+            "prereq_command": "which_7z=`which 7z`\n",
+            "get_prereq_command": "(which pkg && pkg install -y 7-zip)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

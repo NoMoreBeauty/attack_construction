@@ -1,0 +1,48 @@
+{
+    "name": "SharpHound3 - LocalAdmin",
+    "description": "This module runs the Windows executable of SharpHound in order to remotely list members of the local Administrators group (SAMR) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "New-Item -Path \"#{output_path}\" -ItemType Directory > $null\n& \"#{sharphound_path}\" -d \"#{domain}\" --CollectionMethod LocalAdmin --NoSaveCache --OutputDirectory \"#{output_path}\"\n",
+        "cleanup_command": "Remove-Item -Recurse #{output_path} -ErrorAction Ignore\n",
+        "type": "Command Executor"
+    },
+    "id": "T1069.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Local Groups",
+    "source": "ART",
+    "uuid": "e03ada14-0980-4107-aff1-7783b2b59bb1",
+    "arguments": {
+        "domain": {
+            "description": "FQDN of the targeted domain",
+            "type": "string",
+            "default": "$env:UserDnsDomain"
+        },
+        "sharphound_path": {
+            "description": "SharpHound Windows executable",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\SharpHound.exe"
+        },
+        "output_path": {
+            "description": "Output for SharpHound",
+            "type": "path",
+            "default": "$env:TEMP\\SharpHound\\"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "SharpHound binary must exist on disk and at specified location (#{sharphound_path}).\nAnd the computer must be domain joined (implicit authentication).\n",
+            "prereq_command": "if (Test-Path \"#{sharphound_path}\") { exit 0 } else { exit 1 }\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://github.com/BloodHoundAD/BloodHound/blob/e062fe73d73c015dccb37fae5089342d009b84b8/Collectors/SharpHound.exe?raw=true\" -OutFile \"#{sharphound_path}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

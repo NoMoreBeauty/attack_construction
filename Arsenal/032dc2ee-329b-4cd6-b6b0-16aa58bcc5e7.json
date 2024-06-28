@@ -1,0 +1,42 @@
+{
+    "name": "Execute a Windows Command Shell(CMD) command on victim's machines using CALDERA",
+    "uuid": "032dc2ee-329b-4cd6-b6b0-16aa58bcc5e7",
+    "description": "Execute a Windows Command Shell(CMD) command on victim's machines using CALDERA",
+    "supported_platforms": [
+        "windows"
+    ],
+    "arguments": {
+        "command": {
+            "description": "The executed Windows cmd command.",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [
+        {
+            "description": "A live CALDERA agent should be running on the target machines.",
+            "type": "CALDERA Agent"
+        }
+    ],
+    "infrastructure_requirement":[
+        {
+            "description": "CALDERA should be installed on the C2 server.",
+            "prereq_command": null,
+            "get_prereq_command": null
+        }
+    ],
+    "executor": {
+        "type": "C2 console",
+        "name": "CALDERA"
+    },
+    "side": "Attacker",
+    "id": "T1059.003",
+    "tactics": [
+        "Execution"
+    ],
+    "technique": "Command and Scripting Interpreter: Windows Command Shell",
+    "lateral_movement_feature": null,
+    "location": "Attacker",
+    "source": "CALDERA",
+    "effect": "Command Execution"
+}

@@ -1,0 +1,23 @@
+{
+    "name": "using device audio capture commandlet",
+    "description": "[AudioDeviceCmdlets](https://github.com/cdhunt/WindowsAudioDevice-Powershell-Cmdlet) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "powershell.exe -Command WindowsAudioDevice-Powershell-Cmdlet\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1123",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Audio Capture",
+    "source": "ART",
+    "uuid": "9c3ad250-b185-4444-b5a9-d69218a10c95",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

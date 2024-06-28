@@ -1,0 +1,24 @@
+{
+    "name": "Clear History",
+    "description": "Clear Shell History. This technique only affect the bash shell application.  ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "history -c\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "23b88394-091b-4968-a42d-fb8076992443",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,23 @@
+{
+    "name": "Remote System Discovery - net group Domain Controller",
+    "description": "Identify remote systems with net.exe querying the Active Directory Domain Controller. Upon successful execution, cmd.exe will execute cmd.exe against Active Directory to list the Domain Controller in the domain. Output will be via stdout. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net group /domain \"Domain controllers\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1018",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Remote System Discovery",
+    "source": "ART",
+    "uuid": "5843529a-5056-4bc1-9c13-a311e2af4ca0",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

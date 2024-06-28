@@ -1,0 +1,25 @@
+{
+    "name": "Disable Windows Command Line Auditing using Powershell Cmdlet",
+    "description": "In Windows operating systems, command line auditing is controlled through the following registry value:    Registry Path: HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\Audit   Registry Value: ProcessCreationIncludeCmdLine_Enabled  When command line auditing is enabled, the system records detailed information about command execution, including the command executed, the user account responsible for executing the command, and the timestamp of the execution. This information is crucial for security monitoring and forensic analysis, as it helps organizations detect and investigate unauthorized or malicious activities within their systems. By default, command line auditing may not be enabled in Windows systems, and administrators must manually configure the appropriate registry settings to activate it. Conversely, attackers may attempt to tamper with these registry keys to disable command line auditing, as part of their efforts to evade detection and cover their tracks while perpetrating malicious activities.  Because this attack runs a Powershell cmdlet, this attack can be detected by monitoring both:   Powershell Logging (Windows Powershell Event ID 400, 800, 4103, 4104)   Registry events (Windows Event ID 4657, Sysmon Event ID 13)  Read more here: https://securitydatasets.com/notebooks/atomic/windows/defense_evasion/SDWIN-220703123711.html https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/new-itemproperty?view=powershell-7.4#example-2-add-a-registry-entry-to-a-key ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": true,
+        "command": "echo \"Commencing Attack - Disabling Registry Value\"\nNew-ItemProperty -Path \"HKLM:Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\Audit\" -Name \"ProcessCreationIncludeCmdLine_Enabled\" -Value 0 -PropertyType DWORD -Force -ErrorAction Ignore\n",
+        "cleanup_command": "echo \"Commencing Cleanup - Restoring Registry Value\"\nNew-ItemProperty -Path \"HKLM:Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\Audit\" -Name \"ProcessCreationIncludeCmdLine_Enabled\" -Value 1 -PropertyType DWORD -Force -ErrorAction Ignore\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Impair Command History Logging",
+    "source": "ART",
+    "uuid": "95f5c72f-6dfe-45f3-a8c1-d8faa07176fa",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

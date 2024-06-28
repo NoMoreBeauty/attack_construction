@@ -1,0 +1,32 @@
+{
+    "name": "Re-Opened Applications using LoginHook",
+    "description": "Mac Defaults  [Reference](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CustomLogin.html) ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "sudo defaults write com.apple.loginwindow LoginHook #{script}\n",
+        "cleanup_command": "sudo defaults delete com.apple.loginwindow LoginHook\n",
+        "elevation_required": true,
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1547.007",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Re-opened Applications",
+    "source": "ART",
+    "uuid": "5f5b71da-e03f-42e7-ac98-d63f9e0465cb",
+    "arguments": {
+        "script": {
+            "description": "path to script",
+            "type": "path",
+            "default": "/path/to/script"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

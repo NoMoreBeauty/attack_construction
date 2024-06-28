@@ -1,0 +1,36 @@
+{
+    "name": "Suspicious LAPS Attributes Query with adfind all properties",
+    "description": "This test executes LDAP query using adfind command and lists all the attributes including Microsoft LAPS attributes ms-mcs-AdmPwd and ms-mcs-AdmPwdExpirationTime",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "& \"PathToAtomicsFolder\\..\\ExternalPayloads\\AdFind.exe\" #{optional_args} -h #{domain} -s subtree -f \"objectclass=computer\" *\n",
+        "cleanup_command": null,
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1087.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "abf00f6c-9983-4d9a-afbc-6b1c6c6448e1",
+    "arguments": {
+        "optional_args": {
+            "description": "Allows defining arguments to add to the adfind command to tailor it to the specific needs of the environment. Use \"-arg\" notation to add arguments separated by spaces.",
+            "type": "string",
+            "default": null
+        },
+        "domain": {
+            "description": "Domain of the host",
+            "type": "string",
+            "default": "$env:USERDOMAIN"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,30 @@
+{
+    "name": "Restart System - Windows",
+    "description": "This test restarts a Windows system. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "shutdown /r /t #{timeout}\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1529",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "System Shutdown/Reboot",
+    "source": "ART",
+    "uuid": "f4648f0d-bf78-483c-bafc-3ec99cd1c302",
+    "arguments": {
+        "timeout": {
+            "description": "Timeout period before restart (seconds)",
+            "type": "integer",
+            "default": 1
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

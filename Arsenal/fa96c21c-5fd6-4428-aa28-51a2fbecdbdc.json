@@ -1,0 +1,23 @@
+{
+    "name": "Security Software Discovery - pgrep (FreeBSD)",
+    "description": "Methods to identify Security Software on an endpoint when sucessfully executed, command shell is going to display AV/Security software it is running. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "pgrep -l 'bareos-fd|icinga2|cbagentd|wazuh-agent|packetbeat|filebeat|osqueryd'\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1518.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Security Software Discovery",
+    "source": "ART",
+    "uuid": "fa96c21c-5fd6-4428-aa28-51a2fbecdbdc",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,36 @@
+{
+    "name": "Create Volume Shadow Copy with WMI",
+    "description": "This test is intended to be run on a domain Controller.  The Active Directory database NTDS.dit may be dumped by copying it from a Volume Shadow Copy. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "wmic shadowcopy call create Volume=#{drive_letter}\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "NTDS",
+    "source": "ART",
+    "uuid": "224f7de0-8f0a-4a94-b5d8-989b036c86da",
+    "arguments": {
+        "drive_letter": {
+            "description": "Drive letter to source VSC (including colon and backslash)",
+            "type": "string",
+            "default": "C:\\"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Target must be a Domain Controller\n",
+            "prereq_command": "reg query HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\ProductOptions  /v ProductType | findstr LanmanNT\n",
+            "get_prereq_command": "echo Sorry, Promoting this machine to a Domain Controller must be done manually\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

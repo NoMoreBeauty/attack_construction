@@ -1,0 +1,26 @@
+{
+    "name": "Registry key creation and/or modification events for SDB",
+    "description": "Create registry keys in locations where fin7 typically places SDB patches. Upon execution, output will be displayed describing the registry keys that were created. These keys can also be viewed using the Registry Editor.  https://www.fireeye.com/blog/threat-research/2017/05/fin7-shim-databases-persistence.html ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "New-ItemProperty -Path HKLM:\"\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Custom\" -Name \"AtomicRedTeamT1546.011\" -Value \"AtomicRedTeamT1546.011\"\nNew-ItemProperty -Path HKLM:\"\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\InstalledSDB\" -Name \"AtomicRedTeamT1546.011\" -Value \"AtomicRedTeamT1546.011\"\n",
+        "cleanup_command": "Remove-ItemProperty -Path HKLM:\"\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Custom\" -Name \"AtomicRedTeamT1546.011\" -ErrorAction Ignore\nRemove-ItemProperty -Path HKLM:\"\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\InstalledSDB\" -Name \"AtomicRedTeamT1546.011\" -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1546.011",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Application Shimming",
+    "source": "ART",
+    "uuid": "9b6a06f9-ab5e-4e8d-8289-1df4289db02f",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,24 @@
+{
+    "name": "Disable Remote Desktop Security Settings Through Registry",
+    "description": "A modification registry to disable RDP security settings. This technique was seen in DarkGate malware as part of its installation ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add \"HKEY_LOCAL_MACHINE\\Software\\Policies\\Microsoft\\Windows NT\\Terminal Services\" /v \"DisableSecuritySettings\" /t REG_DWORD /d 1 /f\n",
+        "cleanup_command": "reg add \"HKEY_LOCAL_MACHINE\\Software\\Policies\\Microsoft\\Windows NT\\Terminal Services\" /v \"DisableSecuritySettings\" /t REG_DWORD /d 0 /f\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "4b81bcfa-fb0a-45e9-90c2-e3efe5160140",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

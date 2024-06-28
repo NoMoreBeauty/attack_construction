@@ -1,0 +1,32 @@
+{
+    "name": "Trap EXIT (freebsd)",
+    "description": "Launch bash shell with command arg to create TRAP on EXIT. The trap executes script that writes to /tmp/art-fish.txt ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "bash -c 'trap \"nohup sh $PathToAtomicsFolder/T1546.005/src/echo-art-fish.sh\" EXIT'\n",
+        "cleanup_command": "rm -f /tmp/art-fish.txt\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1546.005",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Trap",
+    "source": "ART",
+    "uuid": "be1a5d70-6865-44aa-ab50-42244c9fd16f",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if bash is installed.\n",
+            "prereq_command": "if [ ! -x \"$(command -v bash)\" ]; then exit 1; else exit 0; fi;\n",
+            "get_prereq_command": "(which pkg && pkg install -y bash)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

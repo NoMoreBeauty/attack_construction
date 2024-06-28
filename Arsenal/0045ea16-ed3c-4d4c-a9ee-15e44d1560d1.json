@@ -1,0 +1,42 @@
+{
+    "name": "Create ADS PowerShell",
+    "description": "Create an Alternate Data Stream with PowerShell. Write access is required. To verify execution, the the command ls -Recurse | %{ gi $_.Fullname -stream *} | where stream -ne ':$Data' | Select-Object pschildname in the %temp% direcotry to view all files with hidden data streams. To view the data in the alternate data stream, run notepad.exe T1564.004_has_ads_powershell.txt:adstest.txt in the %temp% folder. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "echo \"test\" > #{file_name} | set-content -path test.txt -stream #{ads_filename} -value \"test\"\nset-content -path #{file_name} -stream #{ads_filename} -value \"test2\"\nset-content -path . -stream #{ads_filename} -value \"test3\"\n",
+        "cleanup_command": "Remove-Item -Path #{file_name} -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1564.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "NTFS File Attributes",
+    "source": "ART",
+    "uuid": "0045ea16-ed3c-4d4c-a9ee-15e44d1560d1",
+    "arguments": {
+        "file_name": {
+            "description": "File name of file to create ADS on.",
+            "type": "string",
+            "default": "$env:TEMP\\T1564.004_has_ads_powershell.txt"
+        },
+        "ads_filename": {
+            "description": "Name of ADS file.",
+            "type": "string",
+            "default": "adstest.txt"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The file must exist on disk at specified location (#{file_name})\n",
+            "prereq_command": "if (Test-Path #{file_name}) { exit 0 } else { exit 1 }\n",
+            "get_prereq_command": "New-Item -Path #{file_name} | Out-Null\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

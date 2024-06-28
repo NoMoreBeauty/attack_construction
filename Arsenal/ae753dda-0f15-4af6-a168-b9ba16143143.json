@@ -1,0 +1,30 @@
+{
+    "name": "Stop and Remove Arbitrary Security Windows Service",
+    "description": "Beginning with Powershell 6.0, the Stop-Service cmdlet sends a stop message to the Windows Service Controller for each of the specified services. The Remove-Service cmdlet removes a Windows service in the registry and in the service database. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Stop-Service -Name #{service_name}\nRemove-Service -Name #{service_name}\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "ae753dda-0f15-4af6-a168-b9ba16143143",
+    "arguments": {
+        "service_name": {
+            "description": "The name of the service to remove",
+            "type": "string",
+            "default": "McAfeeDLPAgentService"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

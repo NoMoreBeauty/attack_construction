@@ -1,0 +1,23 @@
+{
+    "name": "Remote System Discovery - netstat",
+    "description": "Use the netstat command to display the kernels routing tables. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "netstat -r | grep default\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1018",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Remote System Discovery",
+    "source": "ART",
+    "uuid": "d2791d72-b67f-4615-814f-ec824a91f514",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

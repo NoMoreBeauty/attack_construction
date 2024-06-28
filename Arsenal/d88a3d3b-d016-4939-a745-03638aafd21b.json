@@ -1,0 +1,24 @@
+{
+    "name": "Set-Up Proxy Server",
+    "description": "A modification registry to setup proxy server. This technique was seen in DarkGate malware as part of its installation. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\" /v ProxyServer /t REG_SZ /d \"proxy.atomic-test.com:8080\" /f\n",
+        "cleanup_command": "reg delete \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\" /v ProxyServer /f\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "d88a3d3b-d016-4939-a745-03638aafd21b",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

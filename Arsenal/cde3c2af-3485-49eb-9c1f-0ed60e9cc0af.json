@@ -1,0 +1,37 @@
+{
+    "name": "Data Compressed - nix - gzip Single File",
+    "description": "An adversary may compress data (e.g., sensitive documents) that is collected prior to exfiltration. This test uses standard gzip compression. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "test -e #{input_file} && gzip -k #{input_file} || (echo '#{input_content}' >> #{input_file}; gzip -k #{input_file})\n",
+        "cleanup_command": "rm -f #{input_file}.gz\n",
+        "type": "Command Executor"
+    },
+    "id": "T1560.001",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Archive via Utility",
+    "source": "ART",
+    "uuid": "cde3c2af-3485-49eb-9c1f-0ed60e9cc0af",
+    "arguments": {
+        "input_file": {
+            "description": "Path that should be compressed",
+            "type": "path",
+            "default": "$HOME/victim-gzip.txt"
+        },
+        "input_content": {
+            "description": "contents of compressed files if file does not already exist. default contains test credit card and social security number",
+            "type": "string",
+            "default": "confidential! SSN: 078-05-1120 - CCN: 4000 1234 5678 9101"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,37 @@
+{
+    "name": "Execute python script via python's command mode arguement",
+    "uuid": "3a95cdb2-c6ea-4761-b24e-02b71889b8bb",
+    "description": "Execute a Python script using Python -c (command mode)",
+    "supported_platforms": [
+        "linux"
+    ],
+    "arguments": {
+        "python_script": {
+            "description": "Python script to execute.",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Verify if python is in the environment variable path.",
+            "prereq_command": "which_python=$(which python || which python3 || which python3.9 || which python2); $which_python -V",
+            "get_prereq_command": null
+        }
+    ],
+    "executor": {
+        "command": "which_python=$(which python || which python3 || which python3.9 || which python2)\n$which_python -c '#{python_script}'\n",
+        "type": "Command Executor",
+        "name": "sh",
+        "cleanup_command": null,
+        "elevation_required": false
+    },
+    "side": "Victim",
+    "id": "T1059.006",
+    "tactics": [
+        "Execution"
+    ],
+    "technique": "Command and Scripting Interpreter: Python",
+    "source": "ART",
+    "effect": "Command Execution"
+}

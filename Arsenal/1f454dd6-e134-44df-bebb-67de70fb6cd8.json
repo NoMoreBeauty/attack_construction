@@ -1,0 +1,23 @@
+{
+    "name": "Basic Permission Groups Discovery Windows (Local)",
+    "description": "Basic Permission Groups Discovery for Windows. This test will display some errors if run on a computer not connected to a domain. Upon execution, domain information will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net localgroup\nnet localgroup \"Administrators\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1069.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Local Groups",
+    "source": "ART",
+    "uuid": "1f454dd6-e134-44df-bebb-67de70fb6cd8",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

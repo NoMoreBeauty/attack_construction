@@ -1,0 +1,49 @@
+{
+    "name": "Azure AD - Add Company Administrator Role to a user",
+    "description": "Add an existing Azure user account the Company Administrator Role. ",
+    "supported_platforms": [
+        "azure-ad"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Import-Module MSOnline\n$Password = ConvertTo-SecureString -String \"#{password}\" -AsPlainText -Force\n$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList \"#{username}\", $Password\nConnect-MsolService -Credential $Credential\nAdd-MsolRoleMember -RoleName \"Company Administrator\" -RoleMemberEmailAddress \"#{target_user}\"\n",
+        "cleanup_command": "Remove-MsolRoleMember -RoleName \"Company Administrator\" -RoleMemberType User -RoleMemberEmailAddress \"#{target_user}\"\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1098.003",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Additional Cloud Roles",
+    "source": "ART",
+    "uuid": "4d77f913-56f5-4a14-b4b1-bf7bb24298ad",
+    "arguments": {
+        "username": {
+            "description": "Azure AD username",
+            "type": "string",
+            "default": "jonh@contoso.com"
+        },
+        "password": {
+            "description": "Azure AD password",
+            "type": "string",
+            "default": "p4sswd"
+        },
+        "target_user": {
+            "description": "Name of the user who will be assigned the Company Admin role",
+            "type": "string",
+            "default": "default"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "MSOnline module must be installed.\n",
+            "prereq_command": "try {if (Get-InstalledModule -Name MSOnline -ErrorAction SilentlyContinue) {exit 0} else {exit 1}} catch {exit 1}\n",
+            "get_prereq_command": "Install-Module -Name MSOnline -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

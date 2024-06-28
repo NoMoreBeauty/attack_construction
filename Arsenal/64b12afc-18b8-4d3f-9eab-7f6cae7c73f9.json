@@ -1,0 +1,42 @@
+{
+    "name": "Remove the Zone.Identifier alternate data stream",
+    "description": "Remove the Zone.Identifier alternate data stream which identifies the file as downloaded from the internet. Removing this allows more freedom in executing scripts in PowerShell and avoids opening files in protected view. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Unblock-File -Path #{file_path}\n",
+        "cleanup_command": "Set-Content -Path #{file_path} -Stream Zone.Identifier -Value '[ZoneTransfer]','ZoneId=3'\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1553.005",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Mark-of-the-Web Bypass",
+    "source": "ART",
+    "uuid": "64b12afc-18b8-4d3f-9eab-7f6cae7c73f9",
+    "arguments": {
+        "file_to_download": {
+            "description": "File that will be downloaded to test against.",
+            "type": "url",
+            "default": "https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/README.md"
+        },
+        "file_path": {
+            "description": "File to have the Zone.Identifier removed.",
+            "type": "string",
+            "default": "$env:tmp\\ReadMe.md"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "A test file with the Zone.Identifier attribute must be present.",
+            "prereq_command": "if (Test-Path #{file_path}) { EXIT 0 } else { EXIT 1 }\n",
+            "get_prereq_command": "Invoke-WebRequest #{file_to_download} -OutFile #{file_path}\nSet-Content -Path #{file_path} -Stream Zone.Identifier -Value '[ZoneTransfer]','ZoneId=3'\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

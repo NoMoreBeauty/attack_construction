@@ -1,0 +1,24 @@
+{
+    "name": "Reboot System via `poweroff` - Linux",
+    "description": "This test restarts a Linux system using `poweroff`. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "poweroff --reboot\n",
+        "name": "bash",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1529",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "System Shutdown/Reboot",
+    "source": "ART",
+    "uuid": "61303105-ff60-427b-999e-efb90b314e41",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

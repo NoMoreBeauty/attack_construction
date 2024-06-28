@@ -1,0 +1,24 @@
+{
+    "name": "Environment variables discovery on freebsd, macos and linux",
+    "description": "Identify all environment variables. Upon execution, environments variables and your path info will be displayed. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "env\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "fcbdd43f-f4ad-42d5-98f3-0218097e2720",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

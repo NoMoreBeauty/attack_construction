@@ -1,0 +1,52 @@
+{
+    "name": "Renamed Microsoft.Workflow.Compiler.exe Payload Executions",
+    "description": "Emulates attack with a renamed Microsoft.Workflow.Compiler.exe running a .Net assembly that launches calc.exe ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "&\"#{renamed_binary}\" \"#{xml_payload}\" output.txt\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1218",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "System Binary Proxy Execution",
+    "source": "ART",
+    "uuid": "4cc40fd7-87b8-4b16-b2d7-57534b86b911",
+    "arguments": {
+        "xml_payload": {
+            "description": "XML to execution",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218\\src\\T1218.xml"
+        },
+        "renamed_binary": {
+            "description": "renamed Microsoft.Workflow.Compiler",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\svchost.exe"
+        },
+        "mwcpath": {
+            "description": "Default location of Microsoft.Workflow.Compiler.exe",
+            "type": "path",
+            "default": "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319"
+        },
+        "mwcname": {
+            "description": "Default name of microsoft.workflow.compiler.exe",
+            "type": "path",
+            "default": "microsoft.workflow.compiler.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": ".Net must be installed for this test to work correctly.\n",
+            "prereq_command": "if (Test-Path \"#{renamed_binary}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nCopy-Item #{mwcpath}\\#{mwcname} \"#{renamed_binary}\" -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,46 @@
+{
+    "name": "Regsvr32 local COM scriptlet execution",
+    "description": "Regsvr32.exe is a command-line program used to register and unregister OLE controls. Upon execution, calc.exe will be launched. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "#{regsvr32path}\\#{regsvr32name} /s /u /i:\"#{filename}\" scrobj.dll\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218.010",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Regsvr32",
+    "source": "ART",
+    "uuid": "449aa403-6aba-47ce-8a37-247d21ef0306",
+    "arguments": {
+        "filename": {
+            "description": "Name of the local file, include path.",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218.010\\src\\RegSvr32.sct"
+        },
+        "regsvr32path": {
+            "description": "Default location of Regsvr32.exe",
+            "type": "path",
+            "default": "C:\\Windows\\system32"
+        },
+        "regsvr32name": {
+            "description": "Default name of Regsvr32.exe",
+            "type": "string",
+            "default": "regsvr32.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Regsvr32.sct must exist on disk at specified location (#{filename})\n",
+            "prereq_command": "if (Test-Path \"#{filename}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{filename}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.010/src/RegSvr32.sct\" -OutFile \"#{filename}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

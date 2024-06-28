@@ -1,0 +1,25 @@
+{
+    "name": "Copy and Delete Mailbox Data on Windows",
+    "description": "Copies and deletes mail data on Windows ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "New-Item -Path \"C:\\Users\\$env:USERNAME\\AppData\\Local\\Comms\\Unistore\\data\\copy\" -ItemType Directory -ErrorAction Ignore\nGet-ChildItem -Path \"C:\\Users\\$env:USERNAME\\AppData\\Local\\Comms\\Unistore\\data\" -Exclude copy | ForEach-Object { Copy-Item -Path $_.FullName -Destination \"C:\\Users\\$env:USERNAME\\AppData\\Local\\Comms\\Unistore\\data\\copy\" -Recurse -Force -ErrorAction Ignore }\nRemove-Item -Path \"C:\\Users\\$env:USERNAME\\AppData\\Local\\Comms\\Unistore\\data\\copy\" -Recurse -Force -ErrorAction Ignore\n",
+        "cleanup_command": "Remove-Item -Path \"C:\\Users\\$env:USERNAME\\AppData\\Local\\Comms\\Unistore\\data\\copy\" -Recurse -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.008",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Mailbox Data",
+    "source": "ART",
+    "uuid": "d29f01ea-ac72-4efc-8a15-bea64b77fabf",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

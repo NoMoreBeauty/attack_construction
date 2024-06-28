@@ -1,0 +1,31 @@
+{
+    "name": "Delete Windows Defender Scheduled Tasks",
+    "description": "The following atomic test will delete the Windows Defender scheduled tasks.  [Reference](https://thedfirreport.com/2022/05/09/seo-poisoning-a-gootloader-story/) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "IF EXIST \"%temp%\\Windows_Defender_Scheduled_Scan.xml\" ( schtasks /delete /tn \"\\Microsoft\\Windows\\Windows Defender\\Windows Defender Scheduled Scan\" /f )\nIF EXIST \"%temp%\\Windows_Defender_Cleanup.xml\" ( schtasks /delete /tn \"\\Microsoft\\Windows\\Windows Defender\\Windows Defender Cleanup\" /f )\nIF EXIST \"%temp%\\Windows_Defender_Verification.xml\" ( schtasks /delete /tn \"\\Microsoft\\Windows\\Windows Defender\\Windows Defender Verification\" /f )\nIF EXIST \"%temp%\\Windows_Defender_Cache_Maintenance.xml\" ( schtasks /delete /tn \"\\Microsoft\\Windows\\Windows Defender\\Windows Defender Cache Maintenance\" /f )\n",
+        "cleanup_command": "schtasks /create /xml \"%temp%\\Windows_Defender_Scheduled_Scan.xml\" /tn \"\\Microsoft\\Windows\\Windows Defender\\Windows Defender Scheduled Scan\" /f\nschtasks /create /xml \"%temp%\\Windows_Defender_Cleanup.xml\" /tn \"\\Microsoft\\Windows\\Windows Defender\\Windows Defender Cleanup\" /f\nschtasks /create /xml \"%temp%\\Windows_Defender_Verification.xml\" /tn \"\\Microsoft\\Windows\\Windows Defender\\Windows Defender Verification\" /f\nschtasks /create /xml \"%temp%\\Windows_Defender_Cache_Maintenance.xml\" /tn \"\\Microsoft\\Windows\\Windows Defender\\Windows Defender Cache Maintenance\" /f\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "4b841aa1-0d05-4b32-bbe7-7564346e7c76",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "The Windows Defender scheduled tasks must be backed up first\n",
+            "prereq_command": "IF EXIST \"%temp%\\Windows_Defender_Scheduled_Scan.xml\" ( EXIT 0 ) ELSE ( EXIT 1 )\n",
+            "get_prereq_command": "schtasks /query /xml /tn \"\\Microsoft\\Windows\\Windows Defender\\Windows Defender Scheduled Scan\" > \"%temp%\\Windows_Defender_Scheduled_Scan.xml\"\nschtasks /query /xml /tn \"\\Microsoft\\Windows\\Windows Defender\\Windows Defender Cleanup\" > \"%temp%\\Windows_Defender_Cleanup.xml\"\nschtasks /query /xml /tn \"\\Microsoft\\Windows\\Windows Defender\\Windows Defender Verification\" > \"%temp%\\Windows_Defender_Verification.xml\"\nschtasks /query /xml /tn \"\\Microsoft\\Windows\\Windows Defender\\Windows Defender Cache Maintenance\" > \"%temp%\\Windows_Defender_Cache_Maintenance.xml\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

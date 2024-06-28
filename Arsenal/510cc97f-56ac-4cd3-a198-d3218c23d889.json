@@ -1,0 +1,24 @@
+{
+    "name": "Use of SecEdit.exe to export the local security policy (including the password policy)",
+    "description": "SecEdit.exe can be used to export the current local security policy applied to a host. [Reference](https://blueteamops.medium.com/secedit-and-i-know-it-595056dee53d) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "secedit.exe /export /areas SECURITYPOLICY /cfg output_mysecpol.txt\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1201",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Password Policy Discovery",
+    "source": "ART",
+    "uuid": "510cc97f-56ac-4cd3-a198-d3218c23d889",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

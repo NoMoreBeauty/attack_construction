@@ -1,0 +1,22 @@
+{
+    "name": "Space After Filename (Manual)",
+    "description": "Space After Filename ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "steps": "1. echo '#!/bin/bash\\necho \"print \\\"hello, world!\\\"\" | /usr/bin/python\\nexit' > execute.txt && chmod +x execute.txt\n\n2. mv execute.txt \"execute.txt \"\n\n3. ./execute.txt\\ \n",
+        "name": "manual"
+    },
+    "id": "T1036.006",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Space after Filename",
+    "source": "ART",
+    "uuid": "89a7dd26-e510-4c9f-9b15-f3bae333360f",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

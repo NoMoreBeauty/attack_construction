@@ -1,0 +1,24 @@
+{
+    "name": "Hostname Discovery",
+    "description": "Identify system hostname for FreeBSD, Linux and macOS systems. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "hostname\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "486e88ea-4f56-470f-9b57-3f4d73f39133",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

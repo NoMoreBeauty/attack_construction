@@ -1,0 +1,52 @@
+{
+    "name": "Linux Base64 Encoded Shebang in CLI",
+    "description": "Using Linux Base64 Encoded shell scripts that have Shebang in them. This is commonly how attackers obfuscate passing and executing a shell script. Seen [here](https://www.trendmicro.com/pl_pl/research/20/i/the-evolution-of-malicious-shell-scripts.html) by TrendMicro, as well as [LinPEAS](https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS). Also a there is a great Sigma rule [here](https://github.com/SigmaHQ/sigma/blob/master/rules/linux/process_creation/proc_creation_lnx_base64_shebang_cli.yml) for it.  ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "echo #{bash_encoded} | base64 -d | bash\necho #{dash_encoded} | base64 -d | bash\necho #{fish_encoded} | base64 -d | bash\necho #{sh_encoded} | base64 -d | bash\n",
+        "type": "Command Executor"
+    },
+    "id": "T1140",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Deobfuscate/Decode Files or Information",
+    "source": "ART",
+    "uuid": "3a15c372-67c1-4430-ac8e-ec06d641ce4d",
+    "arguments": {
+        "bash_encoded": {
+            "description": "Encoded",
+            "type": "string",
+            "default": "IyEvYmluL2Jhc2gKZWNobyAiaHR0cHM6Ly93d3cueW91dHViZS5jb20vQGF0b21pY3NvbmFmcmlkYXkgRlRXIgo="
+        },
+        "dash_encoded": {
+            "description": "Encoded",
+            "type": "string",
+            "default": "IyEvYmluL2Rhc2gKZWNobyAiaHR0cHM6Ly93d3cueW91dHViZS5jb20vQGF0b21pY3NvbmFmcmlkYXkgRlRXIgo="
+        },
+        "fish_encoded": {
+            "description": "Encoded",
+            "type": "string",
+            "default": "IyEvYmluL2Rhc2gKZWNobyAiaHR0cHM6Ly93d3cueW91dHViZS5jb20vQGF0b21pY3NvbmFmcmlkYXkgRlRXIgo="
+        },
+        "sh_encoded": {
+            "description": "Encoded",
+            "type": "string",
+            "default": "IyEvYmluL3NoCmVjaG8gImh0dHBzOi8vd3d3LnlvdXR1YmUuY29tL0BhdG9taWNzb25hZnJpZGF5IEZUVyIK"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "base64 must be present\n",
+            "prereq_command": "which base64\n",
+            "get_prereq_command": "echo \"please install base64\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

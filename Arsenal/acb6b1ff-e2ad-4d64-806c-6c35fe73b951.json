@@ -1,0 +1,31 @@
+{
+    "name": "Remote System Discovery - arp nix",
+    "description": "Identify remote systems via arp.  Upon successful execution, sh will execute arp to list out the arp cache. Output will be via stdout. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "arp -a | grep -v '^?'\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1018",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Remote System Discovery",
+    "source": "ART",
+    "uuid": "acb6b1ff-e2ad-4d64-806c-6c35fe73b951",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if arp command exists on the machine\n",
+            "prereq_command": "if [ -x \"$(command -v arp)\" ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "(which yum && yum -y install net-tools)||(which apt-get && apt-get install -y net-tools)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

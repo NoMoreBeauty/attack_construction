@@ -1,0 +1,43 @@
+{
+    "name": "Compressing data using bz2 in Python (FreeBSD/Linux)",
+    "description": "Uses bz2 from Python to compress files ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "which_python=`which python || which python3`\n$which_python -c \"import bz2;input_file=open('#{path_to_input_file}','rb');content=input_file.read();input_file.close();bz2content=bz2.compress(content,compresslevel=9);output_file=open('#{path_to_output_file}','w+');output_file.write(str(bz2content));output_file.close();\"\n",
+        "cleanup_command": "rm #{path_to_output_file}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1560.002",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Archive via Library",
+    "source": "ART",
+    "uuid": "c75612b2-9de0-4d7c-879c-10d7b077072d",
+    "arguments": {
+        "path_to_input_file": {
+            "description": "Path to the file that you want to compress",
+            "type": "path",
+            "default": "/etc/passwd"
+        },
+        "path_to_output_file": {
+            "description": "Path of the file that you want your .bz2 file to be",
+            "type": "path",
+            "default": "/tmp/passwd.bz2"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Requires Python\n",
+            "prereq_command": "which python || which python3\n",
+            "get_prereq_command": "echo \"please install python to run this test\"; exit 1\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

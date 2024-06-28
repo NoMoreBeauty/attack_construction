@@ -1,0 +1,31 @@
+{
+    "name": "Access /etc/shadow (Local)",
+    "description": "/etc/shadow file is accessed in Linux environments ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "sudo cat /etc/shadow > #{output_file}\ncat #{output_file}\n",
+        "cleanup_command": "rm -f #{output_file}\n",
+        "name": "bash",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003.008",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "/etc/passwd and /etc/shadow",
+    "source": "ART",
+    "uuid": "3723ab77-c546-403c-8fb4-bb577033b235",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed",
+            "type": "path",
+            "default": "/tmp/T1003.008.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

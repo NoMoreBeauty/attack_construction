@@ -1,0 +1,42 @@
+{
+    "name": "Search files of interest and save them to a single zip file (Windows)",
+    "uuid": "d3d9af44-b8ad-4375-8b0a-4bff4b7e419c",
+    "description": "This test searches for files of certain extensions and saves them to a single zip file prior to extraction.                               ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "arguments": {
+        "starting_directory": {
+            "description": "Path to starting directory for the search",
+            "type": "Path",
+            "default": "C:\\Users"
+        },
+        "output_zip_folder_path": {
+            "description": "Path to directory for saving the generated zip file",
+            "type": "Path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\T1005"
+        },
+        "file_extensions": {
+            "description": "List of file extensions to be searched and zipped, separated by comma and space",
+            "type": "string",
+            "default": ".doc, .docx, .txt"
+        }
+    },
+    "preconditions": [],
+    "executor": {
+        "type": "Command Executor",
+        "command": "$startingDirectory = \"#{starting_directory}\"\n$outputZip = \"#{output_zip_folder_path}\"\n$fileExtensionsString = \"#{file_extensions}\" \n$fileExtensions = $fileExtensionsString -split \", \"\n\nNew-Item -Type Directory $outputZip -ErrorAction Ignore -Force | Out-Null\n\nFunction Search-Files {\n  param (\n    [string]$directory\n  )\n  $files = Get-ChildItem -Path $directory -File -Recurse | Where-Object {\n    $fileExtensions -contains $_.Extension.ToLower()\n  }\n  return $files\n}\n\n$foundFiles = Search-Files -directory $startingDirectory\nif ($foundFiles.Count -gt 0) {\n  $foundFilePaths = $foundFiles.FullName\n  Compress-Archive -Path $foundFilePaths -DestinationPath \"$outputZip\\data.zip\"\n\n  Write-Host \"Zip file created: $outputZip\\data.zip\"\n  } else {\n      Write-Host \"No files found with the specified extensions.\"\n  }\n",
+        "cleanup_command": "Remove-Item -Path  $outputZip\\data.zip -Force\n",
+        "name": "powershell",
+        "elevation_required": false
+    },
+    "side": "Victim",
+    "id": "T1005",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Data from Local System",
+    "effect": "Collected File Placed",
+    "dependencies": null,
+    "source": "ART"
+}

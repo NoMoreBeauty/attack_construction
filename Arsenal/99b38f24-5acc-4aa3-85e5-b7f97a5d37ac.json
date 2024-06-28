@@ -1,0 +1,45 @@
+{
+    "name": "AWS - EC2 Security Group Enumeration",
+    "description": "Simulate an attacker's action to enumerate EC2 Security Groups in a compromised AWS environment.",
+    "supported_platforms": [
+        "iaas:aws"
+    ],
+    "executor": {
+        "name": "command_prompt",
+        "command": "aws ec2 describe-security-groups --profile #{aws_profile} --output #{output_format}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1580",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Cloud Infrastructure Discovery",
+    "source": "ART",
+    "uuid": "99b38f24-5acc-4aa3-85e5-b7f97a5d37ac",
+    "arguments": {
+        "aws_profile": {
+            "description": "AWS CLI profile name",
+            "type": "string",
+            "default": "default"
+        },
+        "output_format": {
+            "description": "Desired output format (text, table, json)",
+            "type": "string",
+            "default": "json"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "AWS CLI installed and configured with the necessary access rights.",
+            "prereq_command": "type aws || aws --version",
+            "get_prereq_command": "if [ \"$(uname)\" = \"Darwin\" ] || [ \"$(expr substr $(uname) 1 5)\" = \"Linux\" ]; then\n  curl \"https://aws.amazon.com/cli/\" -o \"Install-AWSCLI.sh\" && sh Install-AWSCLI.sh\nelif [ \"$(expr substr $(uname) 1 5)\" = \"MINGW\" ]; then\n  Invoke-WebRequest -Uri \"https://aws.amazon.com/cli/\" -OutFile \"Install-AWSCLI.ps1\"; .\\Install-AWSCLI.ps1\nfi\n"
+        },
+        {
+            "description": "Check if AWS CLI is installed and configured.",
+            "prereq_command": "aws sts get-caller-identity --profile #{aws_profile}\n",
+            "get_prereq_command": "if ! aws sts get-caller-identity --profile #{aws_profile}; then\n  echo \"AWS CLI not properly configured. Please configure AWS CLI.\"\nfi\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

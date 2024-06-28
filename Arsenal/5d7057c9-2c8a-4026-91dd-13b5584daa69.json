@@ -1,0 +1,30 @@
+{
+    "name": "Discover System Language by locale file",
+    "description": "Identify System language with the by reading the locale configuration file.  The locale configuration file contains the `LANG` environment variable which will contain the 5 character locale that can be looked up to correlate the language and territory. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "[ -f /etc/locale.conf ] && cat /etc/locale.conf || cat /etc/default/locale\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1614.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Language Discovery",
+    "source": "ART",
+    "uuid": "5d7057c9-2c8a-4026-91dd-13b5584daa69",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check the location of the locale configuration file.\n",
+            "prereq_command": "[ -f /etc/locale.conf ] || [ -f /etc/default/locale ] && exit 0 || exit 1\n",
+            "get_prereq_command": "echo \"Test only valid for systems that have locale file\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

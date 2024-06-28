@@ -1,0 +1,25 @@
+{
+    "name": "Stop Crowdstrike Falcon on Linux",
+    "description": "Stop and disable Crowdstrike Falcon on Linux ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "sudo systemctl stop falcon-sensor.service\nsudo systemctl disable falcon-sensor.service\n",
+        "cleanup_command": "sudo systemctl enable falcon-sensor.service\nsudo systemctl start falcon-sensor.service\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "828a1278-81cc-4802-96ab-188bf29ca77d",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

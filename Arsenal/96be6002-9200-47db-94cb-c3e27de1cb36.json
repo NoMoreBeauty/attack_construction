@@ -1,0 +1,23 @@
+{
+    "name": "Check computer location",
+    "description": "Looks up country code configured in the registry, likely geofence. Upon execution, country code info will be displayed. - https://tria.ge/210111-eaz8mqhgh6/behavioral1 ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg query \"HKEY_CURRENT_USER\\Control Panel\\International\\Geo\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "96be6002-9200-47db-94cb-c3e27de1cb36",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

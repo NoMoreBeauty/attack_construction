@@ -1,0 +1,37 @@
+{
+    "name": "Delete system log files using shred utility",
+    "description": "This test overwrites the contents of the log file with zero bytes(-z) using three passes(-n 3) of data, and then delete the file(-u) securely ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "sudo shred -u -z -n 3 #{system_log_path}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "86f0e4d5-3ca7-45fb-829d-4eda32b232bb",
+    "arguments": {
+        "system_log_path": {
+            "description": "path to system.log",
+            "type": "string",
+            "default": "/var/log/system.log"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "target files must exist\n",
+            "prereq_command": "stat #{system_log_path}\n",
+            "get_prereq_command": "touch #{system_log_path}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

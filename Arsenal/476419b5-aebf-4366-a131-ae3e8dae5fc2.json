@@ -1,0 +1,41 @@
+{
+    "name": "Windows - Overwrite file with SysInternals SDelete",
+    "description": "Overwrites and deletes a file using SysInternals SDelete. Upon successful execution, Files deleted: 1 will be displayed in the powershell session along with other information about the file that was deleted. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "if (-not (Test-Path \"#{file_to_delete}\")) { New-Item \"#{file_to_delete}\" -Force }\n& \"#{sdelete_exe}\" -accepteula \"#{file_to_delete}\"\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1485",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Data Destruction",
+    "source": "ART",
+    "uuid": "476419b5-aebf-4366-a131-ae3e8dae5fc2",
+    "arguments": {
+        "sdelete_exe": {
+            "description": "Path of sdelete executable",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\Sdelete\\sdelete.exe"
+        },
+        "file_to_delete": {
+            "description": "Path of file to delete",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\T1485.txt"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Secure delete tool from SysInternals must exist on disk at specified location (#{sdelete_exe})\n",
+            "prereq_command": "if (Test-Path \"#{sdelete_exe}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://download.sysinternals.com/files/SDelete.zip\" -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\SDelete.zip\"\nExpand-Archive \"PathToAtomicsFolder\\..\\ExternalPayloads\\SDelete.zip\" \"PathToAtomicsFolder\\..\\ExternalPayloads\\Sdelete\" -Force\nRemove-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\SDelete.zip\" -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

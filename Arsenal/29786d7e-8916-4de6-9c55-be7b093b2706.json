@@ -1,0 +1,48 @@
+{
+    "name": "Windows MOFComp.exe Load MOF File",
+    "description": "The following Atomic will utilize MOFComp.exe to load a local MOF file. The Managed Object Format (MOF) compiler parses a file containing MOF statements and adds the classes and class instances defined in the file to the WMI repository.  To query for the class:  gwmi __eventfilter -namespace root\\subscription A successful execution will add the class to WMI root namespace. Reference: https://pentestlab.blog/2020/01/21/persistence-wmi-event-subscription/ and https://thedfirreport.com/2022/07/11/select-xmrig-from-sqlserver/. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "#{mofcomp_path} \"#{mof_file}\"\n",
+        "cleanup_command": "$EventConsumerToCleanup = Get-WmiObject -Namespace root/subscription -Class CommandLineEventConsumer -Filter \"Name = 'AtomicRedTeam_consumer'\"\n$EventFilterToCleanup = Get-WmiObject -Namespace root/subscription -Class __EventFilter -Filter \"Name = 'AtomicRedTeam_filter'\"\n$FilterConsumerBindingToCleanup = Get-WmiObject -Namespace root/subscription -Query \"REFERENCES OF {$($EventConsumerToCleanup.__RELPATH)} WHERE ResultClass = __FilterToConsumerBinding\" -ErrorAction SilentlyContinue\n$FilterConsumerBindingToCleanup | Remove-WmiObject\n$EventConsumerToCleanup | Remove-WmiObject\n$EventFilterToCleanup | Remove-WmiObject\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1546.003",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Windows Management Instrumentation Event Subscription",
+    "source": "ART",
+    "uuid": "29786d7e-8916-4de6-9c55-be7b093b2706",
+    "arguments": {
+        "mofcomp_path": {
+            "description": "Location of mofcomp.exe",
+            "type": "string",
+            "default": "c:\\windows\\system32\\wbem\\mofcomp.exe"
+        },
+        "mof_file": {
+            "description": "Local location MOF file",
+            "type": "string",
+            "default": "PathToAtomicsFolder\\T1546.003\\src\\T1546.003.mof"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "MofComp.exe must exist on disk at specified location (#{mofcomp_path})\n",
+            "prereq_command": "if (Test-Path \"#{mofcomp_path}\") { exit 0} else { exit 1}\n",
+            "get_prereq_command": "Validate MOFComp.exe is on disk somewhere and update input argument.\n"
+        },
+        {
+            "description": "MofComp.exe must exist on disk at specified location (#{mof_file})\n",
+            "prereq_command": "if (Test-Path \"#{mof_file}\") { exit 0} else { exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{mof_file}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1546.003/src/T1546.003.mof\" -OutFile \"#{mof_file}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

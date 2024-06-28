@@ -1,0 +1,37 @@
+{
+    "name": "Delete system journal logs via rm and journalctl utilities",
+    "description": "The first sub-test deletes the journal files using rm utility in the /var/log/journal/ directory and the second sub-test clears the journal by modifiying time period of logs that should be retained to zero. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "sudo rm #{journal_folder}/* #physically deletes the journal files, and not just their content\nsudo journalctl --vacuum-time=0 #clears the journal while still keeping the journal files in place\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "ca50dd85-81ff-48ca-92e1-61f119cb1dcf",
+    "arguments": {
+        "journal_folder": {
+            "description": "path to journal logs",
+            "type": "string",
+            "default": "/var/log/journal"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "target files must exist\n",
+            "prereq_command": "stat #{journal_folder}\n",
+            "get_prereq_command": "mkdir -p #{journal_folder} && touch #{journal_folder}/T1070_002.journal\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

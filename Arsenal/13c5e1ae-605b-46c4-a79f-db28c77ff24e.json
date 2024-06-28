@@ -1,0 +1,31 @@
+{
+    "name": "Nix File and Directory Discovery 2",
+    "description": "Find or discover files on the file system ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "cd $HOME && find . -print | sed -e 's;[^/]*/;|__;g;s;__|; |;g' > #{output_file}\nif [ -f /etc/mtab ]; then cat /etc/mtab >> #{output_file}; fi;\nfind . -type f -iname *.pdf >> #{output_file}\ncat #{output_file}\nfind . -type f -name \".*\"\n",
+        "cleanup_command": "rm #{output_file}",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1083",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "File and Directory Discovery",
+    "source": "ART",
+    "uuid": "13c5e1ae-605b-46c4-a79f-db28c77ff24e",
+    "arguments": {
+        "output_file": {
+            "description": "Output file used to store the results.",
+            "type": "path",
+            "default": "/tmp/T1083.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

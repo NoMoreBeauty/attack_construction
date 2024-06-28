@@ -1,0 +1,24 @@
+{
+    "name": "Reboot System via `poweroff` - FreeBSD",
+    "description": "This test restarts a FreeBSD system using `poweroff`. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "poweroff -r 3\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1529",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "System Shutdown/Reboot",
+    "source": "ART",
+    "uuid": "5a282e50-86ff-438d-8cef-8ae01c9e62e1",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

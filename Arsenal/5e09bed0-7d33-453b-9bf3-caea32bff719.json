@@ -1,0 +1,73 @@
+{
+    "name": "Azure - Eventhub Deletion",
+    "description": "Identifies an Event Hub deletion in Azure. An Event Hub is an event processing service that ingests and processes large volumes of events and data. An adversary may delete an Event Hub in an attempt to evade detection. https://docs.microsoft.com/en-us/azure/event-hubs/event-hubs-about. ",
+    "supported_platforms": [
+        "iaas:azure"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "$secure_pwd = \"#{password}\" | ConvertTo-SecureString -AsPlainText -Force\n$creds = New-Object System.Management.Automation.PSCredential -ArgumentList \"#{username}\", $secure_pwd\nConnect-AzureAD -Credential $creds\nRemove-AzEventHub -ResourceGroupName #{resource_group} -Namespace #{name_space_name} -Name #{event_hub_name}\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "cleanup_command": "cd \"$PathToAtomicsFolder/T1562.008/src/T1562.008-2/\"\nterraform destroy -auto-approve\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.008",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Cloud Logs",
+    "source": "ART",
+    "uuid": "5e09bed0-7d33-453b-9bf3-caea32bff719",
+    "arguments": {
+        "username": {
+            "description": "Azure username",
+            "type": "string",
+            "default": null
+        },
+        "password": {
+            "description": "Azure password",
+            "type": "string",
+            "default": null
+        },
+        "event_hub_name": {
+            "description": "Name of the eventhub",
+            "type": "string",
+            "default": "test_eventhub"
+        },
+        "resource_group": {
+            "description": "Name of the resource group",
+            "type": "string",
+            "default": null
+        },
+        "name_space_name": {
+            "description": "Name of the NameSpace",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Install-Module -Name Az\n",
+            "prereq_command": "try {if (Get-InstalledModule -Name AzureAD -ErrorAction SilentlyContinue) {exit 0} else {exit 1}} catch {exit 1}\n",
+            "get_prereq_command": "Install-Module -Name AzureAD -Force\n"
+        },
+        {
+            "description": "Check if terraform is installed.\n",
+            "prereq_command": "terraform version\n",
+            "get_prereq_command": "echo Please install the terraform.\n"
+        },
+        {
+            "description": "Check if the user is logged into Azure.\n",
+            "prereq_command": "az account show\n",
+            "get_prereq_command": "echo Configure your Azure account using: az login. \n"
+        },
+        {
+            "description": "Create dependency resources using terraform\n",
+            "prereq_command": "try {if (Test-Path \"$PathToAtomicsFolder/T1562.008/src/T1562.008-2/terraform.tfstate\" ){ exit 0 } else {exit 1}} catch {exit 1}\n",
+            "get_prereq_command": "cd \"$PathToAtomicsFolder/T1562.008/src/T1562.008-2/\"\nterraform init\nterraform apply -auto-approve\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,36 @@
+{
+    "name": "Simulating access to Opera Login Data",
+    "description": "Simulates an adversary accessing encrypted credentials from Opera web browser's login database.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "command": "Copy-Item \"$env:APPDATA\\Opera Software\\Opera Stable\\Login Data\" -Destination \"PathToAtomicsFolder\\..\\ExternalPayloads\"\n",
+        "cleanup_command": "Remove-Item -Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\Login Data\" -Force -ErrorAction Ignore\n",
+        "type": "Command Executor"
+    },
+    "id": "T1555.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Web Browsers",
+    "source": "ART",
+    "uuid": "28498c17-57e4-495a-b0be-cc1e36de408b",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Opera must be installed\n",
+            "prereq_command": "if (((Test-Path \"$env:LOCALAPPDATA\\Programs\\Opera\\launcher.exe\") -Or (Test-Path \"C:\\Program Files\\Opera\\launcher.exe\") -Or (Test-Path \"C:\\Program Files (x86)\\Opera\\launcher.exe\"))) {exit 0} else {exit 1}",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\n$installer = \"PathToAtomicsFolder\\..\\ExternalPayloads\\OperaStandaloneInstaller.exe\"\nInvoke-WebRequest -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\OperaStandaloneInstaller.exe\" https://get.geo.opera.com/pub/opera/desktop/82.0.4227.43/win/Opera_82.0.4227.43_Setup.exe\nStart-Process $installer -ArgumentList '/install /silent /launchopera=1 /setdefaultbrowser=0'\nStart-Sleep -s 180\nStop-Process -Name \"opera\"\n"
+        },
+        {
+            "description": "Opera login data file must exist\n",
+            "prereq_command": "if (Test-Path \"$env:APPDATA\\Opera Software\\Opera Stable\\Login Data\") {exit 0} else {exit 1}",
+            "get_prereq_command": "New-Item -Path \"$env:APPDATA\\Opera Software\\Opera Stable\\Login Data\" -ItemType File\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

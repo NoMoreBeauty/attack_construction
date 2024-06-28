@@ -1,0 +1,29 @@
+{
+    "name": "Remove Network Share",
+    "description": "Removes a Network Share utilizing the command_prompt ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net share #{share_name} /delete\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1070.005",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Network Share Connection Removal",
+    "source": "ART",
+    "uuid": "09210ad5-1ef2-4077-9ad3-7351e13e9222",
+    "arguments": {
+        "share_name": {
+            "description": "Share to remove.",
+            "type": "string",
+            "default": "\\\\test\\share"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

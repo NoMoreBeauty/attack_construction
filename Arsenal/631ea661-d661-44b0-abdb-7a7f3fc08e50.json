@@ -1,0 +1,42 @@
+{
+    "name": "Modify file timestamps using reference file",
+    "description": "Modifies the `modify` and `access` timestamps using the timestamps of a specified reference file.  This technique was used by the threat actor Rocke during the compromise of Linux web servers. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "touch -acmr #{reference_file_path} #{target_file_path}\n",
+        "cleanup_command": "rm -f #{target_file_path}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1070.006",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Timestomp",
+    "source": "ART",
+    "uuid": "631ea661-d661-44b0-abdb-7a7f3fc08e50",
+    "arguments": {
+        "target_file_path": {
+            "description": "Path of file to modify timestamps of",
+            "type": "path",
+            "default": "/tmp/T1070.006-reference.txt"
+        },
+        "reference_file_path": {
+            "description": "Path of reference file to read timestamps from",
+            "type": "path",
+            "default": "/bin/sh"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The file must exist in order to be timestomped\n",
+            "prereq_command": "test -e #{target_file_path} && exit 0 || exit 1\n",
+            "get_prereq_command": "echo 'T1070.006 reference file timestomp test' > #{target_file_path}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

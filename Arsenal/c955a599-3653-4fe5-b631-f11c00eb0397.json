@@ -1,0 +1,31 @@
+{
+    "name": "View accounts with UID 0",
+    "description": "View accounts with UID 0 ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "grep 'x:0:' /etc/passwd > #{output_file}\ngrep '*:0:' /etc/passwd >> #{output_file}\ncat #{output_file} 2>/dev/null\n",
+        "cleanup_command": "rm -f #{output_file} 2>/dev/null\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1087.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "c955a599-3653-4fe5-b631-f11c00eb0397",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed",
+            "type": "path",
+            "default": "/tmp/T1087.001.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

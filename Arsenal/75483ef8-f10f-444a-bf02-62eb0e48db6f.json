@@ -1,0 +1,43 @@
+{
+    "name": "Loadable Kernel Module based Rootkit",
+    "description": "Loadable Kernel Module based Rootkit ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "command": "sudo modprobe #{rootkit_name}\n",
+        "cleanup_command": "sudo modprobe -r #{rootkit_name}\nsudo rm /lib/modules/$(uname -r)/#{rootkit_name}.ko\nsudo depmod -a\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1014",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rootkit",
+    "source": "ART",
+    "uuid": "75483ef8-f10f-444a-bf02-62eb0e48db6f",
+    "arguments": {
+        "rootkit_source_path": {
+            "description": "Path to the rootkit source. Used when prerequisites are fetched.",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1014/src/Linux"
+        },
+        "rootkit_name": {
+            "description": "Module name",
+            "type": "string",
+            "default": "T1014"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The kernel module must exist on disk at specified location (#{rootkit_source_path}/#{rootkit_name}.ko)\n",
+            "prereq_command": "if [ -f /lib/modules/$(uname -r)/#{rootkit_name}.ko ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "sudo apt install make\nsudo apt install gcc\nif [ ! -d /tmp/T1014 ]; then mkdir /tmp/T1014; touch /tmp/T1014/safe_to_delete; fi;\ncp #{rootkit_source_path}/* /tmp/T1014\ncd /tmp/T1014; make        \nsudo cp /tmp/T1014/#{rootkit_name}.ko /lib/modules/$(uname -r)/\n[ -f /tmp/T1014/safe_to_delete ] && rm -rf /tmp/T1014\nsudo depmod -a\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

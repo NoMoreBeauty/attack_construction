@@ -1,0 +1,23 @@
+{
+    "name": "System Network Configuration Discovery on Windows",
+    "description": "Identify network configuration information  Upon successful execution, cmd.exe will spawn multiple commands to list network configuration settings. Output will be via stdout. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "ipconfig /all\nnetsh interface show interface\narp -a\nnbtstat -n\nnet config\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1016",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Network Configuration Discovery",
+    "source": "ART",
+    "uuid": "970ab6a1-0157-4f3f-9a73-ec4166754b23",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

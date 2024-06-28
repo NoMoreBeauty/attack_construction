@@ -1,0 +1,23 @@
+{
+    "name": "Show System Integrity Protection status (MacOS)",
+    "description": "Read and Display System Intergrety Protection status. csrutil is commonly used by malware and post-exploitation tools to determine whether certain files and directories on the system are writable or not. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "csrutil status\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "327cc050-9e99-4c8e-99b5-1d15f2fb6b96",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

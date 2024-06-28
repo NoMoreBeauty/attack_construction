@@ -1,0 +1,24 @@
+{
+    "name": "Find and Display Safari Browser Version",
+    "description": "Adversaries may attempt to get a listing of non-security related software that is installed on the system. Adversaries may use the information from Software Discovery during automated discovery to shape follow-on behaviors ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": false,
+        "command": "/usr/libexec/PlistBuddy -c \"print :CFBundleShortVersionString\" /Applications/Safari.app/Contents/Info.plist\n/usr/libexec/PlistBuddy -c \"print :CFBundleVersion\" /Applications/Safari.app/Contents/Info.plist\n",
+        "type": "Command Executor"
+    },
+    "id": "T1518",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Software Discovery",
+    "source": "ART",
+    "uuid": "103d6533-fd2a-4d08-976a-4a598565280f",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,58 @@
+{
+    "name": "Port Scan Nmap",
+    "description": "Scan ports to check for listening ports with Nmap. Upon successful execution, sh will utilize nmap, telnet, and nc to contact a single or range of addresses on port 80 to determine if listening. Results will be via stdout. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "sudo nmap -sS #{network_range} -p #{port}\ntelnet #{host} #{port}\nnc -nv #{host} #{port}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1046",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Network Service Discovery",
+    "source": "ART",
+    "uuid": "515942b0-a09f-4163-a7bb-22fefb6f185f",
+    "arguments": {
+        "host": {
+            "description": "Host to scan.",
+            "type": "string",
+            "default": "192.168.1.1"
+        },
+        "port": {
+            "description": "Ports to scan.",
+            "type": "string",
+            "default": "80"
+        },
+        "network_range": {
+            "description": "Network Range to Scan.",
+            "type": "string",
+            "default": "192.168.1.0/24"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if nmap command exists on the machine\n",
+            "prereq_command": "if [ -x \"$(command -v nmap)\" ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "(which yum && yum -y install epel-release nmap)||(which apt-get && DEBIAN_FRONTEND=noninteractive apt-get install -y nmap)||(which pkg && pkg install -y nmap)\n"
+        },
+        {
+            "description": "Check if nc command exists on the machine\n",
+            "prereq_command": "if [ -x \"$(command -v nc)\" ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "(which yum && yum -y install epel-release nc)||(which apt-get && DEBIAN_FRONTEND=noninteractive apt-get install -y netcat)||(which pkg && pkg install -y netcat)\n"
+        },
+        {
+            "description": "Check if telnet command exists on the machine\n",
+            "prereq_command": "if [ -x \"$(command -v telnet)\" ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "(which yum && yum -y install epel-release telnet)||(which apt-get && DEBIAN_FRONTEND=noninteractive apt-get install -y telnet)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

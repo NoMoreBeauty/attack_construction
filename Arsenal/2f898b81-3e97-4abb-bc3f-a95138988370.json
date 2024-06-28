@@ -1,0 +1,24 @@
+{
+    "name": "Prevent Powershell History Logging",
+    "description": "Prevents Powershell history ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Set-PSReadlineOption -HistorySaveStyle SaveNothing\n",
+        "name": "powershell",
+        "cleanup_command": "Set-PSReadLineOption -HistorySaveStyle SaveIncrementally",
+        "type": "Command Executor"
+    },
+    "id": "T1070.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Command History",
+    "source": "ART",
+    "uuid": "2f898b81-3e97-4abb-bc3f-a95138988370",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

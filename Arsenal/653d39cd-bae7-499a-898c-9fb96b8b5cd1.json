@@ -1,0 +1,24 @@
+{
+    "name": "Delete log files using built-in log utility",
+    "description": "This test deletes main log datastore, inflight log data, time-to-live data(TTL), fault and error content ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "sudo log erase --all\nsudo log erase --ttl #Deletes only time-to-live log content\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "653d39cd-bae7-499a-898c-9fb96b8b5cd1",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

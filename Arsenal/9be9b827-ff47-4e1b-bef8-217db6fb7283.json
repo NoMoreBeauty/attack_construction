@@ -1,0 +1,32 @@
+{
+    "name": "Set a SetUID flag on file (freebsd)",
+    "description": "This test sets the SetUID flag on a file in FreeBSD. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "touch #{file_to_setuid}\nchown root #{file_to_setuid}\nchmod u+xs #{file_to_setuid}\n",
+        "cleanup_command": "rm #{file_to_setuid}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1548.001",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Setuid and Setgid",
+    "source": "ART",
+    "uuid": "9be9b827-ff47-4e1b-bef8-217db6fb7283",
+    "arguments": {
+        "file_to_setuid": {
+            "description": "Path of file to set SetUID flag",
+            "type": "path",
+            "default": "/tmp/evilBinary"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

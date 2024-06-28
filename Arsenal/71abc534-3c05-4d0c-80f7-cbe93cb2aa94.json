@@ -1,0 +1,30 @@
+{
+    "name": "Certutil Rename and Decode",
+    "description": "Rename certutil and decode a file. This is in reference to latest research by FireEye [here](https://www.fireeye.com/blog/threat-research/2018/09/apt10-targeting-japanese-corporations-using-updated-ttps.html) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "copy %windir%\\system32\\certutil.exe %temp%\\tcm.tmp\n%temp%\\tcm.tmp -encode #{executable} %temp%\\T1140_calc2.txt\n%temp%\\tcm.tmp -decode %temp%\\T1140_calc2.txt %temp%\\T1140_calc2_decoded.exe\n",
+        "cleanup_command": "del %temp%\\tcm.tmp >nul 2>&1\ndel %temp%\\T1140_calc2.txt >nul 2>&1\ndel %temp%\\T1140_calc2_decoded.exe >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1140",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Deobfuscate/Decode Files or Information",
+    "source": "ART",
+    "uuid": "71abc534-3c05-4d0c-80f7-cbe93cb2aa94",
+    "arguments": {
+        "executable": {
+            "description": "name of executable/file to decode",
+            "type": "path",
+            "default": "C:\\Windows\\System32\\calc.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

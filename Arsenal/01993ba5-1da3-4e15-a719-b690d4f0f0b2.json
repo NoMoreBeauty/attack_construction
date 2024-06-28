@@ -1,0 +1,36 @@
+{
+    "name": "Create a user account on a MacOS system",
+    "description": "Creates a user on a MacOS system with dscl ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "dscl . -create /Users/#{username}\ndscl . -create /Users/#{username} UserShell /bin/zsh\ndscl . -create /Users/#{username} RealName \"#{realname}\"\ndscl . -create /Users/#{username} UniqueID \"1010\"\ndscl . -create /Users/#{username} PrimaryGroupID 80\ndscl . -create /Users/#{username} NFSHomeDirectory /Users/#{username}\n",
+        "cleanup_command": "dscl . -delete /Users/#{username}\n",
+        "name": "bash",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1136.001",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "01993ba5-1da3-4e15-a719-b690d4f0f0b2",
+    "arguments": {
+        "username": {
+            "description": "Username of the user to create",
+            "type": "string",
+            "default": "evil_user"
+        },
+        "realname": {
+            "description": "'realname' to record when creating the user",
+            "type": "string",
+            "default": "Evil Account"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

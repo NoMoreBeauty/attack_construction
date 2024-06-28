@@ -1,0 +1,36 @@
+{
+    "name": "Enumerate Users Not Requiring Pre Auth (ASRepRoast)",
+    "description": "When successful, accounts that do not require kerberos pre-auth will be returned ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "get-aduser -f * -pr DoesNotRequirePreAuth | where {$_.DoesNotRequirePreAuth -eq $TRUE}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1069.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Groups",
+    "source": "ART",
+    "uuid": "870ba71e-6858-4f6d-895c-bb6237f6121b",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Computer must be domain joined.\n",
+            "prereq_command": "if((Get-CIMInstance -Class Win32_ComputerSystem).PartOfDomain) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Write-Host Joining this computer to a domain must be done manually.\n"
+        },
+        {
+            "description": "Requires the Active Directory module for powershell to be installed.\n",
+            "prereq_command": "if(Get-Module -ListAvailable -Name ActiveDirectory) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Add-WindowsCapability -Online -Name \"Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,30 @@
+{
+    "name": "Rundll32 with desk.cpl",
+    "description": "Rundll32.exe loading an executable renamed as .scr using desk.cpl  Reference:    - [LOLBAS - Libraries/Desk](https://lolbas-project.github.io/lolbas/Libraries/Desk/) SIGMA rules:   - [SCR File Write Event](https://github.com/SigmaHQ/sigma/blob/b53f08b081e0a50099be9b9e8eced82097fdbaf2/rules/windows/file_event/file_event_win_new_src_file.yml)   - [Rundll32 InstallScreenSaver Execution](https://github.com/SigmaHQ/sigma/blob/b53f08b081e0a50099be9b9e8eced82097fdbaf2/rules/windows/process_creation/proc_creation_win_lolbin_rundll32_installscreensaver.yml) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "command_prompt",
+        "command": "copy #{exe_to_launch} not_an_scr.scr\nrundll32.exe desk.cpl,InstallScreenSaver not_an_scr.scr\n",
+        "cleanup_command": "del not_an_scr.scr",
+        "type": "Command Executor"
+    },
+    "id": "T1218.011",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rundll32",
+    "source": "ART",
+    "uuid": "83a95136-a496-423c-81d3-1c6750133917",
+    "arguments": {
+        "exe_to_launch": {
+            "description": "Path of the executable to launch",
+            "type": "path",
+            "default": "%windir%\\System32\\calc.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

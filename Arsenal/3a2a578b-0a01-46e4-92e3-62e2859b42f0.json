@@ -1,0 +1,24 @@
+{
+    "name": "Masquerading - cscript.exe running as notepad.exe",
+    "description": "Copies cscript.exe, renames it, and launches it to masquerade as an instance of notepad.exe.  Upon successful execution, cscript.exe is renamed as notepad.exe and executed from non-standard path. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "copy %SystemRoot%\\System32\\cscript.exe %APPDATA%\\notepad.exe /Y\ncmd.exe /c %APPDATA%\\notepad.exe /B\n",
+        "cleanup_command": "del /Q /F %APPDATA%\\notepad.exe >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1036.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rename System Utilities",
+    "source": "ART",
+    "uuid": "3a2a578b-0a01-46e4-92e3-62e2859b42f0",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

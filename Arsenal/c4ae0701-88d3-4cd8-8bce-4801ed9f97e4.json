@@ -1,0 +1,32 @@
+{
+    "name": "Edit UFW firewall sysctl.conf file",
+    "description": "Edit the Uncomplicated Firewall (UFW) configuration file for setting network  variables /etc/ufw/sysctl.conf. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "echo \"# THIS IS A COMMENT\" >> /etc/ufw/sysctl.conf\ngrep \"# THIS IS A COMMENT\" /etc/ufw/sysctl.conf\n",
+        "cleanup_command": "sed -i 's/# THIS IS A COMMENT//g' /etc/ufw/sysctl.conf\ncat /etc/ufw/sysctl.conf\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "c4ae0701-88d3-4cd8-8bce-4801ed9f97e4",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if /etc/ufw/sysctl.conf exists.\n",
+            "prereq_command": "if [ ! -f \"/etc/ufw/sysctl.conf\" ]; then echo -e \"\\n***** ufw NOT installed *****\\n\"; exit 1; fi\n",
+            "get_prereq_command": "echo \"\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

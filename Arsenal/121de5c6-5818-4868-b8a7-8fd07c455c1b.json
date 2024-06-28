@@ -1,0 +1,36 @@
+{
+    "name": "Qakbot Recon",
+    "description": "A list of commands known to be performed by Qakbot for recon purposes",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "\"#{recon_commands}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1016",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Network Configuration Discovery",
+    "source": "ART",
+    "uuid": "121de5c6-5818-4868-b8a7-8fd07c455c1b",
+    "arguments": {
+        "recon_commands": {
+            "description": "File that houses list of commands to be executed",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1016\\src\\qakbot.bat"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "File to copy must exist on disk at specified location (#{recon_commands})\n",
+            "prereq_command": "if (Test-Path \"#{recon_commands}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{recon_commands}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1016/src/qakbot.bat\" -OutFile \"#{recon_commands}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

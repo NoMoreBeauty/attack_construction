@@ -1,0 +1,24 @@
+{
+    "name": "FreeBSD/macOS/Linux - Simulate CPU Load with Yes",
+    "description": "This test simulates a high CPU load as you might observe during cryptojacking attacks. End the test by using CTRL/CMD+C to break. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "yes > /dev/null\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1496",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Resource Hijacking",
+    "source": "ART",
+    "uuid": "904a5a0e-fb02-490d-9f8d-0e256eb37549",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

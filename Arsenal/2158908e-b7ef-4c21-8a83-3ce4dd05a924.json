@@ -1,0 +1,23 @@
+{
+    "name": "File and Directory Discovery (PowerShell)",
+    "description": "Find or discover files on the file system. Upon execution, file and folder information will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "ls -recurse\nget-childitem -recurse\ngci -recurse\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1083",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "File and Directory Discovery",
+    "source": "ART",
+    "uuid": "2158908e-b7ef-4c21-8a83-3ce4dd05a924",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

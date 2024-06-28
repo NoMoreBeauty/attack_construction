@@ -1,0 +1,56 @@
+{
+    "name": "Cat the contents of a Kubernetes service account token file",
+    "description": "Access the Kubernetes service account access token stored within a container in a cluster. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "kubectl --context kind-atomic-cluster exec atomic-pod -- cat /run/secrets/kubernetes.io/serviceaccount/token\n",
+        "name": "sh",
+        "cleanup_command": "kubectl --context kind-atomic-cluster delete pod atomic-pod\n",
+        "type": "Command Executor"
+    },
+    "id": "T1552.007",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Container API",
+    "source": "ART",
+    "uuid": "788e0019-a483-45da-bcfe-96353d46820f",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Verify docker is installed.",
+            "prereq_command": "which docker\n",
+            "get_prereq_command": "if [ \"\" == \"`which docker`\" ]; then echo \"Docker Not Found\"; if [ -n \"`which apt-get`\" ]; then sudo apt-get -y install docker ; elif [ -n \"`which yum`\" ]; then sudo yum -y install docker ; fi ; else echo \"Docker installed\"; fi\n"
+        },
+        {
+            "description": "Verify docker service is running.",
+            "prereq_command": "sudo systemctl status docker\n",
+            "get_prereq_command": "sudo systemctl start docker\n"
+        },
+        {
+            "description": "Verify kind is in the path.",
+            "prereq_command": "which kind\n",
+            "get_prereq_command": "curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.10.0/kind-linux-amd64\nchmod +x ./kind\nmv kind /usr/bin/kind\n"
+        },
+        {
+            "description": "Verify kind-atomic-cluster is created",
+            "prereq_command": "sudo kind get clusters\n",
+            "get_prereq_command": "sudo kind create cluster --name atomic-cluster\n"
+        },
+        {
+            "description": "Verify kubectl is in path",
+            "prereq_command": "which kubectl\n",
+            "get_prereq_command": "curl -LO \"https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\"\nchmod +x ./kubectl\nmv kubectl /usr/bin/kubectl\n"
+        },
+        {
+            "description": "Verify atomic-pod is running.",
+            "prereq_command": "kubectl --context kind-atomic-cluster get pods |grep atomic-pod\n",
+            "get_prereq_command": "kubectl --context kind-atomic-cluster run atomic-pod --image=alpine --command -- sleep infinity\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

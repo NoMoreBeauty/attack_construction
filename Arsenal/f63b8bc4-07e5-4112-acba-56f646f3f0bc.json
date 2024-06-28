@@ -1,0 +1,36 @@
+{
+    "name": "Bitsadmin Download (PowerShell)",
+    "description": "This test simulates an adversary leveraging bitsadmin.exe to download and execute a payload leveraging PowerShell  Upon execution you will find a github markdown file downloaded to the Temp directory ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Start-BitsTransfer -Priority foreground -Source #{remote_file} -Destination #{local_file}\n",
+        "cleanup_command": "Remove-Item #{local_file} -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1197",
+    "tactics": [
+        "Persistence",
+        "Defense Evasion"
+    ],
+    "technique": "BITS Jobs",
+    "source": "ART",
+    "uuid": "f63b8bc4-07e5-4112-acba-56f646f3f0bc",
+    "arguments": {
+        "remote_file": {
+            "description": "Remote file to download",
+            "type": "url",
+            "default": "https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1197/T1197.md"
+        },
+        "local_file": {
+            "description": "Local file path to save downloaded file",
+            "type": "path",
+            "default": "$env:TEMP\\bitsadmin2_flag.ps1"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

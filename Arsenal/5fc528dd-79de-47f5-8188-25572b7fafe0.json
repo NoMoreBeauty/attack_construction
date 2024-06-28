@@ -1,0 +1,30 @@
+{
+    "name": "List Safari Bookmarks on MacOS",
+    "description": "This test searches for Safari's Bookmarks file (on macOS) and lists any found instances to a text file. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "find / -path \"*/Safari/Bookmarks.plist\" 2>/dev/null >> #{output_file} \ncat #{output_file} \n",
+        "cleanup_command": "rm -f #{output_file} 2>/dev/null\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1217",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Browser Information Discovery",
+    "source": "ART",
+    "uuid": "5fc528dd-79de-47f5-8188-25572b7fafe0",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed.",
+            "type": "path",
+            "default": "/tmp/T1217-Safari.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

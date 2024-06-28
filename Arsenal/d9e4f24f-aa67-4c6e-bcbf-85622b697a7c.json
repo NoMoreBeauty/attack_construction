@@ -1,0 +1,66 @@
+{
+    "name": "Create Systemd Service",
+    "description": "This test creates a Systemd service unit file and enables it as a service. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "echo \"[Unit]\" > #{systemd_service_path}/#{systemd_service_file}\necho \"Description=Atomic Red Team Systemd Service\" >> #{systemd_service_path}/#{systemd_service_file}\necho \"\" >> #{systemd_service_path}/#{systemd_service_file}\necho \"[Service]\" >> #{systemd_service_path}/#{systemd_service_file}\necho \"Type=simple\"\necho \"ExecStart=#{execstart_action}\" >> #{systemd_service_path}/#{systemd_service_file}\necho \"ExecStartPre=#{execstartpre_action}\" >> #{systemd_service_path}/#{systemd_service_file}\necho \"ExecStartPost=#{execstartpost_action}\" >> #{systemd_service_path}/#{systemd_service_file}\necho \"ExecReload=#{execreload_action}\" >> #{systemd_service_path}/#{systemd_service_file}\necho \"ExecStop=#{execstop_action}\" >> #{systemd_service_path}/#{systemd_service_file}\necho \"ExecStopPost=#{execstoppost_action}\" >> #{systemd_service_path}/#{systemd_service_file}\necho \"\" >> #{systemd_service_path}/#{systemd_service_file}\necho \"[Install]\" >> #{systemd_service_path}/#{systemd_service_file}\necho \"WantedBy=default.target\" >> #{systemd_service_path}/#{systemd_service_file}\nsystemctl daemon-reload\nsystemctl enable #{systemd_service_file}\nsystemctl start #{systemd_service_file}\n",
+        "cleanup_command": "systemctl stop #{systemd_service_file}\nsystemctl disable #{systemd_service_file}\nrm -rf #{systemd_service_path}/#{systemd_service_file}\nsystemctl daemon-reload\n",
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1543.002",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Systemd Service",
+    "source": "ART",
+    "uuid": "d9e4f24f-aa67-4c6e-bcbf-85622b697a7c",
+    "arguments": {
+        "systemd_service_path": {
+            "description": "Path to systemd service unit file",
+            "type": "path",
+            "default": "/etc/systemd/system"
+        },
+        "systemd_service_file": {
+            "description": "File name of systemd service unit file",
+            "type": "string",
+            "default": "art-systemd-service.service"
+        },
+        "execstoppost_action": {
+            "description": "ExecStopPost action for Systemd service",
+            "type": "string",
+            "default": "/bin/touch /tmp/art-systemd-execstoppost-marker"
+        },
+        "execreload_action": {
+            "description": "ExecReload action for Systemd service",
+            "type": "string",
+            "default": "/bin/touch /tmp/art-systemd-execreload-marker"
+        },
+        "execstart_action": {
+            "description": "ExecStart action for Systemd service",
+            "type": "string",
+            "default": "/bin/touch /tmp/art-systemd-execstart-marker"
+        },
+        "execstop_action": {
+            "description": "ExecStop action for Systemd service",
+            "type": "string",
+            "default": "/bin/touch /tmp/art-systemd-execstop-marker"
+        },
+        "execstartpre_action": {
+            "description": "ExecStartPre action for Systemd service",
+            "type": "string",
+            "default": "/bin/touch /tmp/art-systemd-execstartpre-marker"
+        },
+        "execstartpost_action": {
+            "description": "ExecStartPost action for Systemd service",
+            "type": "string",
+            "default": "/bin/touch /tmp/art-systemd-execstartpost-marker"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

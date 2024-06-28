@@ -1,0 +1,24 @@
+{
+    "name": "Security Software Discovery - AV Discovery via Get-CimInstance and Get-WmiObject cmdlets",
+    "description": "Discovery of installed antivirus products via Get-CimInstance and Get-WmiObject cmdlets of powershell.  when sucessfully executed, information about installed AV software is displayed.. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "powershell Get-CimInstance -Namespace root/securityCenter2 -classname antivirusproduct\npowershell Get-WmiObject -Namespace root\\securitycenter2 -Class antivirusproduct\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1518.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Security Software Discovery",
+    "source": "ART",
+    "uuid": "015cd268-996e-4c32-8347-94c80c6286ee",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

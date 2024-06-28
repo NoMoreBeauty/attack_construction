@@ -1,0 +1,30 @@
+{
+    "name": "System Discovery - SocGholish whoami",
+    "description": "SocGholish performs whoami discovery commands and outputs the results to a tmp file.  The test will generate a filename similar to the random one generated during execution and write the file to AppData\\Temp.  Reference: https://redcanary.com/threat-detection-report/threats/socgholish/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$TokenSet = @{\n  U = [Char[]]'ABCDEFGHIJKLMNOPQRSTUVWXYZ'\n  N = [Char[]]'0123456789'\n}\n$Upper = Get-Random -Count 5 -InputObject $TokenSet.U\n$Number = Get-Random -Count 5 -InputObject $TokenSet.N\n$StringSet = $Upper + $Number\n$rad = (Get-Random -Count 5 -InputObject $StringSet) -join ''\n$file = \"rad\" + $rad + \".tmp\"\n\nwhoami.exe /all >> #{output_path}\\$file\n",
+        "cleanup_command": "Remove-Item -Path #{output_path}\\rad*.tmp -Force\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1033",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Owner/User Discovery",
+    "source": "ART",
+    "uuid": "3d257a03-eb80-41c5-b744-bb37ac7f65c7",
+    "arguments": {
+        "output_path": {
+            "description": "Location of output file",
+            "type": "string",
+            "default": "$env:temp"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

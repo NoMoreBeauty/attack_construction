@@ -1,0 +1,32 @@
+{
+    "name": "Disable tty_tickets for sudo caching (freebsd)",
+    "description": "Sets sudo caching tty_tickets value to disabled. This is dangerous to modify without using 'visudo', do not do this on a production system. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "sudo sh -c \"echo Defaults \"'!'\"tty_tickets >> /usr/local/etc/sudoers\"\nsudo visudo -c -f /usr/local/etc/sudoers\n",
+        "type": "Command Executor"
+    },
+    "id": "T1548.003",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Sudo and Sudo Caching",
+    "source": "ART",
+    "uuid": "4df6a0fe-2bdd-4be8-8618-a6a19654a57a",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if sudo is installed.\n",
+            "prereq_command": "if [ ! -x \"$(command -v sudo)\" ]; then exit 1; else exit 0; fi;\n",
+            "get_prereq_command": "(which pkg && pkg install -y sudo)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,37 @@
+{
+    "name": "EarlyBird APC Queue Injection in Go",
+    "description": "Creates a process in a suspended state and calls QueueUserAPC WinAPI to add a UserAPC to the child process that points to allocated shellcode.  ResumeThread is called which then calls NtTestAlert to execute the created UserAPC which then executes the shellcode. This technique allows for the early execution of shellcode and potentially before AV/EDR can hook functions to support detection. - PoC Credit: (https://github.com/Ne0nd0g/go-shellcode#createprocesswithpipe) - References:    - https://www.bleepingcomputer.com/news/security/early-bird-code-injection-technique-helps-malware-stay-undetected/   - https://www.ired.team/offensive-security/code-injection-process-injection/early-bird-apc-queue-code-injection ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "$PathToAtomicsFolder\\T1055.004\\bin\\x64\\EarlyBird.exe -program \"#{spawn_process_path}\" -debug\n",
+        "cleanup_command": "Stop-Process -Name CalculatorApp -ErrorAction SilentlyContinue\nStop-Process -Name \"#{spawn_process_name}\" -ErrorAction SilentlyContinue\n",
+        "type": "Command Executor"
+    },
+    "id": "T1055.004",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Asynchronous Procedure Call",
+    "source": "ART",
+    "uuid": "73785dd2-323b-4205-ab16-bb6f06677e14",
+    "arguments": {
+        "spawn_process_path": {
+            "description": "Path of the binary to spawn",
+            "type": "string",
+            "default": "C:\\Windows\\System32\\werfault.exe"
+        },
+        "spawn_process_name": {
+            "description": "Name of the process to spawn",
+            "type": "string",
+            "default": "werfault"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

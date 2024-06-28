@@ -1,0 +1,31 @@
+{
+    "name": "Create a new user in PowerShell",
+    "description": "Creates a new user in PowerShell. Upon execution, details about the new account will be displayed in the powershell session. To verify the new account, run net user in powershell or CMD and observe that there is a new user named T1136.001_PowerShell ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "New-LocalUser -Name \"#{username}\" -NoPassword\n",
+        "cleanup_command": "Remove-LocalUser -Name \"#{username}\" -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1136.001",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "bc8be0ac-475c-4fbf-9b1d-9fffd77afbde",
+    "arguments": {
+        "username": {
+            "description": "Username of the user to create",
+            "type": "string",
+            "default": "T1136.001_PowerShell"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

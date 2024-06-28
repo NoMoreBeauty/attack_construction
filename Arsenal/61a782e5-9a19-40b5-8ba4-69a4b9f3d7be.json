@@ -1,0 +1,25 @@
+{
+    "name": "Create a hidden file in a hidden directory",
+    "description": "Creates a hidden file inside a hidden directory ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "mkdir /var/tmp/.hidden-directory\necho \"T1564.001\" > /var/tmp/.hidden-directory/.hidden-file\n",
+        "cleanup_command": "rm -rf /var/tmp/.hidden-directory/\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1564.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Hidden Files and Directories",
+    "source": "ART",
+    "uuid": "61a782e5-9a19-40b5-8ba4-69a4b9f3d7be",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

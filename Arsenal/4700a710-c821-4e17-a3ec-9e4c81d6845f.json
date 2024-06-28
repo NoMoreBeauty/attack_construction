@@ -1,0 +1,23 @@
+{
+    "name": "Windows - Discover domain trusts with dsquery",
+    "description": "Uses the dsquery command to discover domain trusts. Requires the installation of dsquery via Windows RSAT or the Windows Server AD DS role. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "dsquery * -filter \"(objectClass=trustedDomain)\" -attr *\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1482",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Trust Discovery",
+    "source": "ART",
+    "uuid": "4700a710-c821-4e17-a3ec-9e4c81d6845f",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

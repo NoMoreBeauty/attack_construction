@@ -1,0 +1,53 @@
+{
+    "name": "Copy a sensitive File over Administrative share with Powershell",
+    "description": "Copy from sensitive File from the c$ of another LAN computer with powershell https://twitter.com/SBousseaden/status/1211636381086339073",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "copy-item -Path \"\\\\#{remote}\\C$\\#{share_file}\" -Destination \"$Env:TEMP\\#{local_file}\"",
+        "cleanup_command": "Remove-Item -Path \"\\\\#{remote}\\C$\\#{share_file}\"\nRemove-Item -Path \"$Env:TEMP\\#{local_file}\"",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1039",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Data from Network Shared Drive",
+    "source": "ART",
+    "uuid": "7762e120-5879-44ff-97f8-008b401b9a98",
+    "arguments": {
+        "remote": {
+            "description": "Remote server name",
+            "type": "string",
+            "default": "127.0.0.1"
+        },
+        "share_file": {
+            "description": "Remote Path to the file",
+            "type": "path",
+            "default": "Windows\\temp\\Easter_Bunny.password"
+        },
+        "local_file": {
+            "description": "Local name",
+            "type": "string",
+            "default": "Easter_egg.password"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Administrative share must exist on #{remote}\n",
+            "prereq_command": "if (Test-Path \"\\\\#{remote}\\C$\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Write-Host 'Please Enable \"C$\" share on #{remote}'\n"
+        },
+        {
+            "description": "\"\\\\#{remote}\\C$\\#{share_file}\" must exist on #{remote}\n",
+            "prereq_command": "if (Test-Path \"\\\\#{remote}\\C$\\#{share_file}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Out-File -FilePath \"\\\\#{remote}\\C$\\#{share_file}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

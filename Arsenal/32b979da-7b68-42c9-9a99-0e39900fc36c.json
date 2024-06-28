@@ -1,0 +1,30 @@
+{
+    "name": "attrib - hide file",
+    "description": "Attackers leverage an existing Windows binary, attrib.exe, to mark specific files or folder as hidden by using specific flags so that the victim does not see the file. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "mkdir #{file_or_folder} >nul 2>&1\necho T1222.001_attrib1 >> #{file_or_folder}\\T1222.001_attrib1.txt\necho T1222.001_attrib2 >> #{file_or_folder}\\T1222.001_attrib2.txt\nattrib.exe +h #{file_or_folder}\\T1222.001_attrib1.txt\nattrib.exe +h #{file_or_folder}\\T1222.001_attrib2.txt\n",
+        "cleanup_command": "del /A:H #{file_or_folder}\\T1222.001_attrib*.txt >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1222.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Windows File and Directory Permissions Modification",
+    "source": "ART",
+    "uuid": "32b979da-7b68-42c9-9a99-0e39900fc36c",
+    "arguments": {
+        "file_or_folder": {
+            "description": "Path of the files to hide.",
+            "type": "path",
+            "default": "%temp%\\T1222.001_attrib_2"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

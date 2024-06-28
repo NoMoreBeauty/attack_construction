@@ -1,0 +1,23 @@
+{
+    "name": "Network Share Discovery PowerShell",
+    "description": "Network Share Discovery utilizing PowerShell. The computer name variable may need to be modified to point to a different host Upon execution, avalaible network shares will be displayed in the powershell session ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "get-smbshare\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1135",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Network Share Discovery",
+    "source": "ART",
+    "uuid": "1b0814d1-bb24-402d-9615-1b20c50733fb",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

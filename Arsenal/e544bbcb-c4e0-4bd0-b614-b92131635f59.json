@@ -1,0 +1,30 @@
+{
+    "name": "Import Certificate Item(s) into Keychain",
+    "description": "This command will import a certificate pem file into a keychain. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "security import #{cert_export} -k\n",
+        "name": "sh",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1555.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Keychain",
+    "source": "ART",
+    "uuid": "e544bbcb-c4e0-4bd0-b614-b92131635f59",
+    "arguments": {
+        "cert_export": {
+            "description": "Specify the path of the pem certificate file to import.",
+            "type": "path",
+            "default": "/tmp/certs.pem"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

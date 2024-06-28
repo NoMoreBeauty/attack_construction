@@ -1,0 +1,41 @@
+{
+    "name": "Compress Data and lock with password for Exfiltration with winrar",
+    "description": "Note: Requires winrar installation rar a -pblue hello.rar (VARIANT) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "command_prompt",
+        "elevation_required": false,
+        "command": "mkdir .\\tmp\\victim-files\ncd .\\tmp\\victim-files\necho \"This file will be encrypted\" > .\\encrypted_file.txt\n\"#{rar_exe}\" a -hp\"blue\" hello.rar\ndir\n",
+        "type": "Command Executor"
+    },
+    "id": "T1560.001",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Archive via Utility",
+    "source": "ART",
+    "uuid": "8dd61a55-44c6-43cc-af0c-8bdda276860c",
+    "arguments": {
+        "rar_installer": {
+            "description": "Winrar installer",
+            "type": "path",
+            "default": "%TEMP%\\winrar.exe"
+        },
+        "rar_exe": {
+            "description": "The RAR executable from Winrar",
+            "type": "path",
+            "default": "%programfiles%/WinRAR/Rar.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Rar tool must be installed at specified location (#{rar_exe})\n",
+            "prereq_command": "if not exist \"#{rar_exe}\" (exit /b 1)\n",
+            "get_prereq_command": "echo Downloading Winrar installer\nbitsadmin /transfer myDownloadJob /download /priority normal \"https://www.win-rar.com/fileadmin/winrar-versions/winrar/th/winrar-x64-580.exe\" #{rar_installer}\n#{rar_installer} /S\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

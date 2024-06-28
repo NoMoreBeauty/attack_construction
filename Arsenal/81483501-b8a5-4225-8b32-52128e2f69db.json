@@ -1,0 +1,31 @@
+{
+    "name": "Event Viewer Registry Modification - Redirection Program",
+    "description": "Modify event viewer registry values to alter the behavior of the online help redirection. Upon opening an event in event viewer and attempting to view the help page for the event, it will execute the program defined in the redirection program registry entry.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Event Viewer\" /v MicrosoftRedirectionProgram /t REG_EXPAND_SZ /d \"#{redirection_program}\" /f",
+        "cleanup_command": "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Event Viewer\" /v MicrosoftRedirectionProgram /t REG_EXPAND_SZ /f",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "81483501-b8a5-4225-8b32-52128e2f69db",
+    "arguments": {
+        "redirection_program": {
+            "description": "Path of the program to execute upon opening the event help",
+            "type": "path",
+            "default": "C:\\windows\\system32\\notepad.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

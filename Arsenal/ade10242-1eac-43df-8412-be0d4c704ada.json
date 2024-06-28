@@ -1,0 +1,32 @@
+{
+    "name": "Trap SIGINT (freebsd)",
+    "description": "Launch bash shell with command arg to create TRAP on SIGINT (CTRL+C), then send SIGINT signal. The trap executes script that writes to /tmp/art-fish.txt ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "bash -c 'trap \"nohup sh $PathToAtomicsFolder/T1546.005/src/echo-art-fish.sh\" SIGINT && kill -SIGINT $$'\n",
+        "cleanup_command": "rm -f /tmp/art-fish.txt\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1546.005",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Trap",
+    "source": "ART",
+    "uuid": "ade10242-1eac-43df-8412-be0d4c704ada",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if bash is installed.\n",
+            "prereq_command": "if [ ! -x \"$(command -v bash)\" ]; then exit 1; else exit 0; fi;\n",
+            "get_prereq_command": "(which pkg && pkg install -y bash)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

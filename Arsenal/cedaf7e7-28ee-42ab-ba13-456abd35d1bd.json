@@ -1,0 +1,31 @@
+{
+    "name": "Auditing Configuration Changes on FreeBSD Host",
+    "description": "Emulates modification of auditd configuration files ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "echo '#art_test_1562_006_1' >> /etc/security/#{auditd_config_file_name}\n",
+        "cleanup_command": "sed -i \"\" '/#art_test_1562_006_1/d' /etc/security/#{auditd_config_file_name}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.006",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Indicator Blocking",
+    "source": "ART",
+    "uuid": "cedaf7e7-28ee-42ab-ba13-456abd35d1bd",
+    "arguments": {
+        "auditd_config_file_name": {
+            "description": "The name of the auditd configuration file to be changed",
+            "type": "string",
+            "default": "audit_event"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

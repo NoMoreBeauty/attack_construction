@@ -1,0 +1,24 @@
+{
+    "name": "Automated Collection Command Prompt",
+    "description": "Automated Collection. Upon execution, check the users temp directory (%temp%) for the folder T1119_command_prompt_collection to see what was collected. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "mkdir %temp%\\T1119_command_prompt_collection >nul 2>&1\ndir c: /b /s .docx | findstr /e .docx\nfor /R c:\\ %f in (*.docx) do copy /Y %f %temp%\\T1119_command_prompt_collection\n",
+        "cleanup_command": "del %temp%\\T1119_command_prompt_collection /F /Q >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1119",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Automated Collection",
+    "source": "ART",
+    "uuid": "cb379146-53f1-43e0-b884-7ce2c635ff5b",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

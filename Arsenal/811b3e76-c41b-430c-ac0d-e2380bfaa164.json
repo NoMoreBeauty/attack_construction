@@ -1,0 +1,48 @@
+{
+    "name": "Unload Sysmon Filter Driver",
+    "description": "Unloads the Sysinternals Sysmon filter driver without stopping the Sysmon service. To verify successful execution, o verify successful execution, run the prereq_command's and it should fail with an error of sysmon filter must be loaded. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "fltmc.exe unload #{sysmon_driver}\n",
+        "cleanup_command": "sysmon -u -i > nul 2>&1\nsysmon -i -accepteula -i > nul 2>&1\n\"PathToAtomicsFolder\\..\\ExternalPayloads\\Sysmon\\Sysmon.exe\" -u > nul 2>&1\n\"PathToAtomicsFolder\\..\\ExternalPayloads\\Sysmon\\Sysmon.exe\" -accepteula -i > nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "811b3e76-c41b-430c-ac0d-e2380bfaa164",
+    "arguments": {
+        "sysmon_driver": {
+            "description": "The name of the Sysmon filter driver (this can change from the default)",
+            "type": "string",
+            "default": "SysmonDrv"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Sysmon must be downloaded\n",
+            "prereq_command": "if (-not (cmd.exe /c \"where.exe Sysmon.exe 2> nul | findstr Sysmon 2> nul\") -or (Test-Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\Sysmon\\Sysmon.exe\")) { exit 0 } else { exit 1 }\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://download.sysinternals.com/files/Sysmon.zip\" -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\Sysmon.zip\"\nExpand-Archive \"PathToAtomicsFolder\\..\\ExternalPayloads\\Sysmon.zip\" \"PathToAtomicsFolder\\..\\ExternalPayloads\\Sysmon\" -Force\n"
+        },
+        {
+            "description": "sysmon must be Installed\n",
+            "prereq_command": "if(sc.exe query sysmon | findstr sysmon) { exit 0 } else { exit 1 }\n",
+            "get_prereq_command": "if(cmd.exe /c \"where.exe Sysmon.exe 2> nul | findstr Sysmon 2> nul\") { C:\\Windows\\Sysmon.exe -accepteula -i } else\n{ & \"PathToAtomicsFolder\\..\\ExternalPayloads\\Sysmon\\Sysmon.exe\" -accepteula -i}\n"
+        },
+        {
+            "description": "sysmon filter must be loaded\n",
+            "prereq_command": "if(fltmc.exe filters | findstr #{sysmon_driver}) { exit 0 } else { exit 1 }\n",
+            "get_prereq_command": "if(Test-Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\Sysmon\\Sysmon.exe\"){\n  & \"PathToAtomicsFolder\\..\\ExternalPayloads\\Sysmon\\Sysmon.exe\" -u\n  & \"PathToAtomicsFolder\\..\\ExternalPayloads\\Sysmon\\Sysmon.exe\" -accepteula -i\n}else{\n  sysmon -u\n  sysmon -accepteula -i\n}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

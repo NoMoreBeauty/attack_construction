@@ -1,0 +1,36 @@
+{
+    "name": "Add macOS LoginItem using Applescript",
+    "description": "Runs osascript on a file to create new LoginItem for current user. NOTE: Will popup dialog prompting user to Allow or Deny Terminal.app to control System Events Therefore, it can't be automated until the TCC is granted. The login item launches Safari.app when user logs in, but there is a cleanup script to remove it as well. In addition to the `osascript` Process Events, file modification events to `/Users/*/Library/Application Support/com.apple.backgroundtaskmanagementagent/backgrounditems.btm` should be seen. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "osascript #{scriptfile}\n",
+        "cleanup_command": "osascript #{cleanup_script}\n",
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1547.015",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Login Items",
+    "source": "ART",
+    "uuid": "716e756a-607b-41f3-8204-b214baf37c1d",
+    "arguments": {
+        "scriptfile": {
+            "description": "path to Applescript source to add Safari LoginItem.",
+            "type": "string",
+            "default": "PathToAtomicsFolder/T1547.015/src/add_login_item.osa"
+        },
+        "cleanup_script": {
+            "description": "path to Applescript source to delete Safari LoginItem.",
+            "type": "string",
+            "default": "PathToAtomicsFolder/T1547.015/src/remove_login_item.osa"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

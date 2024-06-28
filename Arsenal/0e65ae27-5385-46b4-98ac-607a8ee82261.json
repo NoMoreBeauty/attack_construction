@@ -1,0 +1,53 @@
+{
+    "name": "Azure AD - adding user to Azure AD role",
+    "description": "The adversaries want to add user to some Azure AD role. Threat actor  may be interested primarily in highly privileged roles, e.g. Global Administrator, Application Administrator,  Privileged Authentication Administrator (this role can reset Global Administrator password!). By default, the role Global Reader is assigned to the user principal in this test.  The account you use to run the PowerShell command should have Privileged Role Administrator or Global Administrator role in your Azure AD.  Detection hint - check Activity Add member to role in Azure AD Audit Logs. In targer you will also see User as a type. ",
+    "supported_platforms": [
+        "azure-ad"
+    ],
+    "executor": {
+        "command": "Import-Module -Name AzureAD\n$PWord = ConvertTo-SecureString -String \"#{password}\" -AsPlainText -Force\n$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList \"#{username}\", $Pword\nConnect-AzureAD -Credential $Credential\n\n$user = Get-AzureADUser -Filter \"DisplayName eq '#{user_principal_name}' or UserPrincipalName eq '#{user_principal_name}'\"\nif ($user -eq $null) { Write-Warning \"User not found\"; exit }\n$role = Get-AzureADDirectoryRole -Filter \"DisplayName eq '#{role_name}'\"\nif ($role -eq $null) { Write-Warning \"Role not found\"; exit }\nAdd-AzureADDirectoryRoleMember -ObjectId $role.ObjectId -RefObjectId $user.ObjectId\nWrite-Host \"User $($user.DisplayName) was added to $($role.DisplayName) role\"\n",
+        "cleanup_command": "Import-Module -Name AzureAD -ErrorAction Ignore\n$PWord = ConvertTo-SecureString -String \"#{password}\" -AsPlainText -Force\n$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList \"#{username}\", $Pword\nConnect-AzureAD -Credential $Credential -ErrorAction Ignore\n\n$user = Get-AzureADUser -Filter \"DisplayName eq '#{user_principal_name}' or UserPrincipalName eq '#{user_principal_name}'\"\nif ($user -eq $null) { Write-Warning \"User not found\"; exit }\n$role = Get-AzureADDirectoryRole -Filter \"DisplayName eq '#{role_name}'\"\nif ($role -eq $null) { Write-Warning \"Role not found\"; exit }\n\nRemove-AzureADDirectoryRoleMember -ObjectId $role.ObjectId -MemberId $user.ObjectId\nWrite-Host \"User $($user.DisplayName) was removed from $($role.DisplayName) role\"\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1098",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Account Manipulation",
+    "source": "ART",
+    "uuid": "0e65ae27-5385-46b4-98ac-607a8ee82261",
+    "arguments": {
+        "username": {
+            "description": "Azure AD username",
+            "type": "string",
+            "default": "jonh@contoso.com"
+        },
+        "password": {
+            "description": "Azure AD password",
+            "type": "string",
+            "default": "p4sswd"
+        },
+        "user_principal_name": {
+            "description": "Display Name, or User Principal Name, of the targeted user principal",
+            "type": "string",
+            "default": "SuperUser"
+        },
+        "role_name": {
+            "description": "Name of the targeted Azure AD role",
+            "type": "string",
+            "default": "Global Reader"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "AzureAD module must be installed.\n",
+            "prereq_command": "try {if (Get-InstalledModule -Name AzureAD -ErrorAction SilentlyContinue) {exit 0} else {exit 1}} catch {exit 1}\n",
+            "get_prereq_command": "Install-Module -Name AzureAD -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

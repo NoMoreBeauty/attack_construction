@@ -1,0 +1,41 @@
+{
+    "name": "Rundll32 with Control_RunDLL",
+    "description": "Rundll32.exe loading dll with 'control_rundll' within the command-line, loading a .cpl or another file type related to CVE-2021-40444.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "command_prompt",
+        "command": "rundll32.exe shell32.dll,Control_RunDLL \"#{input_file}\"\n",
+        "type": "Command Executor"
+    },
+    "id": "T1218.011",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rundll32",
+    "source": "ART",
+    "uuid": "e4c04b6f-c492-4782-82c7-3bf75eb8077e",
+    "arguments": {
+        "input_url": {
+            "description": "Url to download the DLL",
+            "type": "url",
+            "default": "https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1047/bin/calc.dll"
+        },
+        "input_file": {
+            "description": "DLL File",
+            "type": "string",
+            "default": "PathToAtomicsFolder\\T1047\\bin\\calc.dll"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "DLL file must exist on disk at specified location\n",
+            "prereq_command": "if (Test-Path \"#{input_file}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Invoke-WebRequest \"#{input_url}\" -OutFile \"#{input_file}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

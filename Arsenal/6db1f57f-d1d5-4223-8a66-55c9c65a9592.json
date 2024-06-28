@@ -1,0 +1,39 @@
+{
+    "name": "Remote System Discovery - ping sweep",
+    "description": "Identify remote systems via ping sweep.  Upon successful execution, cmd.exe will perform a for loop against the 192.168.1.1/24 network. Output will be via stdout. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "for /l %i in (#{start_host},1,#{stop_host}) do ping -n 1 -w 100 #{subnet}.%i  \n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1018",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Remote System Discovery",
+    "source": "ART",
+    "uuid": "6db1f57f-d1d5-4223-8a66-55c9c65a9592",
+    "arguments": {
+        "start_host": {
+            "description": "Last octet starting value for ping sweep.",
+            "type": "string",
+            "default": "1"
+        },
+        "stop_host": {
+            "description": "Last octet ending value for ping sweep.",
+            "type": "string",
+            "default": "254"
+        },
+        "subnet": {
+            "description": "Subnet used for ping sweep.",
+            "type": "string",
+            "default": "192.168.1"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

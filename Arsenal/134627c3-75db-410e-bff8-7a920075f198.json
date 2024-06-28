@@ -1,0 +1,26 @@
+{
+    "name": "Add file to Local Library StartupItems",
+    "description": "Modify or create an file in /Library/StartupItems  [Reference](https://www.alienvault.com/blogs/labs-research/diversity-in-recent-mac-malware) ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "sudo touch /Library/StartupItems/EvilStartup.plist\n",
+        "cleanup_command": "sudo rm /Library/StartupItems/EvilStartup.plist\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1037.005",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Startup Items",
+    "source": "ART",
+    "uuid": "134627c3-75db-410e-bff8-7a920075f198",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

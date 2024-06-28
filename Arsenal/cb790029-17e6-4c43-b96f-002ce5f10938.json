@@ -1,0 +1,24 @@
+{
+    "name": "Firefox",
+    "description": "Create a file called test.wma, with the duration of 30 seconds ",
+    "supported_platforms": [
+        "linux",
+        "windows",
+        "macos"
+    ],
+    "executor": {
+        "steps": "1. Navigate to [about:debugging](about:debugging) and\nclick \"Load Temporary Add-on\"\n\n2. Navigate to [manifest.json](./src/manifest.json)\n\n3. Then click 'Open'\n",
+        "name": "manual"
+    },
+    "id": "T1176",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Browser Extensions",
+    "source": "ART",
+    "uuid": "cb790029-17e6-4c43-b96f-002ce5f10938",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,26 @@
+{
+    "name": "Add Executable Shortcut Link to User Startup Folder",
+    "description": "Adds a non-malicious executable shortcut link to the current users startup directory. Test can be verified by going to the users startup directory and checking if the shortcut link exists. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$Target = \"C:\\Windows\\System32\\calc.exe\"\n$ShortcutLocation = \"$home\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\calc_exe.lnk\"\n$WScriptShell = New-Object -ComObject WScript.Shell\n$Create = $WScriptShell.CreateShortcut($ShortcutLocation)\n$Create.TargetPath = $Target\n$Create.Save()      ",
+        "cleanup_command": "Remove-Item \"$home\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\calc_exe.lnk\" -ErrorAction Ignore",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1547.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Registry Run Keys / Startup Folder",
+    "source": "ART",
+    "uuid": "24e55612-85f6-4bd6-ae74-a73d02e3441d",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

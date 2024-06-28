@@ -1,0 +1,25 @@
+{
+    "name": "Disable Windows Security Center Notifications",
+    "description": "Modify the registry of the currently logged in user using reg.exe via cmd console to disable the windows security center notification. See how azorult malware abuses this technique- https://app.any.run/tasks/a6f2ffe2-e6e2-4396-ae2e-04ea0143f2d8/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell /v UseActionCenterExperience /t REG_DWORD /d 0 /f\n",
+        "cleanup_command": "reg delete HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell /v UseActionCenterExperience /f >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "45914594-8df6-4ea9-b3cc-7eb9321a807e",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

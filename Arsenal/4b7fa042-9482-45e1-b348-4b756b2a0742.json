@@ -1,0 +1,23 @@
+{
+    "name": "Examine password policy - macOS",
+    "description": "Lists the password policy to console on macOS. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "pwpolicy getaccountpolicies",
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1201",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Password Policy Discovery",
+    "source": "ART",
+    "uuid": "4b7fa042-9482-45e1-b348-4b756b2a0742",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

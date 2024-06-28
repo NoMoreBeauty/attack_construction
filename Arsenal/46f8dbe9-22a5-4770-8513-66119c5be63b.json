@@ -1,0 +1,41 @@
+{
+    "name": "Enumerate Active Directory for Unconstrained Delegation",
+    "description": "Attackers may attempt to query for computer objects with the UserAccountControl property 'TRUSTED_FOR_DELEGATION' (0x80000;524288) set More Information - https://shenaniganslabs.io/2019/01/28/Wagging-the-Dog.html#when-the-stars-align-unconstrained-delegation-leads-to-rce Prerequisite: AD RSAT PowerShell module is needed and it must run under a domain user ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "Get-ADObject -LDAPFilter '(UserAccountControl:1.2.840.113556.1.4.803:=#{uac_prop})' -Server #{domain}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1087.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "46f8dbe9-22a5-4770-8513-66119c5be63b",
+    "arguments": {
+        "domain": {
+            "description": "Domain FQDN",
+            "type": "string",
+            "default": "$env:UserDnsDomain"
+        },
+        "uac_prop": {
+            "description": "UAC Property to search",
+            "type": "integer",
+            "default": 524288
+        }
+    },
+    "preconditions": [
+        {
+            "description": "PowerShell ActiveDirectory Module must be installed\n",
+            "prereq_command": "Try {\n    Import-Module ActiveDirectory -ErrorAction Stop | Out-Null\n    exit 0\n}\nCatch {\n    exit 1\n}\n",
+            "get_prereq_command": "if((Get-CimInstance -ClassName Win32_OperatingSystem).ProductType -eq 1) {\n  Add-WindowsCapability -Name (Get-WindowsCapability -Name RSAT.ActiveDirectory.DS* -Online).Name -Online\n} else {\n  Install-WindowsFeature RSAT-AD-PowerShell\n}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

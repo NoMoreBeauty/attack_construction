@@ -1,0 +1,29 @@
+{
+    "name": "Examine password complexity policy - CentOS/RHEL 7.x",
+    "description": "Lists the password complexity policy to console on CentOS/RHEL 7.x Linux. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "cat /etc/security/pwquality.conf\n",
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1201",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Password Policy Discovery",
+    "source": "ART",
+    "uuid": "78a12e65-efff-4617-bc01-88f17d71315d",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "System must be CentOS or RHEL v7\n",
+            "prereq_command": "if [ $(uname -a | grep -ioP 'el[0-9]' | grep -oP '[0-9]') -eq \"7\" ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "echo Please run from CentOS or RHEL v7\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

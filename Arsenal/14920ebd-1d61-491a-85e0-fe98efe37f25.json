@@ -1,0 +1,46 @@
+{
+    "name": "Parent PID Spoofing - Spawn from Current Process",
+    "description": "Spawns a powershell.exe process as a child of the current process.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Start-ATHProcessUnderSpecificParent -FilePath #{file_path} -CommandLine '#{command_line}' -ParentId #{parent_pid}",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1134.004",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Parent PID Spoofing",
+    "source": "ART",
+    "uuid": "14920ebd-1d61-491a-85e0-fe98efe37f25",
+    "arguments": {
+        "file_path": {
+            "description": "File path or name of process to spawn",
+            "type": "path",
+            "default": "$Env:windir\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        },
+        "parent_pid": {
+            "description": "PID of process to spawn from",
+            "type": "string",
+            "default": "$PID"
+        },
+        "command_line": {
+            "description": "Specified command line to use",
+            "type": "string",
+            "default": "-Command Start-Sleep 10"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The AtomicTestHarnesses module must be installed and Start-ATHProcessUnderSpecificParent must be exported in the module.",
+            "prereq_command": "$RequiredModule = Get-Module -Name AtomicTestHarnesses -ListAvailable\nif (-not $RequiredModule) {exit 1}\nif (-not $RequiredModule.ExportedCommands['Start-ATHProcessUnderSpecificParent']) {exit 1} else {exit 0}",
+            "get_prereq_command": "Install-Module -Name AtomicTestHarnesses -Scope CurrentUser -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

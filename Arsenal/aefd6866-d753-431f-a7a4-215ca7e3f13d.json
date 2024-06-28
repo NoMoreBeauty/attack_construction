@@ -1,0 +1,26 @@
+{
+    "name": "New shim database files created in the default shim database directory",
+    "description": "Upon execution, check the C:\\Windows\\apppatch\\Custom\\ folder for the new shim database  https://www.fireeye.com/blog/threat-research/2017/05/fin7-shim-databases-persistence.html ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Copy-Item \"$PathToAtomicsFolder\\T1546.011\\bin\\T1546.011CompatDatabase.sdb\" C:\\Windows\\apppatch\\Custom\\T1546.011CompatDatabase.sdb\nCopy-Item \"$PathToAtomicsFolder\\T1546.011\\bin\\T1546.011CompatDatabase.sdb\" C:\\Windows\\apppatch\\Custom\\Custom64\\T1546.011CompatDatabase.sdb\n",
+        "cleanup_command": "Remove-Item C:\\Windows\\apppatch\\Custom\\T1546.011CompatDatabase.sdb -ErrorAction Ignore\nRemove-Item C:\\Windows\\apppatch\\Custom\\Custom64\\T1546.011CompatDatabase.sdb -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1546.011",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Application Shimming",
+    "source": "ART",
+    "uuid": "aefd6866-d753-431f-a7a4-215ca7e3f13d",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

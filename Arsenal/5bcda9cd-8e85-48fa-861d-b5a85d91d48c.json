@@ -1,0 +1,23 @@
+{
+    "name": "Lolbin Gpscript logon option",
+    "description": "Executes logon scripts configured in Group Policy. https://lolbas-project.github.io/lolbas/Binaries/Gpscript/ https://oddvar.moe/2018/04/27/gpscript-exe-another-lolbin-to-the-list/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Gpscript /logon\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "System Binary Proxy Execution",
+    "source": "ART",
+    "uuid": "5bcda9cd-8e85-48fa-861d-b5a85d91d48c",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

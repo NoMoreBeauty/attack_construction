@@ -1,0 +1,43 @@
+{
+    "name": "Active Directory Enumeration with LDIFDE",
+    "description": "Output information from Active Directory to a specified file. [Ldifde](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/cc731033(v=ws.11)) is a CLI tool for creating, modifying and deleting directory objects. The test is derived from the CISA Report on Voly Typhoon. Reference: https://media.defense.gov/2023/May/24/2003229517/-1/-1/0/CSA_Living_off_the_Land.PDF ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "elevation_required": true,
+        "command": "ldifde.exe -f #{output_path}\\#{output_file} -p subtree\n",
+        "cleanup_command": "del #{output_path}\\#{output_file}\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1069.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Groups",
+    "source": "ART",
+    "uuid": "22cf8cb9-adb1-4e8c-80ca-7c723dfc8784",
+    "arguments": {
+        "output_path": {
+            "description": "Path to the file that ldifde will output",
+            "type": "path",
+            "default": "C:\\Windows\\temp"
+        },
+        "output_file": {
+            "description": "The filename to be created by ldifde",
+            "type": "string",
+            "default": "atomic_ldifde.txt"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "PowerShell ActiveDirectory Module must be installed\n",
+            "prereq_command": "Try {\n    Import-Module ActiveDirectory -ErrorAction Stop | Out-Null\n    exit 0\n}\nCatch {\n    exit 1\n}\n",
+            "get_prereq_command": "if((Get-CimInstance -ClassName Win32_OperatingSystem).ProductType -eq 1) {\n  Add-WindowsCapability -Name (Get-WindowsCapability -Name RSAT.ActiveDirectory.DS* -Online).Name -Online\n} else {\n  Install-WindowsFeature RSAT-AD-PowerShell\n}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

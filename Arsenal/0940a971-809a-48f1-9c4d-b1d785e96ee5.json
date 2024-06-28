@@ -1,0 +1,23 @@
+{
+    "name": "System Network Connections Discovery",
+    "description": "Get a listing of network connections.  Upon successful execution, cmd.exe will execute `netstat`, `net use` and `net sessions`. Results will output via stdout. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "netstat\nnet use\nnet sessions\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1049",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Network Connections Discovery",
+    "source": "ART",
+    "uuid": "0940a971-809a-48f1-9c4d-b1d785e96ee5",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

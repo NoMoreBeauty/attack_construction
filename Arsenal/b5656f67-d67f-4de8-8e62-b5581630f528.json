@@ -1,0 +1,26 @@
+{
+    "name": "Windows Internal Packet Capture",
+    "description": "Uses the built-in Windows packet capture After execution you should find a file named trace.etl and trace.cab in the temp directory",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "netsh trace start capture=yes tracefile=%temp%\\trace.etl maxsize=10",
+        "cleanup_command": "netsh trace stop >nul 2>&1\nTIMEOUT /T 5 >nul 2>&1\ndel %temp%\\trace.etl >nul 2>&1\ndel %temp%\\trace.cab >nul 2>&1",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1040",
+    "tactics": [
+        "Credential Access",
+        "Discovery"
+    ],
+    "technique": "Network Sniffing",
+    "source": "ART",
+    "uuid": "b5656f67-d67f-4de8-8e62-b5581630f528",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

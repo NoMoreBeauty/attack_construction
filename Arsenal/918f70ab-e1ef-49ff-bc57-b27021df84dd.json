@@ -1,0 +1,24 @@
+{
+    "name": "Shutdown System via `halt` - FreeBSD/Linux",
+    "description": "This test shuts down a FreeBSD/Linux system using `halt`. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "halt -p\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1529",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "System Shutdown/Reboot",
+    "source": "ART",
+    "uuid": "918f70ab-e1ef-49ff-bc57-b27021df84dd",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

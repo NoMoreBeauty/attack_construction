@@ -1,0 +1,44 @@
+{
+    "name": "Packet Capture Linux socket AF_INET,SOCK_PACKET,UDP with sudo",
+    "description": "Captures packets with domain=AF_INET,type=SOCK_PACKET,protocol=UDP for a few seconds. SOCK_PACKET is obsolete according to the man page, but still works on Ubuntu 20.04 ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "command": "sudo #{program_path} -4 -P -p 17 -t 3\n",
+        "cleanup_command": "rm -f #{program_path}\n",
+        "name": "bash",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1040",
+    "tactics": [
+        "Credential Access",
+        "Discovery"
+    ],
+    "technique": "Network Sniffing",
+    "source": "ART",
+    "uuid": "515575ab-d213-42b1-aa64-ef6a2dd4641b",
+    "arguments": {
+        "csource_path": {
+            "description": "Path to C program source",
+            "type": "string",
+            "default": "PathToAtomicsFolder/T1040/src/linux_pcapdemo.c"
+        },
+        "program_path": {
+            "description": "Path to compiled C program",
+            "type": "string",
+            "default": "/tmp/t1040_linux_pcapdemo"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "compile C program\n",
+            "prereq_command": "if [ -f \"#{program_path}\" ]; then exit 0; else exit 1; fi\n",
+            "get_prereq_command": "cc #{csource_path} -o #{program_path}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

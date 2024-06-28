@@ -1,0 +1,24 @@
+{
+    "name": "Use Space Before Command to Avoid Logging to History",
+    "description": "Using a space before a command causes the command to not be logged in the Bash History file ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "hostname\nwhoami\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1070.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Command History",
+    "source": "ART",
+    "uuid": "53b03a54-4529-4992-852d-a00b4b7215a6",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,31 @@
+{
+    "name": "List opened files by user",
+    "description": "List opened files by user ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "username=$(id -u -n) && lsof -u $username\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "dependency_executor_name": "sh",
+    "id": "T1087.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "7e46c7a5-0142-45be-a858-1a3ecb4fd3cb",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "check if lsof exists\n",
+            "prereq_command": "which lsof\n",
+            "get_prereq_command": "(which pkg && pkg install -y lsof)||(which yum && yum -y install lsof)||(which apt-get && DEBIAN_FRONTEND=noninteractive apt-get install -y lsof)\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

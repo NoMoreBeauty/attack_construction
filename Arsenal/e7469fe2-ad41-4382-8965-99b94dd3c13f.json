@@ -1,0 +1,30 @@
+{
+    "name": "chattr - Remove immutable file attribute",
+    "description": "Remove's a file's `immutable` attribute using `chattr`. This technique was used by the threat actor Rocke during the compromise of Linux web servers. ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "executor": {
+        "command": "chattr -i #{file_to_modify}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1222.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Linux and Mac File and Directory Permissions Modification",
+    "source": "ART",
+    "uuid": "e7469fe2-ad41-4382-8965-99b94dd3c13f",
+    "arguments": {
+        "file_to_modify": {
+            "description": "Path of the file",
+            "type": "path",
+            "default": "/var/spool/cron/root"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

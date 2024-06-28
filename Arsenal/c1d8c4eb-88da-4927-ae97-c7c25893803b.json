@@ -1,0 +1,32 @@
+{
+    "name": "Edit UFW firewall ufw.conf file",
+    "description": "Edit the Uncomplicated Firewall (UFW) configuration file /etc/ufw/ufw.conf  which controls if the firewall starts on boot and its logging level. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "echo \"# THIS IS A COMMENT\" >> /etc/ufw/ufw.conf\ngrep \"# THIS IS A COMMENT\" /etc/ufw/ufw.conf\n",
+        "cleanup_command": "sed -i 's/# THIS IS A COMMENT//g' /etc/ufw/ufw.conf\ncat /etc/ufw/ufw.conf\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "c1d8c4eb-88da-4927-ae97-c7c25893803b",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if /etc/ufw/ufw.conf exists.\n",
+            "prereq_command": "if [ ! -f \"/etc/ufw/ufw.conf\" ]; then echo -e \"\\n***** ufw NOT installed *****\\n\"; exit 1; fi\n",
+            "get_prereq_command": "echo \"\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

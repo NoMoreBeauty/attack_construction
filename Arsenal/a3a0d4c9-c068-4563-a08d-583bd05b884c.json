@@ -1,0 +1,49 @@
+{
+    "name": "Filtered Packet Capture FreeBSD using /dev/bpfN with sudo",
+    "description": "Opens a /dev/bpf file (O_RDONLY), sets BPF filter for 'udp' and captures packets for a few seconds. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "sudo #{program_path} -f -i #{ifname} -t 3\n",
+        "cleanup_command": "rm -f #{program_path}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1040",
+    "tactics": [
+        "Credential Access",
+        "Discovery"
+    ],
+    "technique": "Network Sniffing",
+    "source": "ART",
+    "uuid": "a3a0d4c9-c068-4563-a08d-583bd05b884c",
+    "arguments": {
+        "ifname": {
+            "description": "Specify interface to perform PCAP on.",
+            "type": "string",
+            "default": "em0"
+        },
+        "csource_path": {
+            "description": "Path to C program source",
+            "type": "string",
+            "default": "PathToAtomicsFolder/T1040/src/freebsd_pcapdemo.c"
+        },
+        "program_path": {
+            "description": "Path to compiled C program",
+            "type": "string",
+            "default": "/tmp/t1040_freebsd_pcapdemo"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "compile C program\n",
+            "prereq_command": "exit 1\n",
+            "get_prereq_command": "cc #{csource_path} -o #{program_path}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

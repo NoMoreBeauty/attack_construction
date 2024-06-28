@@ -1,0 +1,32 @@
+{
+    "name": "System shell profile scripts",
+    "description": "An adversary may wish to establish persistence by adding commands into any of the script files in the /etc/profile.d/ directory, which are executed every time any user logs in. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "elevation_required": true,
+        "name": "sh",
+        "command": "echo '#{text_to_append}' >> /etc/profile.d/bash_completion.sh\n",
+        "cleanup_command": "sed -i \"s/# Atomic Red Team was here... T1546.004//\" /etc/profile.d/bash_completion.sh\n",
+        "type": "Command Executor"
+    },
+    "id": "T1546.004",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Unix Shell Configuration Modification",
+    "source": "ART",
+    "uuid": "8fe2ccfd-f079-4c03-b1a9-bd9b362b67d4",
+    "arguments": {
+        "text_to_append": {
+            "description": "Text to append to the /etc/profile.d/bash_completion.sh file",
+            "type": "string",
+            "default": "# Atomic Red Team was here... T1546.004"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

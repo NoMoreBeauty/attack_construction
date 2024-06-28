@@ -1,0 +1,37 @@
+{
+    "name": "Create and start Hyper-V virtual machine",
+    "description": "Create a simple Hyper-V VM (Windows native hypervisor) and start up the machine Cleanup command stops and deletes the newly created VM https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v https://embracethered.com/blog/posts/2020/shadowbunny-virtual-machine-red-teaming-technique/ https://attack.mitre.org/techniques/T1564/006/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": true,
+        "command": "$VM = \"#{vm_name}\"\nNew-VM -Name $VM -Generation 2\nSet-VMFirmware $VM -EnableSecureBoot Off\nStart-VM $VM",
+        "cleanup_command": "Stop-VM $VM -Force\nRemove-VM $VM -Force",
+        "type": "Command Executor"
+    },
+    "id": "T1564.006",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Run Virtual Instance",
+    "source": "ART",
+    "uuid": "fb8d4d7e-f5a4-481c-8867-febf13f8b6d3",
+    "arguments": {
+        "vm_name": {
+            "description": "Name of the new virtual machine",
+            "type": "string",
+            "default": "Atomic VM"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Hyper-V must be enabled on the system\nChecks whether Hyper-V is enabled. If not, enables Hyper-V and forces a required restart\n",
+            "prereq_command": "if ((Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V).State = \"Enabled\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

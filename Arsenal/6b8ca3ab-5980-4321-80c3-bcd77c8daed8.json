@@ -1,0 +1,31 @@
+{
+    "name": "Logging Configuration Changes on FreeBSD Host",
+    "description": "Emulates modification of syslog configuration. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "if [ -f \"/etc/#{syslog_config_file_name}\" ];\nthen echo '#art_test_1562_006_2' >> /etc/#{syslog_config_file_name}\nfi\n",
+        "cleanup_command": "if [ -f \"/etc/#{syslog_config_file_name}\" ];\nthen sed -i \"\" '/#art_test_1562_006_2/d' /etc/#{syslog_config_file_name}\nfi\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.006",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Indicator Blocking",
+    "source": "ART",
+    "uuid": "6b8ca3ab-5980-4321-80c3-bcd77c8daed8",
+    "arguments": {
+        "syslog_config_file_name": {
+            "description": "The name of the syslog configuration file to be changed",
+            "type": "string",
+            "default": "syslog.conf"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

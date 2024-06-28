@@ -1,0 +1,29 @@
+{
+    "name": "Remove Network Share PowerShell",
+    "description": "Removes a Network Share utilizing PowerShell ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Remove-SmbShare -Name #{share_name}\nRemove-FileShare -Name #{share_name}\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1070.005",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Network Share Connection Removal",
+    "source": "ART",
+    "uuid": "0512d214-9512-4d22-bde7-f37e058259b3",
+    "arguments": {
+        "share_name": {
+            "description": "Share to remove.",
+            "type": "string",
+            "default": "\\\\test\\share"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,42 @@
+{
+    "name": "Event Monitor Daemon Persistence",
+    "description": "This test adds persistence via a plist to execute via the macOS Event Monitor Daemon.  ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "name": "bash",
+        "elevation_required": true,
+        "command": "sudo cp #{script_location} #{script_destination}\nsudo touch /private/var/db/emondClients/#{empty_file}\n",
+        "cleanup_command": "sudo rm #{script_destination}\nsudo rm /private/var/db/emondClients/#{empty_file}",
+        "type": "Command Executor"
+    },
+    "id": "T1543.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Launch Agent",
+    "source": "ART",
+    "uuid": "11979f23-9b9d-482a-9935-6fc9cd022c3e",
+    "arguments": {
+        "script_location": {
+            "description": "evil plist location",
+            "type": "path",
+            "default": "$PathToAtomicsFolder/T1543.001/src/atomicredteam_T1543_001.plist"
+        },
+        "script_destination": {
+            "description": "Path where to move the evil plist",
+            "type": "path",
+            "default": "/etc/emond.d/rules/atomicredteam_T1543_001.plist"
+        },
+        "empty_file": {
+            "description": "Random name of the empty file used to trigger emond service",
+            "type": "string",
+            "default": "randomflag"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

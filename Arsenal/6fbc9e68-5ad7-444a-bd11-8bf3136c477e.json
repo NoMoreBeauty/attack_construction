@@ -1,0 +1,23 @@
+{
+    "name": "Enumerate all accounts (Domain)",
+    "description": "Enumerate all accounts Upon exection, multiple enumeration commands will be run and their output displayed in the PowerShell session ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net user /domain\nnet group /domain\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1087.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "6fbc9e68-5ad7-444a-bd11-8bf3136c477e",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

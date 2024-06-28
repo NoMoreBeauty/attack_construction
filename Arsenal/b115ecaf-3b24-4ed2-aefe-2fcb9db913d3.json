@@ -1,0 +1,24 @@
+{
+    "name": "Hide a Directory",
+    "description": "Hide a directory on MacOS ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "touch /var/tmp/T1564.001_mac.txt\nchflags hidden /var/tmp/T1564.001_mac.txt\n",
+        "cleanup_command": "rm /var/tmp/T1564.001_mac.txt\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1564.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Hidden Files and Directories",
+    "source": "ART",
+    "uuid": "b115ecaf-3b24-4ed2-aefe-2fcb9db913d3",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

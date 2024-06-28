@@ -1,0 +1,30 @@
+{
+    "name": "Clear Bash history (rm)",
+    "description": "Clears bash history via rm ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "rm #{history_path}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1070.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Command History",
+    "source": "ART",
+    "uuid": "a934276e-2be5-4a36-93fd-98adbb5bd4fc",
+    "arguments": {
+        "history_path": {
+            "description": "Bash history path",
+            "type": "path",
+            "default": "~/.bash_history"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

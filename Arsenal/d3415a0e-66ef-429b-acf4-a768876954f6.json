@@ -1,0 +1,24 @@
+{
+    "name": "Security Software Discovery - Windows Defender Enumeration",
+    "description": "Windows Defender Enumeration via different built-in windows native tools. when sucessfully executed, information about windows defender is displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Get-Service WinDefend #check the service state of Windows Defender\nGet-MpComputerStatus #provides the current status of security solution elements, including Anti-Spyware, Antivirus, LoavProtection, Real-time protection, etc\nGet-MpThreat #threats details that have been detected using MS Defender\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1518.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Security Software Discovery",
+    "source": "ART",
+    "uuid": "d3415a0e-66ef-429b-acf4-a768876954f6",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

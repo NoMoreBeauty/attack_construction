@@ -1,0 +1,25 @@
+{
+    "name": "LockBit Black - Disable Privacy Settings Experience Using Registry -Powershell",
+    "description": "LockBit Black - Disable Privacy Settings Experience Using Registry ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "New-ItemProperty \"HKCU:\\Software\\Policies\\Microsoft\\Windows\\OOBE\" -Name DisablePrivacyExperience -PropertyType DWord -Value 1 -Force\n",
+        "cleanup_command": "Remove-ItemProperty \"HKCU:\\Software\\Policies\\Microsoft\\Windows\\OOBE\" -Name DisablePrivacyExperience -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "d8c57eaa-497a-4a08-961e-bd5efd7c9374",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

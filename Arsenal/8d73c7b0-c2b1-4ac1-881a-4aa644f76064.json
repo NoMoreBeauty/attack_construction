@@ -1,0 +1,46 @@
+{
+    "name": "Msiexec.exe - Execute Local MSI file with embedded VBScript",
+    "description": "Executes an MSI containing embedded VBScript code using msiexec.exe ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "#{msi_exe} /q /#{action} \"#{msi_payload}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218.007",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Msiexec",
+    "source": "ART",
+    "uuid": "8d73c7b0-c2b1-4ac1-881a-4aa644f76064",
+    "arguments": {
+        "msi_payload": {
+            "description": "MSI file to execute",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218.007\\bin\\T1218.007_VBScript.msi"
+        },
+        "msi_exe": {
+            "description": "MSIExec File Path",
+            "type": "path",
+            "default": "c:\\windows\\system32\\msiexec.exe"
+        },
+        "action": {
+            "description": "Specifies the MSI action to perform: i (install), a (admin), j (advertise). The included MSI is designed to support all three action types.\n",
+            "type": "string",
+            "default": "i"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The MSI file must exist on disk at specified location (#{msi_payload})\n",
+            "prereq_command": "if (Test-Path \"#{msi_payload}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{msi_payload}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.007/bin/T1218.007_VBScript.msi\" -OutFile \"#{msi_payload}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

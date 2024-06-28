@@ -1,0 +1,30 @@
+{
+    "name": "The user executes file",
+    "uuid": "6058daec-2333-40c0-af3e-38c4d218b045",
+    "description": "This procedure emulates a user (victim) executes a file.",
+    "supported_platforms": [
+        "windows",
+        "macos",
+        "linux"
+    ],
+    "arguments": {
+        "file_path": {
+            "description": "The path of the executed file",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [],
+    "executor": {
+        "type": "Victim Interaction",
+        "elevation_required": false
+    },
+    "side": "Victim",
+    "id": "T1204.002",
+    "tactics": [
+        "Execution"
+    ],
+    "technique": "User Execution: Malicious File",
+    "source": "MANUAL",
+    "effect": "File Execution"
+}

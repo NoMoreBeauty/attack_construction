@@ -1,0 +1,36 @@
+{
+    "name": "Create Volume Shadow Copy with vssadmin",
+    "description": "This test is intended to be run on a domain Controller.  The Active Directory database NTDS.dit may be dumped by copying it from a Volume Shadow Copy. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "vssadmin.exe create shadow /for=#{drive_letter}\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "NTDS",
+    "source": "ART",
+    "uuid": "dcebead7-6c28-4b4b-bf3c-79deb1b1fc7f",
+    "arguments": {
+        "drive_letter": {
+            "description": "Drive letter to source VSC (including colon)",
+            "type": "string",
+            "default": "C:"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Target must be a Domain Controller\n",
+            "prereq_command": "reg query HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\ProductOptions  /v ProductType | findstr LanmanNT\n",
+            "get_prereq_command": "echo Sorry, Promoting this machine to a Domain Controller must be done manually\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

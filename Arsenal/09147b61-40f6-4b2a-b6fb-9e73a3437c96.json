@@ -1,0 +1,24 @@
+{
+    "name": "Disabling ShowUI Settings of Windows Error Reporting (WER)",
+    "description": "A modification registry to disable ShowUI settings of Windows Error Report. This registry setting can influence the behavior of error reporting dialogs or prompt box.  This technique was seen in DarkGate malware as part of its installation. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add \"HKCU\\Software\\Microsoft\\Windows\\Windows Error Reporting\" /v DontShowUI /t REG_DWORD /d 1 /f\n",
+        "cleanup_command": "reg add \"HKCU\\Software\\Microsoft\\Windows\\Windows Error Reporting\" /v DontShowUI /t REG_DWORD /d 0 /f\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "09147b61-40f6-4b2a-b6fb-9e73a3437c96",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

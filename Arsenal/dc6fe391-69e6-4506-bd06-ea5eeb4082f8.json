@@ -1,0 +1,30 @@
+{
+    "name": "Deobfuscate/Decode Files Or Information",
+    "description": "Encode/Decode executable Upon execution a file named T1140_calc_decoded.exe will be placed in the temp folder ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "certutil -encode #{executable} %temp%\\T1140_calc.txt\ncertutil -decode %temp%\\T1140_calc.txt %temp%\\T1140_calc_decoded.exe\n",
+        "cleanup_command": "del %temp%\\T1140_calc.txt >nul 2>&1\ndel %temp%\\T1140_calc_decoded.exe >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1140",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Deobfuscate/Decode Files or Information",
+    "source": "ART",
+    "uuid": "dc6fe391-69e6-4506-bd06-ea5eeb4082f8",
+    "arguments": {
+        "executable": {
+            "description": "name of executable",
+            "type": "path",
+            "default": "C:\\Windows\\System32\\calc.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

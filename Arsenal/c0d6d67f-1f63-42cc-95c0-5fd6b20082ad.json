@@ -1,0 +1,25 @@
+{
+    "name": "Disable Windows Notification Center",
+    "description": "Modify the registry of the currently logged in user using reg.exe via cmd console to disable the windows notification center. See how remcos rat abuses this technique- https://tccontre.blogspot.com/2020/01/remcos-rat-evading-windows-defender-av.html ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add HKEY_CURRENT_USER\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer /v DisableNotificationCenter /t REG_DWORD /d 1 /f\n",
+        "cleanup_command": "reg delete HKEY_CURRENT_USER\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer /v DisableNotificationCenter /f >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "c0d6d67f-1f63-42cc-95c0-5fd6b20082ad",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,25 @@
+{
+    "name": "Clear and Disable Bash History Logging",
+    "description": "Clears the history and disable bash history logging of the current shell and future shell sessions ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "set +o history\necho 'set +o history' >> ~/.bashrc\n. ~/.bashrc\nhistory -c\n",
+        "cleanup_command": "sed -i 's/set +o history//g' ~/.bashrc\n. ~/.bashrc\nset -o history\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1070.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Command History",
+    "source": "ART",
+    "uuid": "784e4011-bd1a-4ecd-a63a-8feb278512e6",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

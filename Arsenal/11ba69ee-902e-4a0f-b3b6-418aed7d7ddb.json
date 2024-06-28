@@ -1,0 +1,29 @@
+{
+    "name": "Discover Specific Process - tasklist",
+    "description": "Adversaries may use command line tools to discover specific processes in preparation of further attacks.  Examples of this could be discovering the PID of lsass.exe to dump its memory or discovering whether specific security processes (e.g. AV or EDR) are running. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "tasklist | findstr #{process_to_enumerate}\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1057",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Process Discovery",
+    "source": "ART",
+    "uuid": "11ba69ee-902e-4a0f-b3b6-418aed7d7ddb",
+    "arguments": {
+        "process_to_enumerate": {
+            "description": "Process name string to search for.",
+            "type": "string",
+            "default": "lsass"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

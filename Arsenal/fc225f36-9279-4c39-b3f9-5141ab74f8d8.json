@@ -1,0 +1,31 @@
+{
+    "name": "Disable SELinux",
+    "description": "Disables SELinux enforcement ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "setenforce 0\n",
+        "cleanup_command": "setenforce 1\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "fc225f36-9279-4c39-b3f9-5141ab74f8d8",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "SELinux must be installed\n",
+            "prereq_command": "which setenforce\n",
+            "get_prereq_command": "echo \"SELinux is not installed\"; exit 1\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

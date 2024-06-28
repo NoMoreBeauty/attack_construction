@@ -1,0 +1,31 @@
+{
+    "name": "Create a user account on a FreeBSD system",
+    "description": "Create a user via pw ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "pw useradd #{username} -s /usr/sbin/nologin -d /nonexistent -c evil_account\n",
+        "cleanup_command": "rmuser -y #{username}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1136.001",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "a39ee1bc-b8c1-4331-8e5f-1859eb408518",
+    "arguments": {
+        "username": {
+            "description": "Username of the user to create",
+            "type": "string",
+            "default": "evil_user"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

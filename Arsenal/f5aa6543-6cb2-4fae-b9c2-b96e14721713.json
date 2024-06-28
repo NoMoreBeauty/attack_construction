@@ -1,0 +1,31 @@
+{
+    "name": "Access /etc/{shadow,passwd,master.passwd} with shell builtins",
+    "description": "Dump /etc/passwd, /etc/master.passwd and /etc/shadow using sh builtins ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "testcat(){ (while read line; do echo $line >> #{output_file}; done < $1) }\n[ \"$(uname)\" = 'FreeBSD' ] && testcat /etc/master.passwd\ntestcat /etc/passwd\ntestcat /etc/shadow\n",
+        "cleanup_command": "rm -f #{output_file}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003.008",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "/etc/passwd and /etc/shadow",
+    "source": "ART",
+    "uuid": "f5aa6543-6cb2-4fae-b9c2-b96e14721713",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed",
+            "type": "path",
+            "default": "/tmp/T1003.008.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

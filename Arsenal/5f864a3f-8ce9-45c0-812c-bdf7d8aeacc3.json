@@ -1,0 +1,30 @@
+{
+    "name": "System Service Discovery - net.exe",
+    "description": "Enumerates started system services using net.exe and writes them to a file. This technique has been used by multiple threat actors.  Upon successful execution, net.exe will run from cmd.exe that queries services. Expected output is to a txt file in in the temp directory called service-list.txt. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net.exe start >> #{output_file}\n",
+        "cleanup_command": "del /f /q /s #{output_file} >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1007",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Service Discovery",
+    "source": "ART",
+    "uuid": "5f864a3f-8ce9-45c0-812c-bdf7d8aeacc3",
+    "arguments": {
+        "output_file": {
+            "description": "Path of file to hold net.exe output",
+            "type": "path",
+            "default": "%temp%\\service-list.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

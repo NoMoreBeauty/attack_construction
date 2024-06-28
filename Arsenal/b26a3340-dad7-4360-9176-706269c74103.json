@@ -1,0 +1,30 @@
+{
+    "name": "Disable Event Logging with wevtutil",
+    "description": "Wevtutil can be used to disable logs.  NOTE: RansomEXX ransomware uses this to disable Security logs post-encryption. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "wevtutil sl \"#{log_name}\" /e:false\n",
+        "cleanup_command": "wevtutil sl \"#{log_name}\" /e:true\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1562.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable Windows Event Logging",
+    "source": "ART",
+    "uuid": "b26a3340-dad7-4360-9176-706269c74103",
+    "arguments": {
+        "log_name": {
+            "description": "Name of the log to be disabled",
+            "type": "string",
+            "default": "Microsoft-Windows-IKE/Operational"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

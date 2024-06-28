@@ -1,0 +1,29 @@
+{
+    "name": "Enumerate logged on users via CMD (Domain)",
+    "description": "Enumerate logged on users. Upon exeuction, logged on users will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "query user /SERVER:#{computer_name}\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1087.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "161dcd85-d014-4f5e-900c-d3eaae82a0f7",
+    "arguments": {
+        "computer_name": {
+            "description": "Name of remote system to query",
+            "type": "string",
+            "default": "%COMPUTERNAME%"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,45 @@
+{
+    "name": "Azure - Scan for Anonymous Access to Azure Storage (Powershell)",
+    "description": "Upon successful execution, this test will test for anonymous access to Azure storage containers by invoking a web request and outputting the results to a file.  The corresponding response could then be interpreted to determine whether or not the resource/container exists, as well as other information.  See https://ninocrudele.com/the-three-most-effective-and-dangerous-cyberattacks-to-azure-and-countermeasures-part-2-attack-the-azure-storage-service      ",
+    "supported_platforms": [
+        "iaas:azure"
+    ],
+    "executor": {
+        "command": "try{$response = invoke-webrequest \"https://#{base_name}.blob.core.windows.net/#{container_name}/#{blob_name}\" -method \"GET\"}\ncatch [system.net.webexception]\n{if($_.Exception.Response -ne $null)\n{$Response = $_.Exception.Response.GetResponseStream()\n$ReadResponse = New-Object System.IO.StreamReader($Response)\n$ReadResponse.BaseStream.Position = 0\n$responseBody = $ReadResponse.ReadToEnd()}\nelse {$responseBody = \"The storage account could not be anonymously accessed.\"}}\n\"Response received for #{base_name}.blob.core.windows.net/#{container_name}/#{blob_name}: $responsebody\" | out-file -filepath #{output_file} -append\n",
+        "cleanup_command": "remove-item #{output_file} -erroraction silentlycontinue\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1530",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Data from Cloud Storage",
+    "source": "ART",
+    "uuid": "146af1f1-b74e-4aa7-9895-505eb559b4b0",
+    "arguments": {
+        "base_name": {
+            "description": "Azure storage account name to test",
+            "type": "string",
+            "default": "T1530Test2"
+        },
+        "output_file": {
+            "description": "File to output results to",
+            "type": "string",
+            "default": "$env:temp\\T1530Test2.txt"
+        },
+        "container_name": {
+            "description": "Container name to search for (optional)",
+            "type": "string",
+            "default": null
+        },
+        "blob_name": {
+            "description": "Blob name to search for (optional)",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

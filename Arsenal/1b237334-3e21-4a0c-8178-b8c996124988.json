@@ -1,0 +1,41 @@
+{
+    "name": "WMIC bypass using local XSL file",
+    "description": "Executes the code specified within a XSL script using a local payload. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "wmic #{wmic_command} /FORMAT:\"#{local_xsl_file}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1220",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "XSL Script Processing",
+    "source": "ART",
+    "uuid": "1b237334-3e21-4a0c-8178-b8c996124988",
+    "arguments": {
+        "wmic_command": {
+            "description": "WMI command to execute using wmic.exe",
+            "type": "string",
+            "default": "process list"
+        },
+        "local_xsl_file": {
+            "description": "Location of the test XSL script file on the local filesystem.",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1220\\src\\wmicscript.xsl"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "XSL file must exist on disk at specified location (#{local_xsl_file})\n",
+            "prereq_command": "if (Test-Path \"#{local_xsl_file}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{local_xsl_file}\") -ErrorAction Ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1220/src/wmicscript.xsl\" -OutFile \"#{local_xsl_file}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

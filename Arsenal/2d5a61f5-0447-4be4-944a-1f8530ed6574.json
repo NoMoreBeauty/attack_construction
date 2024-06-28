@@ -1,0 +1,23 @@
+{
+    "name": "Remote System Discovery - arp",
+    "description": "Identify remote systems via arp.   Upon successful execution, cmd.exe will execute arp to list out the arp cache. Output will be via stdout. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "arp -a\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1018",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Remote System Discovery",
+    "source": "ART",
+    "uuid": "2d5a61f5-0447-4be4-944a-1f8530ed6574",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

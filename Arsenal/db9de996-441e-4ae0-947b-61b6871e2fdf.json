@@ -1,0 +1,25 @@
+{
+    "name": "Disable syslog (freebsd)",
+    "description": "Disables syslog collection ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "service syslogd stop\nsysrc syslogd_enable=\"NO\"\n",
+        "cleanup_command": "sysrc syslogd_enable=\"YES\"\nservice syslogd start\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "db9de996-441e-4ae0-947b-61b6871e2fdf",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

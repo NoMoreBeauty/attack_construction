@@ -1,0 +1,40 @@
+{
+    "name": "Search Through Bash History",
+    "description": "Search through bash history for specifice commands we want to capture ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "cat #{bash_history_filename} | grep #{bash_history_grep_args} > #{output_file}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1552.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Bash History",
+    "source": "ART",
+    "uuid": "3cfde62b-7c33-4b26-a61e-755d6131c8ce",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed",
+            "type": "path",
+            "default": "~/loot.txt"
+        },
+        "bash_history_grep_args": {
+            "description": "grep arguments that filter out specific commands we want to capture",
+            "type": "path",
+            "default": "-e '-p ' -e 'pass' -e 'ssh'"
+        },
+        "bash_history_filename": {
+            "description": "Path of the bash history file to capture",
+            "type": "path",
+            "default": "~/.bash_history"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

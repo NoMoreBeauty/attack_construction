@@ -1,0 +1,23 @@
+{
+    "name": "Security Software Discovery - ps (Linux)",
+    "description": "Methods to identify Security Software on an endpoint when sucessfully executed, command shell  is going to display AV/Security software it is running. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "ps aux | egrep 'falcond|nessusd|cbagentd|td-agent|packetbeat|filebeat|auditbeat|osqueryd'\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1518.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Security Software Discovery",
+    "source": "ART",
+    "uuid": "23b91cd2-c99c-4002-9e41-317c63e024a2",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

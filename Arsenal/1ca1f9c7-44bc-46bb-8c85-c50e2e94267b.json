@@ -1,0 +1,30 @@
+{
+    "name": "List Mozilla Firefox Bookmark Database Files on macOS",
+    "description": "Searches for Mozilla Firefox's places.sqlite file (on macOS) that contains bookmarks and lists any found instances to a text file. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "find / -path \"*/Firefox/Profiles/*/places.sqlite\" -exec echo {} >> #{output_file} \\;\ncat #{output_file} 2>/dev/null\n",
+        "cleanup_command": "rm -f #{output_file} 2>/dev/null\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1217",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Browser Information Discovery",
+    "source": "ART",
+    "uuid": "1ca1f9c7-44bc-46bb-8c85-c50e2e94267b",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed.",
+            "type": "path",
+            "default": "/tmp/T1217_Firefox.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

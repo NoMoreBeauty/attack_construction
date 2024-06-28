@@ -1,0 +1,31 @@
+{
+    "name": "Access /etc/master.passwd (Local)",
+    "description": "/etc/master.passwd file is accessed in FreeBSD environments ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "sudo cat /etc/master.passwd > #{output_file}\ncat #{output_file}\n",
+        "cleanup_command": "rm -f #{output_file}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003.008",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "/etc/passwd and /etc/shadow",
+    "source": "ART",
+    "uuid": "5076874f-a8e6-4077-8ace-9e5ab54114a5",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed",
+            "type": "path",
+            "default": "/tmp/T1003.008.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

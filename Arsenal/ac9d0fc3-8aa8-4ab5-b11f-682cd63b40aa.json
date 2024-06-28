@@ -1,0 +1,24 @@
+{
+    "name": "Masquerading - powershell.exe running as taskhostw.exe",
+    "description": "Copies powershell.exe, renames it, and launches it to masquerade as an instance of taskhostw.exe.  Upon successful execution, powershell.exe is renamed as taskhostw.exe and executed from non-standard path. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "copy %windir%\\System32\\windowspowershell\\v1.0\\powershell.exe %APPDATA%\\taskhostw.exe /Y\ncmd.exe /K %APPDATA%\\taskhostw.exe\n",
+        "cleanup_command": "del /Q /F %APPDATA%\\taskhostw.exe >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1036.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rename System Utilities",
+    "source": "ART",
+    "uuid": "ac9d0fc3-8aa8-4ab5-b11f-682cd63b40aa",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

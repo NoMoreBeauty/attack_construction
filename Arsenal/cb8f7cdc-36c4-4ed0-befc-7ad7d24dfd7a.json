@@ -1,0 +1,30 @@
+{
+    "name": "Discover System Language by Environment Variable Query",
+    "description": "Identify System language by checking the environment variables  Upon successful execution, the 5 character locale result can be looked up to correlate the language and territory. Environment query commands are likely to run with a pattern match command e.g. `env | grep LANG`  Note: `env` and `printenv` will usually provide the same results. `set` is also used as a builtin command that does not generate syscall telemetry but does provide a list of the environment variables. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "env | grep LANG\nprintenv LANG\nset | grep LANG\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1614.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Language Discovery",
+    "source": "ART",
+    "uuid": "cb8f7cdc-36c4-4ed0-befc-7ad7d24dfd7a",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if printenv command exists on the machine\n",
+            "prereq_command": "[ -x \"$(command -v printenv)\" ] && exit 0 || exit 1\n",
+            "get_prereq_command": "echo \"printenv command does not exist\"\nexit 1\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

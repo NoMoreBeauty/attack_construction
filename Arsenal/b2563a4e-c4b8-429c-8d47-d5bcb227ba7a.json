@@ -1,0 +1,32 @@
+{
+    "name": "Add and delete UFW firewall rules",
+    "description": "Add and delete a rule on the Uncomplicated Firewall (UFW) if installed and enabled.  ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "ufw prepend deny from 1.2.3.4\nufw status numbered\n",
+        "cleanup_command": "{ echo y; echo response; } | ufw delete 1\nufw status numbered\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "b2563a4e-c4b8-429c-8d47-d5bcb227ba7a",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if ufw is installed on the machine and enabled.\n",
+            "prereq_command": "if [ ! -x \"$(command -v ufw)\" ]; then echo -e \"\\n***** ufw NOT installed *****\\n\"; exit 1; fi\nif echo \"$(ufw status)\" |grep -q \"inactive\"; then echo -e \"\\n***** ufw inactive *****\\n\"; exit 1; fi \n",
+            "get_prereq_command": "echo \"\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

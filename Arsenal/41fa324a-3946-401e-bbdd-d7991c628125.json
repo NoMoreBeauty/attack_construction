@@ -1,0 +1,36 @@
+{
+    "name": "Rundll32 syssetup.dll Execution",
+    "description": "Test execution of a command using rundll32.exe with syssetup.dll. Upon execution, a window saying installation failed will be opened  Reference: https://github.com/LOLBAS-Project/LOLBAS/blob/master/yml/OSLibraries/Syssetup.yml ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "rundll32.exe syssetup.dll,SetupInfObjectInstallAction DefaultInstall 128 \"#{inf_to_execute}\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218.011",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rundll32",
+    "source": "ART",
+    "uuid": "41fa324a-3946-401e-bbdd-d7991c628125",
+    "arguments": {
+        "inf_to_execute": {
+            "description": "Local location of inf file",
+            "type": "string",
+            "default": "PathToAtomicsFolder\\T1218.011\\src\\T1218.011_DefaultInstall.inf"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Inf file must exist on disk at specified location (\"#{inf_to_execute}\")\n",
+            "prereq_command": "if (Test-Path \"#{inf_to_execute}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{inf_to_execute}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.011/src/T1218.011_DefaultInstall.inf\" -OutFile \"#{inf_to_execute}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

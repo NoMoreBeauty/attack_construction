@@ -1,0 +1,23 @@
+{
+    "name": "Examine local password policy - Windows",
+    "description": "Lists the local password policy to console on Windows. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net accounts\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1201",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Password Policy Discovery",
+    "source": "ART",
+    "uuid": "4588d243-f24e-4549-b2e3-e627acc089f6",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

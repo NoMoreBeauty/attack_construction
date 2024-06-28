@@ -1,0 +1,23 @@
+{
+    "name": "Discover System Language by Registry Query",
+    "description": "Identify System language by querying the registry on an endpoint.   Upon successful execution, result in number format can be looked up to correlate the language. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg query HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Nls\\Language\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1614.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Language Discovery",
+    "source": "ART",
+    "uuid": "631d4cf1-42c9-4209-8fe9-6bd4de9421be",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

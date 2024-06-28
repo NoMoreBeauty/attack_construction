@@ -1,0 +1,43 @@
+{
+    "name": "Uninstall Sysmon",
+    "description": "Uninstall Sysinternals Sysmon for Defense Evasion ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "sysmon -u\n",
+        "cleanup_command": "sysmon -i -accepteula >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "a316fb2e-5344-470d-91c1-23e15c374edc",
+    "arguments": {
+        "sysmon_exe": {
+            "description": "The location of the Sysmon executable from Sysinternals (ignored if sysmon.exe is found in your PATH)",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1562.001\\bin\\sysmon.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Sysmon executable must be available\n",
+            "prereq_command": "if(cmd /c where sysmon) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "$parentpath = Split-Path \"#{sysmon_exe}\"; $zippath = \"$parentpath\\Sysmon.zip\"\nNew-Item -ItemType Directory $parentpath -Force | Out-Null\nInvoke-WebRequest \"https://download.sysinternals.com/files/Sysmon.zip\" -OutFile \"$zippath\"\nExpand-Archive $zippath $parentpath -Force; Remove-Item $zippath\nif(-not ($Env:Path).contains($parentpath)){$Env:Path += \";$parentpath\"}\n"
+        },
+        {
+            "description": "Sysmon must be installed\n",
+            "prereq_command": "if(cmd /c sc query sysmon) { exit 0} else { exit 1}\n",
+            "get_prereq_command": "cmd /c sysmon -i -accepteula\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,24 @@
+{
+    "name": "Reboot System via `halt` - FreeBSD",
+    "description": "This test restarts a FreeBSD system using `halt`. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "halt -r\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1529",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "System Shutdown/Reboot",
+    "source": "ART",
+    "uuid": "7b1cee42-320f-4890-b056-d65c8b884ba5",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

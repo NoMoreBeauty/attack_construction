@@ -1,0 +1,25 @@
+{
+    "name": "Allow Simultaneous Download Registry",
+    "description": "A registry modification to allow Simultaneous download in the system. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\" /v \"MaxConnectionsPerServer\" /t REG_DWORD /d 10 /f\nreg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\" /v \"MaxConnectionsPer1_0Server\" /t REG_DWORD /d 10 /f\n",
+        "cleanup_command": "reg delete \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\" /v \"MaxConnectionsPerServer\" /f\nreg delete \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\" /v \"MaxConnectionsPer1_0Server\" /f\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "37950714-e923-4f92-8c7c-51e4b6fffbf6",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

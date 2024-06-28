@@ -1,0 +1,23 @@
+{
+    "name": "List Internet Explorer Bookmarks using the command prompt",
+    "description": "This test will list the bookmarks for Internet Explorer that are found in the Favorites folder",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "dir /s /b %USERPROFILE%\\Favorites\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1217",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Browser Information Discovery",
+    "source": "ART",
+    "uuid": "727dbcdb-e495-4ab1-a6c4-80c7f77aef85",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

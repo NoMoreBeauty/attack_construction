@@ -1,0 +1,24 @@
+{
+    "name": "Utilize Clipboard to store or execute commands from",
+    "description": "Add data to clipboard to copy off or execute commands from. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "dir | clip\necho \"T1115\" > %temp%\\T1115.txt\nclip < %temp%\\T1115.txt\n",
+        "cleanup_command": "del %temp%\\T1115.txt >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1115",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Clipboard Data",
+    "source": "ART",
+    "uuid": "0cd14633-58d4-4422-9ede-daa2c9474ae7",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

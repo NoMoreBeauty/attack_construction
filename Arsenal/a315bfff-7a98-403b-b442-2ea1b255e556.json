@@ -1,0 +1,24 @@
+{
+    "name": "Masquerading as FreeBSD or Linux crond process.",
+    "description": "Copies sh process, renames it as crond, and executes it to masquerade as the cron daemon.  Upon successful execution, sh is renamed to `crond` and executed. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "cp /bin/sh /tmp/crond;\necho 'sleep 5' | /tmp/crond\n",
+        "cleanup_command": "rm /tmp/crond\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1036.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rename System Utilities",
+    "source": "ART",
+    "uuid": "a315bfff-7a98-403b-b442-2ea1b255e556",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

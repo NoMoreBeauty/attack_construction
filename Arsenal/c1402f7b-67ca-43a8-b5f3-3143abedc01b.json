@@ -1,0 +1,29 @@
+{
+    "name": "Search macOS Safari Cookies",
+    "description": "This test uses `grep` to search a macOS Safari binaryCookies file for specified values. This was used by CookieMiner malware.  Upon successful execution, MacOS shell will cd to `~/Libraries/Cookies` and grep for `Cookies.binarycookies`. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "cd ~/Library/Cookies\ngrep -q \"#{search_string}\" \"Cookies.binarycookies\"\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1555.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Web Browsers",
+    "source": "ART",
+    "uuid": "c1402f7b-67ca-43a8-b5f3-3143abedc01b",
+    "arguments": {
+        "search_string": {
+            "description": "String to search Safari cookies to find.",
+            "type": "string",
+            "default": "coinbase"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

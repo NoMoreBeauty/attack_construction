@@ -1,0 +1,23 @@
+{
+    "name": "Enumerate Default Domain Admin Details (Domain)",
+    "description": "This test will enumerate the details of the built-in domain admin account ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net user administrator /domain\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1087.002",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "c70ab9fd-19e2-4e02-a83c-9cfa8eaa8fef",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

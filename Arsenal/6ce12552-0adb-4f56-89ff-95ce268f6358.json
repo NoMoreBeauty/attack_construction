@@ -1,0 +1,29 @@
+{
+    "name": "Examine password complexity policy - CentOS/RHEL 6.x",
+    "description": "Lists the password complexity policy to console on CentOS/RHEL 6.x Linux. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "cat /etc/pam.d/system-auth\ncat /etc/security/pwquality.conf\n",
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1201",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Password Policy Discovery",
+    "source": "ART",
+    "uuid": "6ce12552-0adb-4f56-89ff-95ce268f6358",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "System must be CentOS or RHEL v6\n",
+            "prereq_command": "if [ $(rpm -q --queryformat '%{VERSION}') -eq \"6\" ]; then exit /b 0; else exit /b 1; fi;\n",
+            "get_prereq_command": "echo Please run from CentOS or RHEL v6\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

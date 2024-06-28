@@ -1,0 +1,47 @@
+{
+    "name": "DiskShadow Command Execution",
+    "description": "Emulates attack with a DiskShadow.exe (LOLBIN installed by default on Windows) being used to execute arbitrary commands Reference: https://bohops.com/2018/03/26/diskshadow-the-return-of-vss-evasion-persistence-and-active-directory-database-extraction/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "#{dspath} -S #{txt_payload} \n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1218",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "System Binary Proxy Execution",
+    "source": "ART",
+    "uuid": "0e1483ba-8f0c-425d-b8c6-42736e058eaa",
+    "arguments": {
+        "txt_payload": {
+            "description": "txt to execute",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218\\src\\T1218.txt"
+        },
+        "dspath": {
+            "description": "Default location of DiskShadow.exe",
+            "type": "path",
+            "default": "C:\\Windows\\System32\\diskshadow.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "txt file must exist on disk at specified location (#{txt_payload})",
+            "prereq_command": "if (Test-Path \"#{txt_payload}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{txt_payload}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218/src/T1218.txt\" -OutFile \"#{txt_payload}\"\n"
+        },
+        {
+            "description": "DiskShadow.exe must exist on disk at specified location (#{dspath})",
+            "prereq_command": "if (Test-Path #{dspath}) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "echo \"DiskShadow.exe not found on disk at expected location\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

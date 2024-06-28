@@ -1,0 +1,24 @@
+{
+    "name": "Chrome/Chromium (Developer Mode)",
+    "description": "Turn on Chrome/Chromium developer mode and Load Extension found in the src directory",
+    "supported_platforms": [
+        "linux",
+        "windows",
+        "macos"
+    ],
+    "executor": {
+        "steps": "1. Navigate to [chrome://extensions](chrome://extensions) and\ntick 'Developer Mode'.\n\n2. Click 'Load unpacked extension...' and navigate to\n[Browser_Extension](../t1176/src/)\n\n3. Click 'Select'\n",
+        "name": "manual"
+    },
+    "id": "T1176",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Browser Extensions",
+    "source": "ART",
+    "uuid": "3ecd790d-2617-4abf-9a8c-4e8d47da9ee1",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

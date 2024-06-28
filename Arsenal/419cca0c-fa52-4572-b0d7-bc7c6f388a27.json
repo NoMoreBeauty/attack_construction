@@ -1,0 +1,32 @@
+{
+    "name": "Tail the UFW firewall log file",
+    "description": "Print  the last 10 lines of the Uncomplicated Firewall (UFW) log file  /var/log/ufw.log. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "tail /var/log/ufw.log\n",
+        "cleanup_command": "",
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "419cca0c-fa52-4572-b0d7-bc7c6f388a27",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if /var/log/ufw.log exists.\n",
+            "prereq_command": "if [ ! -f \"/var/log/ufw.log\" ]; then echo -e \"\\n***** ufw NOT logging *****\\n\"; exit 1; fi\n",
+            "get_prereq_command": "echo \"\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

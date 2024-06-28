@@ -1,0 +1,23 @@
+{
+    "name": "View available share drives",
+    "description": "View information about all of the resources that are shared on the local computer Upon execution, avalaible share drives will be displayed in the powershell session",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net share\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1135",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Network Share Discovery",
+    "source": "ART",
+    "uuid": "ab39a04f-0c93-4540-9ff2-83f862c385ae",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

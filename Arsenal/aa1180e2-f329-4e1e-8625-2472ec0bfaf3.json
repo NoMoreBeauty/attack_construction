@@ -1,0 +1,24 @@
+{
+    "name": "Recon information for export with Command Prompt",
+    "description": "collect information for exfiltration. Upon execution, check the users temp directory (%temp%) for files T1119_*.txt to see what was collected. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "sc query type=service > %TEMP%\\T1119_1.txt\ndoskey /history > %TEMP%\\T1119_2.txt\nwmic process list > %TEMP%\\T1119_3.txt\ntree C:\\AtomicRedTeam\\atomics > %TEMP%\\T1119_4.txt\n",
+        "cleanup_command": "del %TEMP%\\T1119_1.txt >nul 2>&1\ndel %TEMP%\\T1119_2.txt >nul 2>&1\ndel %TEMP%\\T1119_3.txt >nul 2>&1\ndel %TEMP%\\T1119_4.txt >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1119",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Automated Collection",
+    "source": "ART",
+    "uuid": "aa1180e2-f329-4e1e-8625-2472ec0bfaf3",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

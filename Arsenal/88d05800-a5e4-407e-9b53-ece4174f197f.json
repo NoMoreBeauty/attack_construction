@@ -1,0 +1,24 @@
+{
+    "name": "Disable Microsoft Defender Firewall",
+    "description": "Disables the Microsoft Defender Firewall for the current profile. Caution if you access remotely the host where the test runs! Especially with the cleanup command which will re-enable firewall for the current profile... ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "netsh advfirewall set currentprofile state off\n",
+        "cleanup_command": "netsh advfirewall set currentprofile state on >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "88d05800-a5e4-407e-9b53-ece4174f197f",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

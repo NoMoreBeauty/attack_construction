@@ -1,0 +1,33 @@
+{
+    "name": "Build a CALDERA agent on a windows machine (executing a file)",
+    "uuid": "d83e2137-1bf1-4073-b4a9-a015a40b6669",
+    "description": "This procedure build a caldera agent for C2 purpose, which communicates through the HTTP(S).",
+    "supported_platforms": [
+        "windows"
+    ],
+    "arguments": {
+        "file_path": {
+            "description": "The path of the executed file",
+            "type": "string",
+            "default": null
+        }
+    },
+    "preconditions": [
+        {
+            "type": "File Placed",
+            "description": "The CALDERA build_agent file must exist on disk at specified location (#{file_path})\n"
+        }
+    ],
+    "executor": {
+        "type": "File Executor",
+        "elevation_required": false
+    },
+    "side": "Victim",
+    "effect": "Build a C2 agent",
+    "id": "T1071.001",
+    "tactics": [
+        "Command and Control"
+    ],
+    "technique": "Application Layer Protocol: Web Protocols",
+    "source": "CALDERA"
+}

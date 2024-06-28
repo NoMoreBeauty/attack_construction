@@ -1,0 +1,26 @@
+{
+    "name": "rc.local",
+    "description": "Modify rc.local ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "filename='/etc/rc.local';if [ ! -f $filename ];then sudo touch $filename;else sudo cp $filename /etc/rc.local.original;fi\n[ \"$(uname)\" = 'FreeBSD' ] && alias python3=python3.9 && printf '#\\!/usr/local/bin/bash' | sudo tee /etc/rc.local || printf '#!/bin/bash' | sudo tee /etc/rc.local\necho \"\\npython3 -c \\\"import os, base64;exec(base64.b64decode('aW1wb3J0IG9zCm9zLnBvcGVuKCdlY2hvIGF0b21pYyB0ZXN0IGZvciBtb2RpZnlpbmcgcmMubG9jYWwgPiAvdG1wL1QxMDM3LjAwNC5yYy5sb2NhbCcpCgo='))\\\"\" | sudo tee -a /etc/rc.local\nprintf 'exit 0' | sudo tee -a /etc/rc.local\nsudo chmod +x /etc/rc.local\n",
+        "cleanup_command": "origfilename='/etc/rc.local.original';if [ ! -f $origfilename ];then sudo rm /etc/rc.local;else sudo cp $origfilename /etc/rc.local && sudo rm $origfilename;fi\n",
+        "type": "Command Executor"
+    },
+    "id": "T1037.004",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "RC Scripts",
+    "source": "ART",
+    "uuid": "126f71af-e1c9-405c-94ef-26a47b16c102",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

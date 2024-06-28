@@ -1,0 +1,41 @@
+{
+    "name": "Encrypt files using openssl utility - macOS",
+    "description": "This test encrypts the file(s) using the openssl utility ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "openssl enc #{encryption_option} -in #{input_file_path} -out #{output_file_name}\n",
+        "cleanup_command": "rm #{output_file_name}\n",
+        "name": "sh",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1486",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Data Encrypted for Impact",
+    "source": "ART",
+    "uuid": "1a01f6b8-b1e8-418e-bbe3-78a6f822759e",
+    "arguments": {
+        "encryption_option": {
+            "description": "Specifiy the required encryption option",
+            "type": "string",
+            "default": "-pbkdf2"
+        },
+        "input_file_path": {
+            "description": "Path to the file that you want to encrypt",
+            "type": "path",
+            "default": "~/test.txt"
+        },
+        "output_file_name": {
+            "description": "Path to the file that you want to encrypt",
+            "type": "string",
+            "default": "ARTFile"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

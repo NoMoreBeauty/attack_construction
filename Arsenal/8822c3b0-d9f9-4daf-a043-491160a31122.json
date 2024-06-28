@@ -1,0 +1,37 @@
+{
+    "name": "AWS - Create Access Key and Secret Key",
+    "description": "Adversaries create their own new access and secret keys to programatically interact with AWS environment, which is already compromised ",
+    "supported_platforms": [
+        "iaas:aws"
+    ],
+    "executor": {
+        "command": "aws iam create-access-key --user-name #{username} > \"$PathToAtomicsFolder/T1098.001/bin/aws_secret.creds\"\ncd \"$PathToAtomicsFolder/T1098.001/bin/\"\n./aws_secret.sh\n",
+        "cleanup_command": "access_key=`cat \"$PathToAtomicsFolder/T1098.001/bin/aws_secret.creds\" | jq -r '.AccessKey.AccessKeyId'`\naws iam delete-access-key --access-key-id $access_key --user-name #{username}\nrm \"$PathToAtomicsFolder/T1098.001/bin/aws_secret.creds\"\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1098.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Additional Cloud Credentials",
+    "source": "ART",
+    "uuid": "8822c3b0-d9f9-4daf-a043-491160a31122",
+    "arguments": {
+        "username": {
+            "description": "Create new AWS access and secret keys for the user",
+            "type": "string",
+            "default": "atomicredteam"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Check if the user exists.\n",
+            "prereq_command": "aws iam list-users | grep #{username}\n",
+            "get_prereq_command": "echo Please run atomic test T1136.003, before running this atomic\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

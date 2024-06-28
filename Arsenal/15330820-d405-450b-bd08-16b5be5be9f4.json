@@ -1,0 +1,30 @@
+{
+    "name": "Examine AWS Password Policy",
+    "description": "This atomic test will display details about the password policy for the current AWS account. ",
+    "supported_platforms": [
+        "iaas:aws"
+    ],
+    "executor": {
+        "command": "aws iam get-account-password-policy\n",
+        "name": "sh",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1201",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Password Policy Discovery",
+    "source": "ART",
+    "uuid": "15330820-d405-450b-bd08-16b5be5be9f4",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if ~/.aws/credentials file has a default stanza is configured\n",
+            "prereq_command": "cat ~/.aws/credentials | grep \"default\"\n",
+            "get_prereq_command": "echo Please install the aws-cli and configure your AWS defult profile using: aws configure\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

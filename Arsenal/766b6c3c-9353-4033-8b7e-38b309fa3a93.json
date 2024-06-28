@@ -1,0 +1,43 @@
+{
+    "name": "Append to existing loginwindow for Re-Opened Applications",
+    "description": "Appends an entry to launch Calculator hidden loginwindow.*.plist for next login. Note that the change may not result in the added Calculator program launching on next user login. It may depend on which version of macOS you are running on. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "command": "FILE=`find ~/Library/Preferences/ByHost/com.apple.loginwindow.*.plist -type f | head -1`\nif [ -z \"${FILE}\" ] ; then echo \"No loginwindow plist file found\" && exit 1 ; fi\necho save backup copy to /tmp/\ncp ${FILE} /tmp/t1547007_loginwindow-backup.plist\necho before\nplutil -p ${FILE}\necho overwriting...\n#{exe_path} ${FILE} && echo after && plutil -p ${FILE}\n",
+        "cleanup_command": "rm -f #{exe_path}\n# revert to backup copy\nFILE=`find ~/Library/Preferences/ByHost/com.apple.loginwindow.*.plist -type f | head -1`\nif [ -z \"${FILE}\" ] ; then\n   exit 0\nfi\nmv /tmp/t1547007_loginwindow-backup.plist ${FILE}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1547.007",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Re-opened Applications",
+    "source": "ART",
+    "uuid": "766b6c3c-9353-4033-8b7e-38b309fa3a93",
+    "arguments": {
+        "objc_source_path": {
+            "description": "path to objective C program",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1547.007/src/append_reopen_loginwindow.m"
+        },
+        "exe_path": {
+            "description": "path to compiled program",
+            "type": "path",
+            "default": "/tmp/t1547007_append_exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "compile C program\n",
+            "prereq_command": "if [ -f \"#{exe_path}\" ]; then exit 0 ; else exit 1; fi\n",
+            "get_prereq_command": "cc #{objc_source_path} -o #{exe_path} -framework Cocoa\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

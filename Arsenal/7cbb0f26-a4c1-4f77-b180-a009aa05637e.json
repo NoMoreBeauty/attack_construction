@@ -1,0 +1,47 @@
+{
+    "name": "Microsoft.Workflow.Compiler.exe Payload Execution",
+    "description": "Emulates attack with Microsoft.Workflow.Compiler.exe running a .Net assembly that launches calc.exe ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "#{mwcpath}\\#{mwcname} \"#{xml_payload}\" output.txt\n",
+        "name": "powershell",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1218",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "System Binary Proxy Execution",
+    "source": "ART",
+    "uuid": "7cbb0f26-a4c1-4f77-b180-a009aa05637e",
+    "arguments": {
+        "xml_payload": {
+            "description": "XML to execution",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218\\src\\T1218.xml"
+        },
+        "mwcpath": {
+            "description": "Default location of Microsoft.Workflow.Compiler.exe",
+            "type": "path",
+            "default": "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319"
+        },
+        "mwcname": {
+            "description": "Default name of microsoft.workflow.compiler.exe",
+            "type": "path",
+            "default": "microsoft.workflow.compiler.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": ".Net must be installed for this test to work correctly.\n",
+            "prereq_command": "if (Test-Path #{mwcpath}\\#{mwcname} ) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "write-host \".Net must be installed for this test to work correctly.\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

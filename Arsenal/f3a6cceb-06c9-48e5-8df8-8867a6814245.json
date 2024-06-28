@@ -1,0 +1,30 @@
+{
+    "name": "Change Powershell Execution Policy to Bypass",
+    "description": "Attackers need to change the powershell execution policy in order to run their malicious powershell scripts. They can either specify it during the execution of the powershell script or change the registry value for it. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine\n",
+        "cleanup_command": "try { Set-ExecutionPolicy -ExecutionPolicy #{default_execution_policy} -Scope LocalMachine -Force } catch {}\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1112",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Modify Registry",
+    "source": "ART",
+    "uuid": "f3a6cceb-06c9-48e5-8df8-8867a6814245",
+    "arguments": {
+        "default_execution_policy": {
+            "description": "Specify the default poweshell execution policy",
+            "type": "string",
+            "default": "Default"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

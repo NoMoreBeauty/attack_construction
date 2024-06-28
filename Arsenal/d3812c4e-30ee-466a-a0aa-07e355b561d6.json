@@ -1,0 +1,41 @@
+{
+    "name": "Delete User via sysadminctl utility",
+    "description": "This test deletes the user account using the sysadminctl utility. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "sysadminctl -deleteUser #{user_account} #enter admin password\n",
+        "cleanup_command": "sysadminctl -addUser #{user_account} -fullName \"#{user_name}\" -password #{user_password}\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1531",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Account Access Removal",
+    "source": "ART",
+    "uuid": "d3812c4e-30ee-466a-a0aa-07e355b561d6",
+    "arguments": {
+        "user_account": {
+            "description": "User account which will be deleted.",
+            "type": "string",
+            "default": "ARTUserAccount"
+        },
+        "user_name": {
+            "description": "New user name.",
+            "type": "string",
+            "default": "ARTUser"
+        },
+        "user_password": {
+            "description": "New user password.",
+            "type": "string",
+            "default": "ARTPassword"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

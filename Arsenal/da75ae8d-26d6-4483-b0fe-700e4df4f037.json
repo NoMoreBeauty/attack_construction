@@ -1,0 +1,23 @@
+{
+    "name": "Clear Powershell History by Deleting History File",
+    "description": "Clears Powershell history ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Remove-Item (Get-PSReadlineOption).HistorySavePath\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1070.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Command History",
+    "source": "ART",
+    "uuid": "da75ae8d-26d6-4483-b0fe-700e4df4f037",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

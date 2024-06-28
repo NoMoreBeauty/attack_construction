@@ -1,0 +1,24 @@
+{
+    "name": "Security Software Discovery - Windows Firewall Enumeration",
+    "description": "Enumerates windows firewall to retrieves firewall rules from the target computer.  when sucessfully executed, details of windows firewall is displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Get-NetFirewallProfile | Format-Table Name, Enabled\nGet-NetFirewallSetting\nGet-NetFirewallRule | select DisplayName, Enabled, Description\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1518.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Security Software Discovery",
+    "source": "ART",
+    "uuid": "9dca5a1d-f78c-4a8d-accb-d6de67cfed6b",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

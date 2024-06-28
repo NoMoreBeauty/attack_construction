@@ -1,0 +1,36 @@
+{
+    "name": "Capture Linux Desktop using Import Tool",
+    "description": "Use import command from ImageMagick to collect a full desktop screenshot ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "import -window root #{output_file}\n",
+        "cleanup_command": "rm #{output_file}\n",
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1113",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Screen Capture",
+    "source": "ART",
+    "uuid": "9cd1cccb-91e4-4550-9139-e20a586fcea1",
+    "arguments": {
+        "output_file": {
+            "description": "Output file path",
+            "type": "path",
+            "default": "/tmp/T1113_desktop.png"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "ImageMagick must be installed\n",
+            "prereq_command": "if import -help > /dev/null 2>&1; then exit 0; else exit 1; fi\n",
+            "get_prereq_command": "sudo apt install graphicsmagick-imagemagick-compat\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

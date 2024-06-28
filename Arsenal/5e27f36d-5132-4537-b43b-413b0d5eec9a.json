@@ -1,0 +1,25 @@
+{
+    "name": "Lockbit Black - Use Registry Editor to turn on automatic logon -Powershell",
+    "description": "Lockbit Black - Use Registry Editor to turn on automatic logon ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "New-ItemProperty \"HKLM:\\Software\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" -Name AutoAdminLogon -PropertyType DWord -Value 1 -Force\nNew-ItemProperty \"HKLM:\\Software\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" -Name DefaultUserName -Value Administrator -Force\nNew-ItemProperty \"HKLM:\\Software\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" -Name DefaultDomainName -Value contoso.com -Force\nNew-ItemProperty \"HKLM:\\Software\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" -Name DefaultPassword  -Value password1 -Force\n",
+        "cleanup_command": "Remove-ItemProperty \"HKLM:\\Software\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" -Name AutoAdminLogon -Force -ErrorAction Ignore\nRemove-ItemProperty \"HKLM:\\Software\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" -Name DefaultUserName -Force -ErrorAction Ignore\nRemove-ItemProperty \"HKLM:\\Software\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" -Name DefaultDomainName -Force -ErrorAction Ignore\nRemove-ItemProperty \"HKLM:\\Software\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" -Name DefaultPassword -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "5e27f36d-5132-4537-b43b-413b0d5eec9a",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

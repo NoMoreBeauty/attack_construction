@@ -1,0 +1,30 @@
+{
+    "name": "Gatekeeper Bypass",
+    "description": "Gatekeeper Bypass via command line ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "sudo xattr -d com.apple.quarantine #{app_path}\n",
+        "elevation_required": true,
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1553.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Gatekeeper Bypass",
+    "source": "ART",
+    "uuid": "fb3d46c6-9480-4803-8d7d-ce676e1f1a9b",
+    "arguments": {
+        "app_path": {
+            "description": "Path to app to be used",
+            "type": "path",
+            "default": "myapp.app"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,42 @@
+{
+    "name": "Modify Service to Run Arbitrary Binary (Powershell)",
+    "uuid": "1f896ce4-8070-4959-8a25-2658856a70c9",
+    "description": "This test will use PowerShell to temporarily modify a service to run an arbitrary executable by changing its binary path and will then revert the binary path change, restoring the service to its original state. This technique was previously observed through SnapMC's use of Powerspolit's invoke-serviceabuse function.  [Reference](https://blog.fox-it.com/2021/10/11/snapmc-skips-ransomware-steals-data/) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "arguments": {
+        "service_name": {
+            "description": "Name of the service to modify",
+            "type": "string",
+            "default": "fax"
+        },
+        "new_bin_path": {
+            "description": "Path of the new service binary",
+            "type": "String",
+            "default": "$env:windir\\system32\\notepad.exe"
+        },
+        "original_bin_path": {
+            "description": "Path of the original service binary",
+            "type": "String",
+            "default": "$env:windir\\system32\\fxssvc.exe"
+        }
+    },
+    "preconditions": [],
+    "executor": {
+        "command": "Stop-Service -Name \"#{service_name}\" -force -erroraction silentlycontinue | Out-Null\nset-servicebinarypath -name \"#{service_name}\" -path \"#{new_bin_path}\"\nstart-service -Name \"#{service_name}\" -erroraction silentlycontinue | out-null",
+        "cleanup_command": "Stop-Service -Name \"#{service_name}\" -force -erroraction silentlycontinue | Out-Null\nset-servicebinarypath -name \"#{service_name}\" -path \"#{original_bin_path}\" -erroraction silentlycontinue | out-null",
+        "name": "powershell",
+        "type": "Command Executor",
+        "elevation_required": true
+    },
+    "side": "Victim",
+    "id": "T1543.003",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Windows Service",
+    "dependencies": null,
+    "source": "ART"
+}

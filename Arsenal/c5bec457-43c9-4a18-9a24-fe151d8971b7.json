@@ -1,0 +1,36 @@
+{
+    "name": "Launch DirLister Executable",
+    "description": "Launches the DirLister executable for a short period of time and then exits.  Recently seen used by [BlackCat ransomware](https://news.sophos.com/en-us/2022/07/14/blackcat-ransomware-attacks-not-merely-a-byproduct-of-bad-luck/) to create a list of accessible directories and files.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Start-Process \"#{dirlister_path}\"\nStart-Sleep -Second 4\nStop-Process -Name \"DirLister\"\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1083",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "File and Directory Discovery",
+    "source": "ART",
+    "uuid": "c5bec457-43c9-4a18-9a24-fe151d8971b7",
+    "arguments": {
+        "dirlister_path": {
+            "description": "Path to the DirLister executable ",
+            "type": "string",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\DirLister.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "DirLister.exe must exist in the specified path #{dirlister_path}\n",
+            "prereq_command": "if (Test-Path \"#{dirlister_path}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "$parentpath = Split-Path \"#{dirlister_path}\"\nNew-Item -ItemType Directory -Force -Path $parentpath | Out-Null\nInvoke-WebRequest https://github.com/SanderSade/DirLister/releases/download/v2.beta4/DirLister.v2.beta4.zip -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\TDirLister.v2.beta4.zip\"\nExpand-Archive -Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\TDirLister.v2.beta4.zip\" -DestinationPath \"PathToAtomicsFolder\\..\\ExternalPayloads\\TDirLister.v2.beta4\" -Force\nCopy-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\TDirLister.v2.beta4\\*\" \"$parentpath\" -Recurse\nRemove-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\TDirLister.v2.beta4.zip\",\"PathToAtomicsFolder\\..\\ExternalPayloads\\TDirLister.v2.beta4\" -Recurse -ErrorAction Ignore\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,31 @@
+{
+    "name": "Nix File and Directory Discovery",
+    "description": "Find or discover files on the file system  References:  http://osxdaily.com/2013/01/29/list-all-files-subdirectory-contents-recursively/  https://perishablepress.com/list-files-folders-recursively-terminal/ ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "ls -a >> #{output_file}\nif [ -d /Library/Preferences/ ]; then ls -la /Library/Preferences/ > #{output_file}; fi;\nfile */* *>> #{output_file}\ncat #{output_file} 2>/dev/null\nfind . -type f\nls -R | grep \":$\" | sed -e 's/:$//' -e 's/[^-][^\\/]*\\//--/g' -e 's/^/ /' -e 's/-/|/'\nlocate *\nwhich sh\n",
+        "cleanup_command": "rm #{output_file}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1083",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "File and Directory Discovery",
+    "source": "ART",
+    "uuid": "ffc8b249-372a-4b74-adcd-e4c0430842de",
+    "arguments": {
+        "output_file": {
+            "description": "Output file used to store the results.",
+            "type": "path",
+            "default": "/tmp/T1083.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

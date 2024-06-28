@@ -1,0 +1,23 @@
+{
+    "name": "Examine password complexity policy - Ubuntu",
+    "description": "Lists the password complexity policy to console on Ubuntu Linux. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "cat /etc/pam.d/common-password\n",
+        "name": "bash",
+        "type": "Command Executor"
+    },
+    "id": "T1201",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Password Policy Discovery",
+    "source": "ART",
+    "uuid": "085fe567-ac84-47c7-ac4c-2688ce28265b",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

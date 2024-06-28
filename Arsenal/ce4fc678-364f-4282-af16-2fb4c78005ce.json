@@ -1,0 +1,31 @@
+{
+    "name": "Shortcut Modification",
+    "description": "This test to simulate shortcut modification and then execute. example shortcut (*.lnk , .url) strings check with powershell; gci -path C:\\Users -recurse -include *.url -ea SilentlyContinue | Select-String -Pattern exe | FL. Upon execution, calc.exe will be launched. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "echo [InternetShortcut] > #{shortcut_file_path}\necho URL=C:\\windows\\system32\\calc.exe >> #{shortcut_file_path}\n#{shortcut_file_path}\n",
+        "cleanup_command": "del -f #{shortcut_file_path} >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1547.009",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Shortcut Modification",
+    "source": "ART",
+    "uuid": "ce4fc678-364f-4282-af16-2fb4c78005ce",
+    "arguments": {
+        "shortcut_file_path": {
+            "description": "shortcut modified and execute",
+            "type": "path",
+            "default": "%temp%\\T1547.009_modified_shortcut.url"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

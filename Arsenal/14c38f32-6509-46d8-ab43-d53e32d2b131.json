@@ -1,0 +1,29 @@
+{
+    "name": "Add Network Share",
+    "description": "Add a Network Share utilizing the command_prompt ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net use c: #{share_name}\nnet share test=#{share_name} /REMARK:\"test share\" /CACHE:No\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1070.005",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Network Share Connection Removal",
+    "source": "ART",
+    "uuid": "14c38f32-6509-46d8-ab43-d53e32d2b131",
+    "arguments": {
+        "share_name": {
+            "description": "Share to add.",
+            "type": "string",
+            "default": "\\\\test\\share"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

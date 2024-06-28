@@ -1,0 +1,29 @@
+{
+    "name": "Windows - Discover domain trusts with nltest",
+    "description": "Uses the nltest command to discover domain trusts. Requires the installation of nltest via Windows RSAT or the Windows Server AD DS role. This technique has been used by the Trickbot malware family. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "nltest /domain_trusts\nnltest /trusted_domains\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1482",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Domain Trust Discovery",
+    "source": "ART",
+    "uuid": "2e22641d-0498-48d2-b9ff-c71e496ccdbe",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "nltest.exe from RSAT must be present on disk\n",
+            "prereq_command": "WHERE nltest.exe >NUL 2>&1\n",
+            "get_prereq_command": "echo Sorry RSAT must be installed manually\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

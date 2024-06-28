@@ -1,0 +1,37 @@
+{
+    "name": "Delete log files via cat utility by appending /dev/null or /dev/zero",
+    "description": "The first sub-test truncates the log file to zero bytes via /dev/null and the second sub-test fills the log file with null bytes(zeroes) via /dev/zero, using cat utility ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "command": "sudo cat /dev/null > #{system_log_path} #truncating the file to zero bytes\nsudo dd if=/dev/zero bs=1000 count=5 of=#{system_log_path} #log file filled with null bytes(zeros)\n",
+        "name": "sh",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Linux or Mac System Logs",
+    "source": "ART",
+    "uuid": "c23bdb88-928d-493e-b46d-df2906a50941",
+    "arguments": {
+        "system_log_path": {
+            "description": "path of system log to delete.",
+            "type": "string",
+            "default": "/var/log/system.log"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "target files must exist\n",
+            "prereq_command": "stat #{system_log_path}\n",
+            "get_prereq_command": "touch #{system_log_path}\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

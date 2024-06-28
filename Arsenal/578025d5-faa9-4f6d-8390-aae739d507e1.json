@@ -1,0 +1,38 @@
+{
+    "name": "Dynamic API Resolution-Ninja-syscall",
+    "description": "This test calls NtCreateFile via API hashing and dynamic syscall resolution. I have dubbed this particular combination of techniques 'Ninja-syscall'. When successful, a new file named 'hello.log' will be created in the default user's temporary folder, which is a common location for a dropper. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "Start-Process \"#{exe_binary}\"\nStart-Sleep -Seconds 7\nif (Test-Path \"C:\\Users\\Default\\AppData\\Local\\Temp\\hello.log\") { Remove-Item \"C:\\Users\\Default\\AppData\\Local\\Temp\\hello.log\" -Force; Write-Host \"[+] hello.log removed.\" }\n",
+        "cleanup_command": "if (Test-Path \"C:\\Users\\Default\\AppData\\Local\\Temp\\hello.log\") { Remove-Item \"C:\\Users\\Default\\AppData\\Local\\Temp\\hello.log\" -Force; Write-Host \"[+] hello.log removed.\" }",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1027.007",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Dynamic API Resolution",
+    "source": "ART",
+    "uuid": "578025d5-faa9-4f6d-8390-aae739d507e1",
+    "arguments": {
+        "exe_binary": {
+            "description": "PE binary",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1027.007\\bin\\ninja_syscall1.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Portable Executable to run must exist at specified location (#{exe_binary})\n",
+            "prereq_command": "if (Test-Path \"#{exe_binary}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{exe_binary}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1027.007/bin/ninja_syscall1.exe\" -OutFile \"#{exe_binary}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

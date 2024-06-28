@@ -1,0 +1,23 @@
+{
+    "name": "Windows MachineGUID Discovery",
+    "description": "Identify the Windows MachineGUID value for a system. Upon execution, the machine GUID will be displayed from registry. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "REG QUERY HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1082",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Information Discovery",
+    "source": "ART",
+    "uuid": "224b4daf-db44-404e-b6b2-f4d1f0126ef8",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

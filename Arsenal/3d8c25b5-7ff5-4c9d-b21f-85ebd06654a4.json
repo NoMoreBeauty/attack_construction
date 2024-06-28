@@ -1,0 +1,24 @@
+{
+    "name": "Logoff System - Windows",
+    "description": "This test performs a Windows system logoff as seen in [dcrat backdoor capabilities](https://www.mandiant.com/resources/analyzing-dark-crystal-rat-backdoor) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "shutdown /l \n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1529",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "System Shutdown/Reboot",
+    "source": "ART",
+    "uuid": "3d8c25b5-7ff5-4c9d-b21f-85ebd06654a4",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

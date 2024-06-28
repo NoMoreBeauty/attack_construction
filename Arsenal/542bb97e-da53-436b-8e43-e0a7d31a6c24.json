@@ -1,0 +1,30 @@
+{
+    "name": "Create Volume Shadow Copy with Powershell",
+    "description": "This test is intended to be run on a domain Controller.  The Active Directory database NTDS.dit may be dumped by copying it from a Volume Shadow Copy. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "(gwmi -list win32_shadowcopy).Create('#{drive_letter}','ClientAccessible')\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1003.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "NTDS",
+    "source": "ART",
+    "uuid": "542bb97e-da53-436b-8e43-e0a7d31a6c24",
+    "arguments": {
+        "drive_letter": {
+            "description": "Drive letter to source VSC (including colon)",
+            "type": "string",
+            "default": "C:\\"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

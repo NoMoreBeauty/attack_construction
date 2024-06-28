@@ -1,0 +1,26 @@
+{
+    "name": "PowerShell Network Sniffing",
+    "description": "PowerShell Built-in Cmdlets to capture network traffic. https://learn.microsoft.com/en-us/powershell/module/neteventpacketcapture/new-neteventsession?view=windowsserver2022-ps",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "New-NetEventSession -Name Capture007 -LocalFilePath \"$ENV:Temp\\sniff.etl\"\nAdd-NetEventPacketCaptureProvider -SessionName Capture007 -TruncationLength 100\nStart-NetEventSession -Name Capture007\nStop-NetEventSession -Name Capture007\nRemove-NetEventSession -Name Capture007\n",
+        "cleanup_command": "del $ENV:Temp\\sniff.etl",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1040",
+    "tactics": [
+        "Credential Access",
+        "Discovery"
+    ],
+    "technique": "Network Sniffing",
+    "source": "ART",
+    "uuid": "9c15a7de-de14-46c3-bc2a-6d94130986ae",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

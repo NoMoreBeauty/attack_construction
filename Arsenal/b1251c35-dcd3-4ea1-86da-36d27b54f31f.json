@@ -1,0 +1,30 @@
+{
+    "name": "Clear Bash history (cat dev/null)",
+    "description": "Clears bash history via cat /dev/null ",
+    "supported_platforms": [
+        "linux",
+        "macos"
+    ],
+    "executor": {
+        "command": "cat /dev/null > #{history_path}\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1070.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Command History",
+    "source": "ART",
+    "uuid": "b1251c35-dcd3-4ea1-86da-36d27b54f31f",
+    "arguments": {
+        "history_path": {
+            "description": "Bash history path",
+            "type": "path",
+            "default": "~/.bash_history"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

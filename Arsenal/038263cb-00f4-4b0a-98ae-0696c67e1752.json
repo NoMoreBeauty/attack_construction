@@ -1,0 +1,23 @@
+{
+    "name": "List Windows Firewall Rules",
+    "description": "Enumerates Windows Firewall Rules using netsh.  Upon successful execution, cmd.exe will spawn netsh.exe to list firewall rules. Output will be via stdout. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "netsh advfirewall firewall show rule name=all\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1016",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Network Configuration Discovery",
+    "source": "ART",
+    "uuid": "038263cb-00f4-4b0a-98ae-0696c67e1752",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

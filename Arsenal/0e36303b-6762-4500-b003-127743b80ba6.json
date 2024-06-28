@@ -1,0 +1,30 @@
+{
+    "name": "File and Directory Discovery (cmd.exe)",
+    "description": "Find or discover files on the file system.  Upon successful execution, this test will output the results of all the data discovery commands to a specified file. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "dir /s c:\\ >> #{output_file}\ndir /s \"c:\\Documents and Settings\" >> #{output_file}\ndir /s \"c:\\Program Files\\\" >> #{output_file}\ndir \"%systemdrive%\\Users\\*.*\" >> #{output_file}\ndir \"%userprofile%\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\*.*\" >> #{output_file}\ndir \"%userprofile%\\Desktop\\*.*\" >> #{output_file}\ntree /F >> #{output_file}\n",
+        "cleanup_command": "del #{output_file}\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1083",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "File and Directory Discovery",
+    "source": "ART",
+    "uuid": "0e36303b-6762-4500-b003-127743b80ba6",
+    "arguments": {
+        "output_file": {
+            "description": "File to output results to",
+            "type": "string",
+            "default": "%temp%\\T1083Test1.txt"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

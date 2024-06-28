@@ -1,0 +1,30 @@
+{
+    "name": "Windows Screen Capture (CopyFromScreen)",
+    "description": "Take a screen capture of the desktop through a call to the [Graphics.CopyFromScreen] .NET API.  [Graphics.CopyFromScreen]: https://docs.microsoft.com/en-us/dotnet/api/system.drawing.graphics.copyfromscreen ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Add-Type -AssemblyName System.Windows.Forms\n$screen = [Windows.Forms.SystemInformation]::VirtualScreen\n$bitmap = New-Object Drawing.Bitmap $screen.Width, $screen.Height\n$graphic = [Drawing.Graphics]::FromImage($bitmap)\n$graphic.CopyFromScreen($screen.Left, $screen.Top, 0, 0, $bitmap.Size)\n$bitmap.Save(\"#{output_file}\")\n",
+        "cleanup_command": "Remove-Item #{output_file} -ErrorAction Ignore\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1113",
+    "tactics": [
+        "Collection"
+    ],
+    "technique": "Screen Capture",
+    "source": "ART",
+    "uuid": "e9313014-985a-48ef-80d9-cde604ffc187",
+    "arguments": {
+        "output_file": {
+            "description": "Path where captured results will be placed",
+            "type": "path",
+            "default": "$env:TEMP\\T1113.png"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

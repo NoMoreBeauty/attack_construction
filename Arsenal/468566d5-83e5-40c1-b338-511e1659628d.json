@@ -1,0 +1,23 @@
+{
+    "name": "Mac HISTCONTROL",
+    "description": "The HISTCONTROL variable is set to ignore (not write to the history file) command that are a duplicate of something already in the history  and commands that start with a space. This atomic sets this variable in the current session and also writes it to the current user's ~/.bash_profile  so that it will apply to all future settings as well. https://www.linuxjournal.com/content/using-bash-history-more-efficiently-histcontrol ",
+    "supported_platforms": [
+        "macos",
+        "linux"
+    ],
+    "executor": {
+        "steps": "1. export HISTCONTROL=ignoreboth\n2. echo export \"HISTCONTROL=ignoreboth\" >> ~/.bash_profile\n3. ls\n4. whoami > recon.txt\n",
+        "name": "manual"
+    },
+    "id": "T1562.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Impair Command History Logging",
+    "source": "ART",
+    "uuid": "468566d5-83e5-40c1-b338-511e1659628d",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

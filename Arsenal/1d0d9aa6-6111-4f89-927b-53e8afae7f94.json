@@ -1,0 +1,24 @@
+{
+    "name": "Set Custom AddToHistoryHandler to Avoid History File Logging",
+    "description": "The AddToHistoryHandler receives the current command as the $line variable and then returns $true if  the line should be written to the history file. Here we simply return $false so nothing gets added to  the history file for the current session.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "Set-PSReadLineOption -AddToHistoryHandler { return $false }\n",
+        "cleanup_command": "Set-PSReadLineOption -AddToHistoryHandler $null\n",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1070.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Command History",
+    "source": "ART",
+    "uuid": "1d0d9aa6-6111-4f89-927b-53e8afae7f94",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

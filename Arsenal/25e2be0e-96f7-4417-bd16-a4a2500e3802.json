@@ -1,0 +1,25 @@
+{
+    "name": "Copy and Delete Mailbox Data on Linux",
+    "description": "Copies and deletes mail data on Linux ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "mkdir -p /var/spool/mail/copy\nfor file in /var/spool/mail/*; do\n  if [ \"$(basename \"$file\")\" != \"copy\" ]\n  then\n    cp -R \"$file\" /var/spool/mail/copy/\n  fi\ndone\nrm -rf /var/spool/mail/copy/*\n",
+        "cleanup_command": "rm -rf /var/spool/mail/copy\n",
+        "name": "bash",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1070.008",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Mailbox Data",
+    "source": "ART",
+    "uuid": "25e2be0e-96f7-4417-bd16-a4a2500e3802",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

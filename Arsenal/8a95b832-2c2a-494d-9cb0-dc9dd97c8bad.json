@@ -1,0 +1,32 @@
+{
+    "name": "Turn off UFW logging",
+    "description": "Turn off the Uncomplicated Firewall (UFW) logging.  ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "ufw logging off\n",
+        "cleanup_command": "ufw logging low\nufw status verbose\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "8a95b832-2c2a-494d-9cb0-dc9dd97c8bad",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if ufw is installed on the machine and enabled.\n",
+            "prereq_command": "if [ ! -x \"$(command -v ufw)\" ]; then echo -e \"\\n***** ufw NOT installed *****\\n\"; exit 1; fi\nif echo \"$(ufw status)\" |grep -q \"inactive\"; then echo -e \"\\n***** ufw inactive *****\\n\"; exit 1; fi \n",
+            "get_prereq_command": "echo \"\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

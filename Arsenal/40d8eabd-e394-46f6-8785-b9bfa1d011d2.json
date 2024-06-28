@@ -1,0 +1,31 @@
+{
+    "name": "Create a user account on a Linux system",
+    "description": "Create a user via useradd ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "useradd -M -N -r -s /bin/bash -c evil_account #{username}\n",
+        "cleanup_command": "userdel #{username}\n",
+        "name": "bash",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1136.001",
+    "tactics": [
+        "Persistence"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "40d8eabd-e394-46f6-8785-b9bfa1d011d2",
+    "arguments": {
+        "username": {
+            "description": "Username of the user to create",
+            "type": "string",
+            "default": "evil_user"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

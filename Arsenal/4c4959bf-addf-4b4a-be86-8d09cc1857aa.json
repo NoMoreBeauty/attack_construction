@@ -1,0 +1,29 @@
+{
+    "name": "System Owner/User Discovery",
+    "description": "Identify System owner or users on an endpoint.  Upon successful execution, cmd.exe will spawn multiple commands against a target host to identify usernames. Output will be via stdout.  Additionally, two files will be written to disk - computers.txt and usernames.txt. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "cmd.exe /C whoami\nwmic useraccount get /ALL\nquser /SERVER:\"#{computer_name}\"\nquser\nqwinsta.exe /server:#{computer_name}\nqwinsta.exe\nfor /F \"tokens=1,2\" %i in ('qwinsta /server:#{computer_name} ^| findstr \"Active Disc\"') do @echo %i | find /v \"#\" | find /v \"console\" || echo %j > computers.txt\n@FOR /F %n in (computers.txt) DO @FOR /F \"tokens=1,2\" %i in ('qwinsta /server:%n ^| findstr \"Active Disc\"') do @echo %i | find /v \"#\" | find /v \"console\" || echo %j > usernames.txt\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1033",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Owner/User Discovery",
+    "source": "ART",
+    "uuid": "4c4959bf-addf-4b4a-be86-8d09cc1857aa",
+    "arguments": {
+        "computer_name": {
+            "description": "Name of remote computer",
+            "type": "string",
+            "default": "localhost"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,33 @@
+{
+    "name": "Auditd keylogger",
+    "description": "The linux audit tool auditd can be used to capture 32 and 64 bit command execution and place the command in the /var/log/audit/audit.log audit log.  ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "auditctl -a always,exit -F arch=b64 -S execve -k CMDS \nauditctl -a always,exit -F arch=b32 -S execve -k CMDS\nwhoami; ausearch -i --start $(date +\"%d/%m/%y %H:%M:%S\") \n",
+        "cleanup_command": "systemctl restart auditd\n",
+        "type": "Command Executor"
+    },
+    "id": "T1056.001",
+    "tactics": [
+        "Credential Access",
+        "Collection"
+    ],
+    "technique": "Keylogging",
+    "source": "ART",
+    "uuid": "a668edb9-334e-48eb-8c2e-5413a40867af",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "This test requires sshd and auditd\n",
+            "prereq_command": "if [ ! -x \"$(command -v auditd)\" ]; then echo -e \"\\n***** auditd NOT installed *****\\n\"; exit 1; fi\n",
+            "get_prereq_command": "echo \"\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

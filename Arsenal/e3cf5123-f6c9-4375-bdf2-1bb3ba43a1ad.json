@@ -1,0 +1,24 @@
+{
+    "name": "Get-WmiObject to Enumerate Domain Controllers",
+    "description": "The following Atomic test will utilize get-wmiobject to enumerate Active Directory for Domain Controllers. Upon successful execution a listing of Systems from AD will output with their paths. Reference: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-wmiobject?view=powershell-5.1 ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "try { get-wmiobject -class ds_computer -namespace root\\directory\\ldap -ErrorAction Stop }\ncatch { $_; exit $_.Exception.HResult }\n",
+        "type": "Command Executor"
+    },
+    "id": "T1018",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Remote System Discovery",
+    "source": "ART",
+    "uuid": "e3cf5123-f6c9-4375-bdf2-1bb3ba43a1ad",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

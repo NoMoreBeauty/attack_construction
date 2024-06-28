@@ -1,0 +1,30 @@
+{
+    "name": "Binary simply packed by UPX",
+    "description": "Copies and then runs a simple binary (just outputting the cake is a lie), that was packed by UPX. No other protection/compression were applied. ",
+    "supported_platforms": [
+        "macos"
+    ],
+    "executor": {
+        "command": "cp #{bin_path} /tmp/packed_bin && /tmp/packed_bin\n",
+        "cleanup_command": "rm /tmp/packed_bin\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1027.002",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Software Packing",
+    "source": "ART",
+    "uuid": "b16ef901-00bb-4dda-b4fc-a04db5067e20",
+    "arguments": {
+        "bin_path": {
+            "description": "Packed binary",
+            "type": "path",
+            "default": "PathToAtomicsFolder/T1027.002/bin/darwin/test_upx"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

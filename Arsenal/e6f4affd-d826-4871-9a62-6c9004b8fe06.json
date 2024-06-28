@@ -1,0 +1,36 @@
+{
+    "name": "Extract all accounts in use as SPN using setspn",
+    "description": "The following test will utilize setspn to extract the Service Principal Names. This behavior is typically used during a kerberos or silver ticket attack.  A successful execution will output all the SPNs for the related domain.  ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "dependency_executor_name": "powershell",
+    "executor": {
+        "command": "setspn -T #{domain_name} -Q */*\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1558.003",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Kerberoasting",
+    "source": "ART",
+    "uuid": "e6f4affd-d826-4871-9a62-6c9004b8fe06",
+    "arguments": {
+        "domain_name": {
+            "description": "The Domain Name to lookup against",
+            "type": "string",
+            "default": "%USERDNSDOMAIN%"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Computer must be domain joined\n",
+            "prereq_command": "if((Get-CIMInstance -Class Win32_ComputerSystem).PartOfDomain) {exit 0} else {exit 1}\n",
+            "get_prereq_command": "Write-Host Joining this computer to a domain must be done manually\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,32 @@
+{
+    "name": "Stop/Start UFW firewall",
+    "description": "Stop the Uncomplicated Firewall (UFW) if installed. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "ufw disable\n",
+        "cleanup_command": "ufw enable\nufw status verbose\n",
+        "type": "Command Executor"
+    },
+    "id": "T1562.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Disable or Modify System Firewall",
+    "source": "ART",
+    "uuid": "fe135572-edcd-49a2-afe6-1d39521c5a9a",
+    "arguments": null,
+    "preconditions": [
+        {
+            "description": "Check if ufw is installed on the machine.\n",
+            "prereq_command": "if [ ! -x \"$(command -v ufw)\" ]; then echo -e \"\\n***** ufw NOT installed *****\\n\"; exit 1; fi\nif echo \"$(ufw status)\" |grep -q \"inactive\"; then echo -e \"\\n***** ufw inactive *****\\n\"; exit 1; fi \n",
+            "get_prereq_command": "echo \"\"\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

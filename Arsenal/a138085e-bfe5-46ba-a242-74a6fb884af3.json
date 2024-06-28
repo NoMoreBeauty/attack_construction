@@ -1,0 +1,23 @@
+{
+    "name": "Enumerate logged on users via CMD (Local)",
+    "description": "Enumerate logged on users. Upon execution, logged on users will be displayed. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "query user\n",
+        "name": "command_prompt",
+        "type": "Command Executor"
+    },
+    "id": "T1087.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Local Account",
+    "source": "ART",
+    "uuid": "a138085e-bfe5-46ba-a242-74a6fb884af3",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

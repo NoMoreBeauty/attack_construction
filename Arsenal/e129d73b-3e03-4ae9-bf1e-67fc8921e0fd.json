@@ -1,0 +1,25 @@
+{
+    "name": "Detect Virtualization Environment (FreeBSD)",
+    "description": "Detects execution in a virtualized environment. At boot, dmesg stores a log if a hypervisor is detected. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "name": "sh",
+        "elevation_required": true,
+        "command": "if [ \"$(sysctl -n hw.hv_vendor)\" != \"\" ]; then echo \"Virtualization Environment detected\"; fi\n",
+        "type": "Command Executor"
+    },
+    "id": "T1497.001",
+    "tactics": [
+        "Defense Evasion",
+        "Discovery"
+    ],
+    "technique": "System Checks",
+    "source": "ART",
+    "uuid": "e129d73b-3e03-4ae9-bf1e-67fc8921e0fd",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

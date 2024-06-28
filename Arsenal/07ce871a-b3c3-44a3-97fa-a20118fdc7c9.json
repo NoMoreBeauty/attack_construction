@@ -1,0 +1,23 @@
+{
+    "name": "Discover System Language with localectl",
+    "description": "Identify System language with the `localectl` command.  Upon successful execution, the key `System Locale` from the output will contain the `LANG` environment variable that has the 5 character locale result that can be looked up to correlate the language and territory. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "command": "localectl status\n",
+        "name": "sh",
+        "type": "Command Executor"
+    },
+    "id": "T1614.001",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "System Language Discovery",
+    "source": "ART",
+    "uuid": "07ce871a-b3c3-44a3-97fa-a20118fdc7c9",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

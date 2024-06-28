@@ -1,0 +1,24 @@
+{
+    "name": "Enumerate credentials from Windows Credential Manager using vaultcmd.exe [Web Credentials]",
+    "description": "This module will enumerate credentials stored in Web Credentials vault of Windows Credential Manager using builtin utility vaultcmd.exe",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "vaultcmd /listcreds:\"Web Credentials\" /all\n",
+        "type": "Command Executor"
+    },
+    "id": "T1555",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "Credentials from Password Stores",
+    "source": "ART",
+    "uuid": "bc071188-459f-44d5-901a-f8f2625b2d2e",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

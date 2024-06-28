@@ -1,0 +1,37 @@
+{
+    "name": "Change Startup Folder - HKLM Modify User Shell Folders Common Startup Value",
+    "description": "This test will modify the HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders -V Common Startup  value to point to a new startup folder where a payload could be stored to launch at boot.  *successful execution requires system restart ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "New-Item -ItemType Directory -path \"#{new_startup_folder}\"\nCopy-Item -path \"#{payload}\" -destination \"#{new_startup_folder}\"\nSet-ItemProperty -Path  \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders\" -Name \"Common Startup\" -Value \"#{new_startup_folder}\"\n",
+        "cleanup_command": "Set-ItemProperty -Path  \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders\" -Name \"Common Startup\" -Value \"%ProgramData%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\"\nRemove-Item \"#{new_startup_folder}\" -Recurse -Force\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1547.001",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "technique": "Registry Run Keys / Startup Folder",
+    "source": "ART",
+    "uuid": "acfef903-7662-447e-a391-9c91c2f00f7b",
+    "arguments": {
+        "new_startup_folder": {
+            "description": "new startup folder to replace standard one",
+            "type": "string",
+            "default": "$env:TMP\\atomictest\\"
+        },
+        "payload": {
+            "description": "executable to be placed in new startup location ",
+            "type": "string",
+            "default": "C:\\Windows\\System32\\calc.exe"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

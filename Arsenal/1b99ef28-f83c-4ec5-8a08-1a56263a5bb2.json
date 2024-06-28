@@ -1,0 +1,41 @@
+{
+    "name": "Change User Password - Windows",
+    "description": "Changes the user password to hinder access attempts. Seen in use by LockerGoga. Upon execution, log into the user account AtomicAdministrator with the password HuHuHUHoHo283283. ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "net user #{user_account} #{new_user_password} /add\nnet.exe user #{user_account} #{new_password}\n",
+        "cleanup_command": "net.exe user #{user_account} /delete >nul 2>&1\n",
+        "name": "command_prompt",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1531",
+    "tactics": [
+        "Impact"
+    ],
+    "technique": "Account Access Removal",
+    "source": "ART",
+    "uuid": "1b99ef28-f83c-4ec5-8a08-1a56263a5bb2",
+    "arguments": {
+        "user_account": {
+            "description": "User account whose password will be changed.",
+            "type": "string",
+            "default": "AtomicAdministrator"
+        },
+        "new_user_password": {
+            "description": "Password to use if user account must be created first",
+            "type": "string",
+            "default": "User2ChangePW!"
+        },
+        "new_password": {
+            "description": "New password for the specified account.",
+            "type": "string",
+            "default": "HuHuHUHoHo283283@dJD"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

@@ -1,0 +1,37 @@
+{
+    "name": "linux rename /proc/pid/comm using prctl",
+    "description": "Runs a C program that calls prctl(PR_SET_NAME) to modify /proc/pid/comm value to totally_legit.  This will show up as process name in simple 'ps' listings. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "sh",
+    "executor": {
+        "name": "sh",
+        "command": "#{exe_path} & ps\nTMP=`ps | grep totally_legit`\nif [ -z \"${TMP}\" ] ; then echo \"renamed process NOT FOUND in process list\" && exit 1; fi\nexit 0\n",
+        "cleanup_command": "rm -f #{exe_path}\n",
+        "type": "Command Executor"
+    },
+    "id": "T1036.004",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Masquerade Task or Service",
+    "source": "ART",
+    "uuid": "f0e3aaea-5cd9-4db6-a077-631dd19b27a8",
+    "arguments": {
+        "exe_path": {
+            "description": "Output Binary Path",
+            "type": "path",
+            "default": "/tmp/T1036_004_prctl_rename"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "#{exe_path} must be exist on system.\n",
+            "prereq_command": "stat #{exe_path}\n",
+            "get_prereq_command": "cc -o #{exe_path} PathToAtomicsFolder/T1036.004/src/prctl_rename.c\n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

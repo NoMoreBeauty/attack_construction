@@ -1,0 +1,42 @@
+{
+    "name": "Network Share Discovery - linux",
+    "description": "Network Share Discovery using smbstatus ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "dependency_executor_name": "bash",
+    "executor": {
+        "command": "sudo smbstatus --shares\n",
+        "name": "bash",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1135",
+    "tactics": [
+        "Discovery"
+    ],
+    "technique": "Network Share Discovery",
+    "source": "ART",
+    "uuid": "875805bc-9e86-4e87-be86-3a5527315cae",
+    "arguments": {
+        "package_checker": {
+            "description": "Package checking command. Debian - dpkg -s samba",
+            "type": "string",
+            "default": "(rpm -q samba &>/dev/null) || (dpkg -s samba | grep -q installed)"
+        },
+        "package_installer": {
+            "description": "Package installer command. Debian - apt install samba",
+            "type": "string",
+            "default": "(which yum && yum -y install epel-release samba)||(which apt-get && DEBIAN_FRONTEND=noninteractive apt-get install -y samba)"
+        }
+    },
+    "preconditions": [
+        {
+            "description": "Package with smbstatus (samba) must exist on device\n",
+            "prereq_command": "if #{package_checker} > /dev/null; then exit 0; else exit 1; fi\n",
+            "get_prereq_command": "sudo #{package_installer} \n"
+        }
+    ],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

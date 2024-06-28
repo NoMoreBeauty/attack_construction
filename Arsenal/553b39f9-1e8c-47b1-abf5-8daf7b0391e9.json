@@ -1,0 +1,23 @@
+{
+    "name": "Clear Docker Container Logs",
+    "description": "Clears Docker container logs using the Docker CLI and the truncate command, removing all log entries. ",
+    "supported_platforms": [
+        "linux"
+    ],
+    "executor": {
+        "name": "bash",
+        "command": "docker container prune -f && sudo truncate -s 0 /var/lib/docker/containers/*/*-json.log\n",
+        "type": "Command Executor"
+    },
+    "id": "T1070.003",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Clear Command History",
+    "source": "ART",
+    "uuid": "553b39f9-1e8c-47b1-abf5-8daf7b0391e9",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

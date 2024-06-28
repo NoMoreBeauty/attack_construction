@@ -1,0 +1,37 @@
+{
+    "name": "Process Hollowing in Go using CreateProcessW WinAPI",
+    "description": "Creates a process in a suspended state, executes shellcode to spawn calc.exe in a child process, and then resumes the original process. - PoC Credit: (https://github.com/Ne0nd0g/go-shellcode#createprocess) ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "name": "powershell",
+        "elevation_required": false,
+        "command": "$PathToAtomicsFolder\\T1055.012\\bin\\x64\\CreateProcess.exe -program \"#{hollow_binary_path}\" -debug\n",
+        "cleanup_command": "Stop-Process -Name CalculatorApp -ErrorAction SilentlyContinue\nStop-Process -Name \"#{hollow_process_name}\" -ErrorAction SilentlyContinue\n",
+        "type": "Command Executor"
+    },
+    "id": "T1055.012",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "technique": "Process Hollowing",
+    "source": "ART",
+    "uuid": "c8f98fe1-c89b-4c49-a7e3-d60ee4bc2f5a",
+    "arguments": {
+        "hollow_binary_path": {
+            "description": "Path of the binary to hollow",
+            "type": "string",
+            "default": "C:\\Windows\\System32\\werfault.exe"
+        },
+        "hollow_process_name": {
+            "description": "Name of the process to hollow",
+            "type": "string",
+            "default": "werfault"
+        }
+    },
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}

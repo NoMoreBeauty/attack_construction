@@ -1,0 +1,25 @@
+{
+    "name": "LockBit Black - Disable the ETW Provider of Windows Defender -Powershell",
+    "description": "An adversary can disable the ETW Provider of Windows Defender, so nothing would be logged to Microsoft-Windows-Windows-Defender/Operational anymore. https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-075a ",
+    "supported_platforms": [
+        "windows"
+    ],
+    "executor": {
+        "command": "New-ItemProperty \"HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Channels\\Microsoft-Windows-Windows Defender/Operational\" -Name Enabled  -PropertyType DWord -Value 0 -Force\n",
+        "cleanup_command": "Remove-ItemProperty \"HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Channels\\Microsoft-Windows-Windows Defender/Operational\" -Name Enabled -Force -ErrorAction Ignore\n",
+        "name": "powershell",
+        "elevation_required": true,
+        "type": "Command Executor"
+    },
+    "id": "T1562.006",
+    "tactics": [
+        "Defense Evasion"
+    ],
+    "technique": "Indicator Blocking",
+    "source": "ART",
+    "uuid": "69fc085b-5444-4879-8002-b24c8e1a3e02",
+    "arguments": null,
+    "preconditions": [],
+    "infrastructure_requirement": [],
+    "side": "Victim"
+}
